@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Typography,
-  Grid,
-  TextField,
-  Button,
-  Snackbar,
-} from "@material-ui/core";
+import { Typography, Grid, TextField, Button } from "@material-ui/core";
 //import MuiAlert from "@material-ui/lab/Alert";
 //import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
@@ -50,6 +44,7 @@ function SignupForm() {
       return;
     } else if (credentials.email.match(/\S+@\S+\.\S+/) == null) {
       setAlert({ error: true, message: "Invalid email address" });
+      return;
     } else if (credentials.firstName.length < 1 || !credentials.firstName) {
       setAlert({ error: true, message: "Please fill up First Name field" });
       return;
@@ -104,7 +99,7 @@ function SignupForm() {
           type="email"
           id="email"
           placeholder="Your Email"
-          autofocus
+          autoFocus
           required
         />
       </Grid>
@@ -120,7 +115,7 @@ function SignupForm() {
         />
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography className={classes.labels}>Last name</Typography>
+        <Typography>Last name</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -130,17 +125,17 @@ function SignupForm() {
           required
         />
       </Grid>
-
       <Grid item className={classes.elements}>
-        <Typography className={classes.labels}>Password</Typography>
+        <Typography>Password</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
           variant="outlined"
           type="password"
           id="password"
-          minlength="6"
+          minLength="6"
           placeholder="Create a password (at least 6 characters)"
+          autoComplete="on"
           required
         />
       </Grid>

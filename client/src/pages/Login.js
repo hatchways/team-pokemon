@@ -1,16 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 
-import {
-  Typography,
-  Grid,
-  Container,
-  Hidden,
-  Paper,
-  Box,
-} from "@material-ui/core";
+import { Grid, Hidden, Paper } from "@material-ui/core";
 //import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
-import { Route, Link } from "react-router-dom";
+//import { Route, Link } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import dogsPicture from "../img/dogs-main.jpg";
 
@@ -46,15 +39,15 @@ function Login() {
         sm={12}
         style={{ maxHeight: "100vh", overflowY: "auto" }}
       >
-        <LoginForm />
+        <form>
+          <LoginForm />
+        </form>
       </Grid>
       <Hidden smDown>
         <Grid
           item
           lg={6}
           md={6}
-          justify="center"
-          alignItems="center"
           style={{ backgroundColor: "blue", height: "100vh" }}
         >
           <Paper

@@ -12,11 +12,13 @@ import "./App.css";
 
 function App() {
   //loggedIn -> should come form context
-  const [loggedIn, setLoggedIn] = useState(false);
+
+  //const [loggedIn, setLoggedIn] = useState(false);
+  const loggedIn = false; //for now, use variable instead of state to avoid error on console
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        <Route path="/" component={Signup}>
+        <Route path="/">
           {loggedIn ? <Profile /> : <Redirect to="/signup" />}
         </Route>
         <Route path="/signup" component={Signup} />

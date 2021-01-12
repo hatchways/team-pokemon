@@ -1,12 +1,5 @@
-import React, { Component } from "react";
-import {
-  Typography,
-  Grid,
-  Container,
-  Hidden,
-  Paper,
-  Box,
-} from "@material-ui/core";
+import React from "react";
+import { Grid, Hidden, Paper } from "@material-ui/core";
 //import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 //import { Route, Link } from "react-router-dom";
@@ -45,15 +38,15 @@ function Signup() {
         sm={12}
         style={{ maxHeight: "100vh", overflowY: "auto" }}
       >
-        <SignupForm />
+        <form>
+          <SignupForm />
+        </form>
       </Grid>
       <Hidden smDown>
         <Grid
           item
           lg={6}
           md={6}
-          justify="center"
-          alignItems="center"
           style={{ backgroundColor: "blue", height: "100vh" }}
         >
           <Paper

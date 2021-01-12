@@ -11,8 +11,8 @@ function AlertMessage(props) {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    console.log(props);
-    if (props.alert.error == true) {
+    //console.log(props);
+    if (props.alert.error) {
       setOpen(true);
       setMessage(props.alert.message);
     } else {
@@ -21,9 +21,9 @@ function AlertMessage(props) {
     }
   }, [props]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  // const handleOpen = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

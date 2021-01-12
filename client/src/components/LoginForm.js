@@ -40,6 +40,7 @@ function LoginForm() {
       return;
     } else if (credentials.email.match(/\S+@\S+\.\S+/) == null) {
       setAlert({ error: true, message: "Invalid email address" });
+      return;
     } else if (credentials.password.length < 1 || !credentials.password) {
       setAlert({
         error: true,
@@ -75,7 +76,7 @@ function LoginForm() {
           type="email"
           id="email"
           placeholder="Your Email"
-          autofocus
+          autoFocus
           required
         />
       </Grid>
@@ -87,8 +88,9 @@ function LoginForm() {
           variant="outlined"
           type="password"
           id="password"
-          minlength="6"
+          minLength="6"
           placeholder="Your Password"
+          autoComplete="on"
           required
         />
       </Grid>
