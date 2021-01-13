@@ -15,11 +15,11 @@ In the `.env` file create the following two variables and assign them the mongoU
 
 You should now be able to connect to the mongoDB database.
 
-# In the `.env` file create the TOKEN_SECRET variable
+## In the `.env` file create the TOKEN_SECRET variable
 
 TOKEN_SECRET=<token_secret>
 
-Finished Bacjend Login / Register API routes
+Finished Backend Login / Register API routes
 
 ## Login route : '/api/login/'
 
