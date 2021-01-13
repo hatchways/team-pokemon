@@ -2,16 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: [true, "Please provide your first name."],
-    validate: [validator.isAlpha, "First name must only contain characters."],
-  },
-  lastName: {
-    type: String,
-    required: [true, "Please provide your last name."],
-    validate: [validator.isAlpha, "Last name must only contain characters."],
-  },
   email: {
     type: String,
     required: [true, "Please provide your email."],

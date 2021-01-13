@@ -6,7 +6,6 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
-
 const authRouter = require("./routes/auth");
 
 const connectDB = require("./database");
