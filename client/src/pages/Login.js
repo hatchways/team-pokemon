@@ -1,11 +1,10 @@
 import React from "react";
-
 import { Grid, Hidden, Paper } from "@material-ui/core";
-//import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
-//import { Route, Link } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import dogsPicture from "../img/dogs-main.jpg";
+
+//import Navbar from "../components/navbar/Navbar";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,25 +30,15 @@ function Login() {
       alignItems="center"
       spacing={0}
       justify="center"
+      style={{ height: "100vh" }}
     >
-      <Grid
-        item
-        lg={6}
-        md={6}
-        sm={12}
-        style={{ maxHeight: "100vh", overflowY: "auto" }}
-      >
+      <Grid item lg={6} md={6} sm={12} style={{ overflowY: "auto" }}>
         <form>
           <LoginForm />
         </form>
       </Grid>
       <Hidden smDown>
-        <Grid
-          item
-          lg={6}
-          md={6}
-          style={{ backgroundColor: "blue", height: "100vh" }}
-        >
+        <Grid item lg={6} md={6} style={{ height: "100vh" }}>
           <Paper
             className={classes.sideImage}
             square
