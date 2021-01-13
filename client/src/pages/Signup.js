@@ -30,25 +30,15 @@ function Signup() {
       alignItems="center"
       spacing={0}
       justify="center"
+      style={{ height: "100vh" }}
     >
-      <Grid
-        item
-        lg={6}
-        md={6}
-        sm={12}
-        style={{ maxHeight: "100vh", overflowY: "auto" }}
-      >
+      <Grid item lg={6} md={6} sm={12} style={{ overflowY: "auto" }}>
         <form>
           <SignupForm />
         </form>
       </Grid>
       <Hidden smDown>
-        <Grid
-          item
-          lg={6}
-          md={6}
-          style={{ backgroundColor: "blue", height: "100vh" }}
-        >
+        <Grid item lg={6} md={6} style={{ height: "100vh" }}>
           <Paper
             className={classes.sideImage}
             square

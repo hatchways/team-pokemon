@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
@@ -6,25 +6,37 @@ import { theme } from "./themes/theme";
 //import LandingPage from "./pages/Landing";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/navbar/Navbar";
 import Profile from "./pages/Profile"; //temporary name
-
-import "./App.css";
+import { UserContext } from "./context/Context";
+import UserProvider from "./context/Context";
 
 function App() {
-  //loggedIn -> should come form context
+  //const { isAuthenticated, setIsAuthenticated } = useContext(UserContext);
+  //we should receive isAuthenticated from context
+  let isAuthenticated = false;
 
-  //const [loggedIn, setLoggedIn] = useState(false);
-  const loggedIn = false; //for now, use variable instead of state to avoid error on console
   return (
-    <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Route path="/">
-          {loggedIn ? <Profile /> : <Redirect to="/signup" />}
-        </Route>
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-      </BrowserRouter>
-    </MuiThemeProvider>
+    <UserProvider>
+      <MuiThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Navbar />
+          <Route path="/">
+            {isAuthenticated && isAuthenticated ? (
+              <Redirect to="/dashboard" />
+            ) : (
+              <Redirect to="/signup" />
+            )}
+          </Route>
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          {/* This should go into protected route */}
+          <Route path="/dashboard" component={Dashboard} />
+          {/* Untli here - protected routes */}
+        </BrowserRouter>
+      </MuiThemeProvider>
+    </UserProvider>
   );
 }
 
