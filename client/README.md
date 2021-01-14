@@ -1,3 +1,19 @@
+### Folder Structure
+
+```
+client
+├─── public
+├─── src
+│    ├─── actions         # Functions that make API calls to our server and call the dispatch method to handle state changes.
+│    ├─── components
+│    ├─── context         # Initialisation of our Context object(s).
+│    ├─── img
+│    ├─── pages
+│    ├─── reducers        # Contains state object and function to determine changes to our application's state.
+│    ├─── routing         # Contains Higher Order Component(s) related to routing (e.g. PrivateRoute)
+│    └─── themes
+```
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
