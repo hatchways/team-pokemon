@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
 import {
   Grid,
   Dialog,
@@ -28,6 +29,9 @@ const useStyles = makeStyles(theme => ({
     fontSize: "20px",
     margin: "24px auto",
     width: "fit-content",
+  },
+  logout: {
+    color: "red",
   },
   BackButton: {
     height: "60px",
@@ -65,6 +69,10 @@ function Dashboard() {
   const handleMenuWindow = e => {
     setOpen(true);
     setPageShown(+e.target.id); //+ to quickly convert string into number
+  };
+
+  const handleLogout = () => {
+    //API call to back-end
   };
 
   return (
@@ -113,6 +121,12 @@ function Dashboard() {
           >
             Settings
           </MenuItem>
+          <MenuItem
+            className={classes.menuItem + " " + classes.logout}
+            onClick={handleLogout}
+          >
+            Logout
+          </MenuItem>
         </MenuList>
       </Grid>
       <Hidden xsDown>
@@ -148,4 +162,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);

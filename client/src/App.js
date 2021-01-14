@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
@@ -8,35 +8,29 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/navbar/Navbar";
-import Profile from "./pages/Profile"; //temporary name
+//import Profile from "./pages/Profile"; //temporary name
 import { UserContext } from "./context/Context";
-import UserProvider from "./context/Context";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
-  //const { isAuthenticated, setIsAuthenticated } = useContext(UserContext);
-  //we should receive isAuthenticated from context
-  let isAuthenticated = false;
+  const { isAuthenticated, setIsAuthenticated } = useContext(UserContext);
 
   return (
-    <UserProvider>
-      <MuiThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Navbar />
-          <Route path="/">
-            {isAuthenticated && isAuthenticated ? (
-              <Redirect to="/dashboard" />
-            ) : (
-              <Redirect to="/signup" />
-            )}
-          </Route>
-          <Route path="/signup" component={Signup} />
-          <Route path="/login" component={Login} />
-          {/* This should go into protected route */}
-          <Route path="/dashboard" component={Dashboard} />
-          {/* Untli here - protected routes */}
-        </BrowserRouter>
-      </MuiThemeProvider>
-    </UserProvider>
+    <MuiThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Navbar />
+        <Route path="/" exact>
+          {isAuthenticated ? (
+            <Redirect to="/dashboard" />
+          ) : (
+            <Redirect to="/signup" />
+          )}
+        </Route>
+        <Route path="/signup" component={Signup} />
+        <Route path="/login" component={Login} />
+        <ProtectedRoute path="/dashboard" component={Dashboard} />
+      </BrowserRouter>
+    </MuiThemeProvider>
   );
 }
 
