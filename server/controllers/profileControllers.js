@@ -26,8 +26,24 @@ exports.create = async (req, res, next) => {
         });
         const savedProfile = await newProfile.save();
 
-        res.status(200).send("New profile created!");
+        res.status(200).send(savedProfile);
     }catch (err) {
+        next(createError(500, err.message));
+    }
+}
+/** 
+ * UPDATE /profile/:id 
+ * - Given an ID and new parameters, update the profile
+*/
+exports.updateProfile = async (req, res, next) => {
+    try{
+        //retrieve profile and update necessary fields
+        const updatedProfile = await Profile.findOneAndUpdate(
+            {_id: req.params.id},
+            { $set: req.body},
+            { new: true});
+            res.status(200).send(updatedProfile);
+    }catch (err){
         next(createError(500, err.message));
     }
 }
@@ -37,10 +53,11 @@ exports.create = async (req, res, next) => {
  */
 exports.getProfile = async (req, res, next) => {
     try{
-        const profile = await Profile.findById(req.body._id);
+        const profile = await Profile.findById(req.params.id);
         if (!profile){
             return next(createError(400, "Profile does not exist!"));
         }
+        res.status(200).send(profile);
     }catch (err){
         next(createError(500, err.message));
     }
@@ -49,3 +66,11 @@ exports.getProfile = async (req, res, next) => {
  * GET /profile
  * - A list of profiles 
  */
+exports.getProfileList = async (req, res, next) => {
+    try{
+        const profileList = await Profile.find();
+        res.status(200).send(profileList);
+    }catch (err){
+        next(createError(500, err.message));
+    }
+}
