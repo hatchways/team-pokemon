@@ -48,7 +48,7 @@ exports.updateProfile = async (req, res, next) => {
             { $set: req.body},
             { new: true});
         if (!updatedProfile){
-            return next(createError(400, "Update Failed! Profile does not exist!"));
+            return next(createError(404, "Update Failed! Profile does not exist!"));
         }
         res.status(200).send(updatedProfile);
     }catch (err){
@@ -68,7 +68,7 @@ exports.getProfile = async (req, res, next) => {
         //retrieve profile by id
         const profile = await Profile.findById(req.params.id);
         if (!profile){
-            return next(createError(400, "Profile does not exist!"));
+            return next(createError(404, "Profile does not exist!"));
         }
         res.status(200).send(profile);
     }catch (err){
