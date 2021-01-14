@@ -5,7 +5,7 @@ import Menu from "../components/dashboard/Menu";
 import BackButton from "../components/dashboard/BackButton";
 import { UserContext } from "../context/Context";
 
-function Profile() {
+function Security() {
   const { dashboardDialogOpen } = useContext(UserContext);
 
   return (
@@ -16,7 +16,7 @@ function Profile() {
       <Hidden xsDown>
         <Grid item lg={9} md={9} sm={8} style={{ padding: "15px" }}>
           <Paper square elevation={3} style={{ width: "100%", height: "100%" }}>
-            PROFILE INFO GOES HERE
+            Security page
           </Paper>
         </Grid>
       </Hidden>
@@ -29,8 +29,7 @@ function Profile() {
               elevation={3}
               style={{ width: "100%", height: "100%" }}
             >
-              PROFILE INFO GOES HERE - Should create a component later to bring
-              here
+              Security mobile
             </Paper>
           </Grid>
         </Dialog>
@@ -39,4 +38,4 @@ function Profile() {
   );
 }
 
-export default withRouter(Profile);
+export default withRouter(Security);

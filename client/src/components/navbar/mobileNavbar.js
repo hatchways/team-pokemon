@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import {
   IconButton,
   Button,
@@ -40,12 +40,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function MobileNavbar() {
-  const {
-    mobileMenuOpen,
-    setMobileMenuOpen,
-    isAuthenticated,
-    setIsAuthenticated,
-  } = useContext(UserContext);
+  const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
   const classes = useStyles();
 
   const handleClose = () => {
@@ -82,21 +77,21 @@ function MobileNavbar() {
             }}
           >
             <Grid item className={classes.gridElement}>
-              <Link to="/login" style={{ textDecorationColor: "red" }}>
+              <Link to="/login" style={{ textDecoration: "none" }}>
                 <Button className={classes.menuButton} onClick={handleClose}>
                   Login
                 </Button>
               </Link>
             </Grid>
             <Grid item className={classes.gridElement}>
-              <Link to="/signup" style={{ textDecorationColor: "red" }}>
+              <Link to="/signup" style={{ textDecoration: "none" }}>
                 <Button className={classes.menuButton} onClick={handleClose}>
                   Sign Up
                 </Button>
               </Link>
             </Grid>
             <Grid item className={classes.gridElement}>
-              <Link to="/*" style={{ textDecorationColor: "red" }}>
+              <Link to="/*" style={{ textDecoration: "none" }}>
                 <Button className={classes.menuButton} onClick={handleClose}>
                   Become a Sitter
                 </Button>

@@ -61,23 +61,19 @@ function Navbar() {
         <img src={logo} alt="logo" className={classes.logo} />
         <Hidden smDown>
           <Box mr={4} ml={4}>
-            <Link to="*">
-              <Button
-                color="secondary"
-                size="large"
-                className={classes.sitterLink}
-              >
+            <Link to="*" style={{ textDecorationColor: "black" }}>
+              <Button size="large" className={classes.sitterLink}>
                 Become a Sitter
               </Button>
             </Link>
             <Link to="/login" style={{ textDecoration: "none" }}>
-              <Button color="secondary" variant="outlined" size="large">
+              <Button color="primary" variant="outlined" size="large">
                 Login
               </Button>
             </Link>
           </Box>
           <Link to="/signup" style={{ textDecoration: "none" }}>
-            <Button color="secondary" variant="contained" size="large">
+            <Button color="primary" variant="contained" size="large">
               Sign Up
             </Button>
           </Link>

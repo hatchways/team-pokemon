@@ -95,7 +95,6 @@ function SignupForm() {
         </Typography>
       </Grid>
       <Grid item className={classes.elements}>
-        {/*<Typography>Email</Typography>*/}
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -108,7 +107,6 @@ function SignupForm() {
         />
       </Grid>
       <Grid item className={classes.elements}>
-        {/*<Typography>First name</Typography>*/}
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -120,7 +118,6 @@ function SignupForm() {
         />
       </Grid>
       <Grid item className={classes.elements}>
-        {/*<Typography>Last name</Typography>*/}
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -132,7 +129,6 @@ function SignupForm() {
         />
       </Grid>
       <Grid item className={classes.elements}>
-        {/*<Typography>Password</Typography>*/}
         <TextField
           className={classes.text}
           onChange={handleInputChange}

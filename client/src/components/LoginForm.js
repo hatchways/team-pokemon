@@ -72,7 +72,6 @@ function LoginForm() {
         </Typography>
       </Grid>
       <Grid item className={classes.elements}>
-        {/*<Typography>Email</Typography>*/}
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -85,7 +84,6 @@ function LoginForm() {
         />
       </Grid>
       <Grid item className={classes.elements}>
-        {/*<Typography className={classes.labels}>Password</Typography>*/}
         <TextField
           className={classes.text}
           onChange={handleInputChange}
