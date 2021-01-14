@@ -40,17 +40,17 @@ const createSendToken = (user, statusCode, req, res) => {
 
 exports.register = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
     // Validate data before creating new user
-    const { error } = registerValidation(req.body);
+    const { error } = registerValidation({ email, password });
 
     if (error) {
       return next(createError(400, error.details[0].message));
     }
 
-    const { email, password } = req.body;
-
     // Check if user already exists
     const emailExist = await User.findOne({ email });
+
     if (emailExist) {
       return next(createError(400, "Email already exists!"));
     }
@@ -103,4 +103,10 @@ exports.login = async (req, res, next) => {
   } catch (err) {
     next(createError(500, err.message));
   }
+};
+
+// Logout User
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.status(200).json({ status: "success" });
 };
