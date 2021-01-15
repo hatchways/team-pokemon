@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
 //import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AlertMessage from "./Alert";
 
-const useStyles = makeStyles(theme => ({
+import { login } from "../actions/auth";
+import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
+
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -27,12 +31,16 @@ function LoginForm() {
   //state for alert message to pass into Alert.js component if form validation fails
   const [alert, setAlert] = useState({ error: false, message: "" });
 
-  const handleInputChange = e => {
+  // get dispatch method and state from auth context
+  const dispatch = useContext(AuthDispatchContext);
+  const { isAuthenticated } = useContext(AuthStateContext);
+
+  const handleInputChange = (e) => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
   //submitting user's credentials
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {
@@ -49,11 +57,18 @@ function LoginForm() {
       return;
     }
 
-    //validation passed
-    console.log(credentials);
+    // Login action makes API request and handles all the necessary state changes
+    login(dispatch, credentials);
   };
+
   //call classes for Material-UI components
   const classes = useStyles();
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/profile" />;
+  }
+
   return (
     <Grid
       container
