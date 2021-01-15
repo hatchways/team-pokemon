@@ -20,18 +20,18 @@ export const getMonths = (year) => {
   const currYear = today.getFullYear();
   const currMonth = today.getMonth();
   let months = [
-    { idx: 1, name: "January" },
-    { idx: 2, name: "February" },
-    { idx: 3, name: "March" },
-    { idx: 4, name: "April" },
-    { idx: 5, name: "May" },
-    { idx: 6, name: "June" },
-    { idx: 7, name: "July" },
-    { idx: 8, name: "August" },
-    { idx: 9, name: "September" },
-    { idx: 10, name: "October" },
-    { idx: 11, name: "November" },
-    { idx: 12, name: "December" },
+    { idx: 0, name: "January" },
+    { idx: 1, name: "February" },
+    { idx: 2, name: "March" },
+    { idx: 3, name: "April" },
+    { idx: 4, name: "May" },
+    { idx: 5, name: "June" },
+    { idx: 6, name: "July" },
+    { idx: 7, name: "August" },
+    { idx: 8, name: "September" },
+    { idx: 9, name: "October" },
+    { idx: 10, name: "November" },
+    { idx: 11, name: "December" },
   ];
   if (year === currYear) {
     months = months.slice(0, currMonth);
@@ -40,9 +40,12 @@ export const getMonths = (year) => {
   return months;
 };
 
+// Returns an array of containing the number of days in a given month
 export const getDays = (month) => {
+  console.log("Feb is selected: ", month);
   switch (month) {
-    case "February":
+    // February
+    case 1:
       return [
         1,
         2,
@@ -73,10 +76,11 @@ export const getDays = (month) => {
         27,
         28,
       ];
-    case "April":
-    case "June":
-    case "September":
-    case "November":
+    // April, June, September, November
+    case 3:
+    case 5:
+    case 8:
+    case 10:
       return [
         1,
         2,

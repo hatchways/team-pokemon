@@ -5,10 +5,12 @@ import {
   TextField,
   Button,
   Select,
+  Switch,
   MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { getYears, getMonths, getDays } from "./BirthDatePicker";
+import AlertMessage from "../../Alert";
 
 const useStyles = makeStyles((theme) => ({
   vertAlign: {
@@ -20,10 +22,11 @@ const useStyles = makeStyles((theme) => ({
 
 function OwnerProfile() {
   const classes = useStyles();
-  const [editPhone, toggleEditPhone] = useState(false);
+  const [alert, setAlert] = useState({ error: false, message: "" });
 
   // Edit profile form's state
   const [profileData, setProfileData] = useState({
+    isSitter: false,
     fistName: "",
     lastName: "",
     gender: "",
@@ -36,10 +39,10 @@ function OwnerProfile() {
 
   // Destructure form field state
   const {
+    isSitter,
     firstName,
     lastName,
     gender,
-    birthDate,
     email,
     phoneNumber,
     address,
@@ -93,9 +96,14 @@ function OwnerProfile() {
       formattedDate = new Date(birthYear, e.target.value, birthDay);
     }
     if (e.target.name === "birthYear") {
+      setBirthYear(e.target.value);
       formattedDate = new Date(e.target.value, birthMonth, birthDay);
     }
-    console.log(formattedDate);
+
+    setProfileData({
+      ...profileData,
+      birthDate: formattedDate,
+    });
   };
 
   // Function that updates the state when changes are made
@@ -104,6 +112,35 @@ function OwnerProfile() {
       ...profileData,
       [e.target.name]: e.target.value,
     });
+    setAlert({ error: false, message: "" });
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!firstName) {
+      setAlert({ error: true, message: "First Name is Required!" });
+      return;
+    }
+
+    if (!lastName) {
+      setAlert({ error: true, message: "First Name is Required!" });
+      return;
+    }
+
+    // Check whether the birth date input was incorrectly selected
+    if (
+      (!birthDay && birthMonth) ||
+      (!birthDay && birthYear) ||
+      (birthDay && !birthMonth) ||
+      (!birthMonth && birthYear) ||
+      (!birthYear && birthMonth)
+    ) {
+      setAlert({ error: true, message: "Invalid Birth Date!" });
+      return;
+    }
+
+    // Passed validation
   };
 
   return (
@@ -115,13 +152,30 @@ function OwnerProfile() {
       </Grid>
       <Grid item sm={4} md={3} className={classes.vertAlign}>
         <Typography align="right" fontWeight={500}>
+          I'M A SITTER
+        </Typography>
+      </Grid>
+      <Grid item sm={8} md={9}>
+        <Switch
+          name="isSitter"
+          checked={isSitter}
+          onChange={(e) => {
+            setProfileData({
+              ...profileData,
+              [e.target.name]: e.target.checked,
+            });
+          }}
+        />
+      </Grid>
+      <Grid item sm={4} md={3} className={classes.vertAlign}>
+        <Typography align="right" fontWeight={500}>
           FIRST NAME
         </Typography>
       </Grid>
       <Grid item sm={8} md={9}>
         <TextField
           variant="outlined"
-          name="fistName"
+          name="firstName"
           placeholder="John"
           fullWidth={true}
           onChange={(e) => onChange(e)}
@@ -179,27 +233,21 @@ function OwnerProfile() {
           onChange={(e) => {
             handleBirthDateChange(e);
           }}
-          value={
-            birthMonth ? birthMonth : monthArray[monthArray.length - 1]["idx"]
-          }
+          value={birthMonth}
         >
           {monthMenuItem}
         </Select>
         <Select
           name="birthDay"
           onChange={(e) => handleBirthDateChange(e)}
-          value={
-            birthDay && birthDay <= dayArray[dayArray.length - 1]
-              ? birthDay
-              : dayArray[dayArray.length - 1]
-          }
+          value={birthDay}
         >
           {dayMenuItem}
         </Select>
         <Select
           name="birthYear"
           onChange={(e) => handleBirthDateChange(e)}
-          value={birthYear ? birthYear : yearArray[0]}
+          value={birthYear}
         >
           {yearMenuItem}
         </Select>
@@ -223,34 +271,14 @@ function OwnerProfile() {
         <Typography align="right">PHONE NUMBER</Typography>
       </Grid>
       <Grid item sm={9}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} className={classes.vertAlign}>
-            {editPhone ? (
-              <TextField
-                variant="outlined"
-                name="phoneNumber"
-                fullWidth={true}
-                value={phoneNumber}
-                onChange={(e) => onChange(e)}
-              ></TextField>
-            ) : (
-              [
-                phoneNumber ? (
-                  <Typography>{phoneNumber}</Typography>
-                ) : (
-                  <Typography>
-                    <em>No Phone Number Added</em>
-                  </Typography>
-                ),
-              ]
-            )}
-          </Grid>
-          <Grid item xs={6}>
-            <Button onClick={() => toggleEditPhone(!editPhone)}>
-              {editPhone ? "Save" : "Add a phone Number"}
-            </Button>
-          </Grid>
-        </Grid>
+        <TextField
+          variant="outlined"
+          name="phoneNumber"
+          placeholder="Your Phone Number"
+          fullWidth={true}
+          value={phoneNumber}
+          onChange={(e) => onChange(e)}
+        />
       </Grid>
       <Grid item sm={3} className={classes.vertAlign}>
         <Typography align="right">WHERE YOU LIVE</Typography>
@@ -281,9 +309,16 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item sm={12} align="center">
-        <Button type="submit" variant="contained" size="large" color="primary">
+        <Button
+          type="submit"
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={(e) => handleSubmit(e)}
+        >
           SAVE
         </Button>
+        <AlertMessage alert={alert} />
       </Grid>
     </Grid>
   );
