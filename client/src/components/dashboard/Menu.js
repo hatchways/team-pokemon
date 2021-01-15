@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core";
 import { UserContext } from "../../context/Context";
 import { Link } from "react-router-dom";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuBox: {
     "&:focus": {

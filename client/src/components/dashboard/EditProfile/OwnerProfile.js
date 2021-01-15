@@ -4,19 +4,21 @@ import {
   Grid,
   TextField,
   Button,
-  Select,
   Switch,
   MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
-import { getYears, getMonths, getDays } from "./BirthDatePicker";
+import { getYears, getMonths, getDays } from "./birthDateUtils";
 import AlertMessage from "../../Alert";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   vertAlign: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+  },
+  labelStyles: {
+    fontWeight: "bold",
   },
 }));
 
@@ -100,6 +102,8 @@ function OwnerProfile() {
       formattedDate = new Date(e.target.value, birthMonth, birthDay);
     }
 
+    setAlert({ error: false, message: "" });
+
     setProfileData({
       ...profileData,
       birthDate: formattedDate,
@@ -144,19 +148,20 @@ function OwnerProfile() {
   };
 
   return (
-    <Grid container spacing={3} style={{ width: "80%", paddingTop: "10px" }}>
+    <Grid container spacing={3} style={{ width: "80%", paddingTop: "30px" }}>
       <Grid item xs={12}>
-        <Typography variant="h4" align="center">
+        <Typography variant="h4" align="center" style={{ fontWeight: "bold" }}>
           Edit Profile
         </Typography>
       </Grid>
       <Grid item sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" fontWeight={500}>
+        <Typography align="right" className={classes.labelStyles}>
           I'M A SITTER
         </Typography>
       </Grid>
       <Grid item sm={8} md={9}>
         <Switch
+          color="primary"
           name="isSitter"
           checked={isSitter}
           onChange={(e) => {
@@ -164,11 +169,12 @@ function OwnerProfile() {
               ...profileData,
               [e.target.name]: e.target.checked,
             });
+            setAlert({ error: false, message: "" });
           }}
         />
       </Grid>
       <Grid item sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" fontWeight={500}>
+        <Typography align="right" className={classes.labelStyles}>
           FIRST NAME
         </Typography>
       </Grid>
@@ -184,7 +190,9 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right">LAST NAME</Typography>
+        <Typography align="right" className={classes.labelStyles}>
+          LAST NAME
+        </Typography>
       </Grid>
       <Grid item sm={8} md={9}>
         <TextField
@@ -197,63 +205,75 @@ function OwnerProfile() {
           required
         />
       </Grid>
-      <Grid item sm={3} className={classes.vertAlign}>
-        <Typography align="right">GENDER</Typography>
+      <Grid item sm={4} md={3} className={classes.vertAlign}>
+        <Typography align="right" className={classes.labelStyles}>
+          GENDER
+        </Typography>
       </Grid>
-      <Grid item sm={9}>
-        <Select
-          disableUnderline
+      <Grid item sm={8} md={9}>
+        <TextField
+          select
+          variant="outlined"
           name="gender"
-          displayEmpty
-          placeholder="Male"
           value={gender ? gender : ""}
           onChange={(e) => onChange(e)}
-          MenuProps={{
-            // moves the menu below the select input
-            anchorOrigin: {
-              vertical: "bottom",
-              horizontal: "left",
-            },
-            getContentAnchorEl: null,
-          }}
+          style={{ width: "50%" }}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           <MenuItem value="Male">Male</MenuItem>
           <MenuItem value="Female">Female</MenuItem>
-        </Select>
+        </TextField>
       </Grid>
-      <Grid item sm={3} className={classes.vertAlign}>
-        <Typography align="right">BIRTH DATE</Typography>
+      <Grid item sm={4} md={3} className={classes.vertAlign}>
+        <Typography align="right" className={classes.labelStyles}>
+          BIRTH DATE
+        </Typography>
       </Grid>
-      <Grid item sm={9}>
-        <Select
+      <Grid
+        item
+        sm={8}
+        md={9}
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
+        <TextField
+          select
+          variant="outlined"
           name="birthMonth"
+          label="Month"
           onChange={(e) => {
             handleBirthDateChange(e);
           }}
           value={birthMonth}
+          style={{ width: "30%" }}
         >
           {monthMenuItem}
-        </Select>
-        <Select
+        </TextField>
+        <TextField
+          select
+          variant="outlined"
           name="birthDay"
+          label="Day"
           onChange={(e) => handleBirthDateChange(e)}
           value={birthDay}
+          style={{ width: "30%" }}
         >
           {dayMenuItem}
-        </Select>
-        <Select
+        </TextField>
+        <TextField
+          select
+          variant="outlined"
           name="birthYear"
+          label="Year"
           onChange={(e) => handleBirthDateChange(e)}
           value={birthYear}
+          style={{ width: "30%" }}
         >
           {yearMenuItem}
-        </Select>
+        </TextField>
       </Grid>
       <Grid item sm={3} className={classes.vertAlign}>
-        <Typography align="right">EMAIL ADDRESS</Typography>
+        <Typography align="right" className={classes.labelStyles}>
+          EMAIL ADDRESS
+        </Typography>
       </Grid>
       <Grid item sm={9}>
         <TextField
@@ -268,7 +288,9 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item sm={3} className={classes.vertAlign}>
-        <Typography align="right">PHONE NUMBER</Typography>
+        <Typography align="right" className={classes.labelStyles}>
+          PHONE NUMBER
+        </Typography>
       </Grid>
       <Grid item sm={9}>
         <TextField
@@ -281,7 +303,9 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item sm={3} className={classes.vertAlign}>
-        <Typography align="right">WHERE YOU LIVE</Typography>
+        <Typography align="right" className={classes.labelStyles}>
+          WHERE YOU LIVE
+        </Typography>
       </Grid>
       <Grid item sm={9}>
         <TextField
@@ -294,7 +318,9 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item sm={3} className={classes.vertAlign}>
-        <Typography align="right">DESCRIBE YOURSELF</Typography>
+        <Typography align="right" className={classes.labelStyles}>
+          DESCRIBE YOURSELF
+        </Typography>
       </Grid>
       <Grid item sm={9}>
         <TextField
@@ -310,10 +336,16 @@ function OwnerProfile() {
       </Grid>
       <Grid item sm={12} align="center">
         <Button
+          disabled={false}
+          style={{
+            height: "60px",
+            width: "30%",
+            marginTop: "25px",
+          }}
           type="submit"
           variant="contained"
           size="large"
-          color="primary"
+          color="secondary"
           onClick={(e) => handleSubmit(e)}
         >
           SAVE

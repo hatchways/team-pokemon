@@ -10,18 +10,33 @@ function Profile() {
   const { dashboardDialogOpen } = useContext(UserContext);
 
   return (
-    <Grid container style={{ paddingTop: "90px", height: "100vh" }}>
-      <Grid item lg={3} md={3} sm={4} xs={12}>
-        <Menu />
-      </Grid>
+    <Grid
+      container
+      style={{ paddingTop: "90px", height: "100vh", width: "80%" }}
+    >
+      <Hidden smDown>
+        <Grid item lg={3} md={3} sm={4} xs={12}>
+          <Menu />
+        </Grid>
+      </Hidden>
       <Hidden xsDown>
-        <Grid item lg={9} md={9} sm={8} style={{ padding: "15px" }}>
+        <Grid
+          item
+          lg={9}
+          md={9}
+          sm={8}
+          style={{
+            width: "100%",
+            padding: "15px",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
           <Paper
             square
             elevation={3}
             style={{
-              width: "minContent",
-              padding: "15px",
+              paddingBottom: "75px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -38,10 +53,15 @@ function Profile() {
             <Paper
               square
               elevation={3}
-              style={{ width: "100%", height: "100%" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              PROFILE INFO GOES HERE - Should create a component later to bring
-              here
+              <OwnerProfile />
             </Paper>
           </Grid>
         </Dialog>
