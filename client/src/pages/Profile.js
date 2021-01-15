@@ -4,6 +4,7 @@ import { Grid, Dialog, Hidden, Paper } from "@material-ui/core";
 import Menu from "../components/dashboard/Menu";
 import BackButton from "../components/dashboard/BackButton";
 import { UserContext } from "../context/Context";
+import OwnerProfile from "../components/dashboard/EditProfile/OwnerProfile";
 
 function Profile() {
   const { dashboardDialogOpen } = useContext(UserContext);
@@ -15,8 +16,18 @@ function Profile() {
       </Grid>
       <Hidden xsDown>
         <Grid item lg={9} md={9} sm={8} style={{ padding: "15px" }}>
-          <Paper square elevation={3} style={{ width: "100%", height: "100%" }}>
-            PROFILE INFO GOES HERE
+          <Paper
+            square
+            elevation={3}
+            style={{
+              width: "minContent",
+              padding: "15px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <OwnerProfile />
           </Paper>
         </Grid>
       </Hidden>
