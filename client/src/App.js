@@ -9,11 +9,17 @@ import { initialState, AuthReducer } from "./reducers/auth";
 import PrivateRoute from "./routing/PrivateRoute";
 
 import { theme } from "./themes/theme";
-//import LandingPage from "./pages/Landing";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile"; // temporary name
 import TestingRoute from "./pages/TestingRoute";
+import Navbar from "./components/navbar/Navbar";
+import Profile from "./pages/Profile";
+import Photo from "./pages/Photo";
+import Availability from "./pages/Availability";
+import Payment from "./pages/Payment";
+import Security from "./pages/Security";
+import Settings from "./pages/Settings";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 import "./App.css";
 
@@ -30,17 +36,19 @@ function App() {
       <BrowserRouter>
         <AuthStateContext.Provider value={state}>
           <AuthDispatchContext.Provider value={dispatch}>
-            <Route exact path="/">
-              {state.isAuthenticated ? (
-                <Redirect to="/profile" />
-              ) : (
-                <Redirect to="/signup" />
-              )}
-            </Route>
+            <Navbar />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
-            <PrivateRoute exact path="/profile" component={Profile} />
-            <PrivateRoute exact path="/testingroute" component={TestingRoute} />
+            <PrivateRoute path="/" exact component={Profile} />
+            <PrivateRoute path="/dashboard/profile" component={Profile} />
+            <PrivateRoute path="/dashboard/photo" component={Photo} />
+            <PrivateRoute
+              path="/dashboard/availability"
+              component={Availability}
+            />
+            <PrivateRoute path="/dashboard/payment" component={Payment} />
+            <PrivateRoute path="/dashboard/security" component={Security} />
+            <PrivateRoute path="/dashboard/settings" component={Settings} />
           </AuthDispatchContext.Provider>
         </AuthStateContext.Provider>
       </BrowserRouter>

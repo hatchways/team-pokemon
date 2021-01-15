@@ -100,14 +100,17 @@ function SignupForm() {
       alignItems="center"
       direction="column"
       spacing={0}
+      style={{ paddingTop: "25px" }}
     >
       <Grid item className={classes.elements}>
-        <Typography variant="h4" style={{ marginTop: "20px" }}>
+        <Typography
+          variant="h4"
+          style={{ marginTop: "20px", marginBottom: "5px" }}
+        >
           Sign Up
         </Typography>
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography>Email</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -115,34 +118,33 @@ function SignupForm() {
           type="email"
           id="email"
           placeholder="Your Email"
-          autoFocus
+          label="Email"
           required
         />
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography>First name</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
           variant="outlined"
           id="firstName"
+          label="First Name"
           placeholder="Your First Name"
           required
         />
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography>Last name</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
           variant="outlined"
           id="lastName"
           placeholder="Your Last Name"
+          label="Last Name"
           required
         />
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography>Password</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -151,6 +153,7 @@ function SignupForm() {
           id="password"
           minLength="6"
           placeholder="Create a password (at least 6 characters)"
+          label="Password"
           autoComplete="on"
           required
         />

@@ -76,14 +76,17 @@ function LoginForm() {
       alignItems="center"
       direction="column"
       spacing={0}
+      style={{ paddingTop: "25px" }}
     >
       <Grid item className={classes.elements}>
-        <Typography variant="h4" style={{ marginTop: "20px" }}>
+        <Typography
+          variant="h4"
+          style={{ marginTop: "20px", marginBottom: "20px" }}
+        >
           Login
         </Typography>
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography>Email</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -91,12 +94,11 @@ function LoginForm() {
           type="email"
           id="email"
           placeholder="Your Email"
-          autoFocus
+          label="Email"
           required
         />
       </Grid>
       <Grid item className={classes.elements}>
-        <Typography className={classes.labels}>Password</Typography>
         <TextField
           className={classes.text}
           onChange={handleInputChange}
@@ -105,6 +107,7 @@ function LoginForm() {
           id="password"
           minLength="6"
           placeholder="Your Password"
+          label="Password"
           autoComplete="on"
           required
         />
