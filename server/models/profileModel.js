@@ -22,6 +22,9 @@ const profileSchema = new mongoose.Schema({
       description: {
           type: String,
           validate: [validator.isAlpha, "description must contain only characters"]
+      },
+      profilePicture: {
+          type: String
       }
 });
 

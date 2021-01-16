@@ -1,6 +1,7 @@
 const createError = require("http-errors");
 const Profile = require('../models/profileModel');
 const ObjectId = require('mongoose').Types.ObjectId;
+const cloudinaryUpload = require("../middleware/cloudinaryUpload");
 
 /**
  * CREATE /profile
@@ -83,6 +84,39 @@ exports.getProfileList = async (req, res, next) => {
     try{
         const profileList = await Profile.find();
         res.status(200).send(profileList);
+    }catch (err){
+        next(createError(500, err.message));
+    }
+}
+/**
+ * upload image for profile
+ * - takes image file and uploads it to cloudinary. Updates profile picture
+ *   with new url returned from cloudinary.
+ */
+exports.upload = async (req, res, next) =>{
+    try {
+        //check if ID is valid
+        if(!ObjectId.isValid(req.params.id)){
+            return next(createError(400, "Invalid Profile id!"))
+        }
+       const file = req.files.image; // extract image from post request
+       //return error if image not included in request
+       if(!file){
+           return next(createError(400,"Please include image"));
+       }
+
+       const result = await cloudinaryUpload.upload(file.tempFilePath);
+
+       //update profile pic with new url
+       const updatedProfile = await Profile.findOneAndUpdate(
+           {_id: req.params.id},
+           { profilePicture: result.url}, 
+           { new: true});
+        if (!updatedProfile){ // check if profile exists.
+            return next(createError(404, "Image upload failed. Profile does not exist!"));
+        }
+       res.status(200).send("Image updated!");
+
     }catch (err){
         next(createError(500, err.message));
     }
