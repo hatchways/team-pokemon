@@ -373,7 +373,7 @@ function OwnerProfile() {
       </Grid>
       <Grid item xs={12} sm={12} align="center">
         <Button
-          disabled={!firstName || !lastName}
+          disabled={!firstName || !lastName || !email}
           style={{
             height: "60px",
             width: "30%",

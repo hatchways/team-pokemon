@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const Profile = require("../models/profileModel");
+const User = require("../models/userModel");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /**
@@ -39,6 +40,7 @@ exports.create = async (req, res, next) => {
 exports.updateProfile = async (req, res, next) => {
   try {
     // Add check if profile belongs to current user
+
     //check if ID is valid
     if (!ObjectId.isValid(req.params.id)) {
       return next(createError(400, "Invalid Profile id!"));
@@ -67,6 +69,13 @@ exports.updateProfile = async (req, res, next) => {
     if (address) profileFields.address = address;
     if (description) profileFields.description = description;
 
+    // retrieve user and update email field
+    const user = await User.findById(req.user.id);
+
+    user.email = email;
+
+    const updatedUser = await user.save();
+
     //retrieve profile and update necessary fields
     const updatedProfile = await Profile.findOneAndUpdate(
       { _id: req.params.id },
@@ -77,7 +86,7 @@ exports.updateProfile = async (req, res, next) => {
     if (!updatedProfile) {
       return next(createError(404, "Update Failed! Profile does not exist!"));
     }
-    res.status(200).send(updatedProfile);
+    res.status(200).send({ profile: updatedProfile, user: updatedUser });
   } catch (err) {
     next(createError(500, err.message));
   }
