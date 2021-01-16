@@ -38,7 +38,8 @@ export const AuthReducer = (state = initialState, action) => {
     case PROFILE_UPDATE_SUCCESS:
       return {
         ...state,
-        profile: payload,
+        user: payload.user,
+        profile: payload.profile,
       };
     case LOGOUT_SUCCESS:
     case NOT_LOGGED_IN:
