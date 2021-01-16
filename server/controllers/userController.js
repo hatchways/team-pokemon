@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 
 exports.getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).populate("profile");
 
     if (!user) {
       return next(createError(404, "User not found."));

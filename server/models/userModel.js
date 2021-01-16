@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     minLength: 6, // This check may not work if our password is salted + hashed prior to storing in database. The hashed password length may always be greater than 6 characters even if plain text password is less than 6. May need to update number depending on which hashing algorithm we use.
     select: false,
   },
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Profile",
+  },
 });
 
 const User = mongoose.model("User", userSchema);
