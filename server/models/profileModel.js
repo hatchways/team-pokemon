@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const profileSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
   isSitter: {
     type: Boolean,
     default: false,
