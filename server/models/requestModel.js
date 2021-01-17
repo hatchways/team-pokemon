@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-//const validator = require("validator"); do we need it?
 
 const requestSchema = new mongoose.Schema({
   userId: {
@@ -20,17 +19,14 @@ const requestSchema = new mongoose.Schema({
   },
   accepted: {
     type: Boolean,
-    required: true,
     default: false,
   },
   declined: {
     type: Boolean,
-    required: true,
     default: false,
   },
   paid: {
     type: Boolean,
-    required: true,
     default: false,
   },
 });
