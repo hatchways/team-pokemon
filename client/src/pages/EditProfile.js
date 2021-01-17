@@ -6,8 +6,9 @@ import {
   Button,
   Switch,
   MenuItem,
+  makeStyles,
+  useMediaQuery,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
 import { getYears, getMonths, getDays } from "../utils/birthDate";
 import AlertMessage from "../components/Alert";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
@@ -24,11 +25,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function OwnerProfile() {
+function EditProfile() {
   const classes = useStyles();
-  const [alert, setAlert] = useState({ error: false, message: "" });
+  const aboveSm = useMediaQuery("(min-width:600px)");
 
-  // get dispatch method and state from auth context
+  // Component's local state
+  const [alert, setAlert] = useState({ error: false, message: "" });
+  const [saveButtonText, setSaveButtonText] = useState("SAVE");
+
+  // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
   const { user, profile } = useContext(AuthStateContext);
 
@@ -64,15 +69,15 @@ function OwnerProfile() {
       setBirthMonth(parseInt(profile.birthDate.slice(5, 7)) - 1);
     profile.birthDate && setBirthDay(parseInt(profile.birthDate.slice(8)));
     setProfileData({
-      isSitter: profile.isSitter && profile.isSitter,
-      firstName: profile.firstName && profile.firstName,
-      lastName: profile.lastName && profile.lastName,
-      gender: profile.gender && profile.gender,
-      birthDate: profile.birthDate && profile.birthDate,
-      email: user.email && user.email,
-      phoneNumber: profile.phoneNumber && profile.phoneNumber,
-      address: profile.address && profile.address,
-      description: profile.description && profile.description,
+      isSitter: profile.isSitter ? profile.isSitter : false,
+      firstName: profile.firstName ? profile.firstName : "",
+      lastName: profile.lastName ? profile.lastName : "",
+      gender: profile.gender ? profile.gender : "",
+      birthDate: profile.birthDate ? profile.birthDate : "",
+      email: user.email ? user.email : "",
+      phoneNumber: profile.phoneNumber ? profile.phoneNumber : "",
+      address: profile.address ? profile.address : "",
+      description: profile.description ? profile.description : "",
     });
   }, [
     profile.isSitter,
@@ -115,22 +120,24 @@ function OwnerProfile() {
 
   // Function that handles changes to birth date (year, month, and date <Select> input).
   const handleBirthDateChange = (e) => {
+    setSaveButtonText("SAVE");
     let fullDate;
     if (birthDay > dayArray[dayArray.length - 1]) {
       setBirthDay(dayArray[dayArray.length - 1]);
-      fullDate = new Date(dayArray[dayArray.length - 1], birthMonth, birthDay);
+      fullDate = `${birthYear}-${birthMonth + 1}-${e.target.value}`;
+      // fullDate = new Date(dayArray[dayArray.length - 1], birthMonth, birthDay);
     }
     if (e.target.name === "birthDay") {
       setBirthDay(e.target.value);
-      fullDate = new Date(birthYear, birthMonth, e.target.value);
+      fullDate = new Date(birthYear, birthMonth, e.target.value + 1);
     }
     if (e.target.name === "birthMonth") {
       setBirthMonth(e.target.value);
-      fullDate = new Date(birthYear, e.target.value, birthDay);
+      fullDate = new Date(birthYear, e.target.value, birthDay + 1);
     }
     if (e.target.name === "birthYear") {
       setBirthYear(e.target.value);
-      fullDate = new Date(e.target.value, birthMonth, birthDay);
+      fullDate = new Date(e.target.value, birthMonth, birthDay + 1);
     }
 
     setAlert({ error: false, message: "" });
@@ -144,22 +151,27 @@ function OwnerProfile() {
 
   // Function that updates the state when changes are made
   const onChange = (e) => {
+    setSaveButtonText("SAVE");
     setProfileData({
       ...profileData,
       [e.target.name]: e.target.value,
     });
     setAlert({ error: false, message: "" });
   };
+
   // Handle form submission
   const handleSubmit = (e) => {
+    setSaveButtonText("SAVING...");
     e.preventDefault();
     if (!firstName) {
       setAlert({ error: true, message: "First Name is Required!" });
+      setSaveButtonText("SAVE");
       return;
     }
 
     if (!lastName) {
       setAlert({ error: true, message: "First Name is Required!" });
+      setSaveButtonText("SAVE");
       return;
     }
 
@@ -172,11 +184,13 @@ function OwnerProfile() {
       (!birthYear && birthMonth)
     ) {
       setAlert({ error: true, message: "Invalid Birth Date!" });
+      setSaveButtonText("SAVE");
       return;
     }
 
     // Validation passed
     updateProfile(dispatch, profileData, profile._id);
+    setSaveButtonText("SAVED");
   };
 
   return (
@@ -190,17 +204,21 @@ function OwnerProfile() {
           Edit Profile
         </Typography>
       </Grid>
-      <Grid item sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+      <Grid item sm={3} className={classes.vertAlign}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           I'M A SITTER
         </Typography>
       </Grid>
-      <Grid item sm={8} md={9}>
+      <Grid item sm={9}>
         <Switch
           color="primary"
           name="isSitter"
           checked={isSitter}
           onChange={(e) => {
+            setSaveButtonText("SAVE");
             setProfileData({
               ...profileData,
               [e.target.name]: e.target.checked,
@@ -209,12 +227,15 @@ function OwnerProfile() {
           }}
         />
       </Grid>
-      <Grid item xs={12} sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+      <Grid item xs={12} sm={3} className={classes.vertAlign}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           FIRST NAME
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={8} md={9}>
+      <Grid item xs={12} sm={9}>
         <TextField
           variant="outlined"
           name="firstName"
@@ -225,12 +246,15 @@ function OwnerProfile() {
           required
         />
       </Grid>
-      <Grid item xs={12} sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+      <Grid item xs={12} sm={3} className={classes.vertAlign}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           LAST NAME
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={8} md={9}>
+      <Grid item xs={12} sm={9}>
         <TextField
           variant="outlined"
           name="lastName"
@@ -241,12 +265,15 @@ function OwnerProfile() {
           required
         />
       </Grid>
-      <Grid item xs={12} sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+      <Grid item xs={12} sm={3} className={classes.vertAlign}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           GENDER
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={8} md={9}>
+      <Grid item xs={12} sm={9}>
         <TextField
           select
           variant="outlined"
@@ -259,16 +286,18 @@ function OwnerProfile() {
           <MenuItem value="Female">Female</MenuItem>
         </TextField>
       </Grid>
-      <Grid item xs={12} sm={4} md={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+      <Grid item xs={12} sm={3} className={classes.vertAlign}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           BIRTH DATE
         </Typography>
       </Grid>
       <Grid
         item
         xs={12}
-        sm={8}
-        md={9}
+        sm={9}
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <TextField
@@ -308,7 +337,10 @@ function OwnerProfile() {
         </TextField>
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           EMAIL ADDRESS
         </Typography>
       </Grid>
@@ -325,7 +357,10 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           PHONE NUMBER
         </Typography>
       </Grid>
@@ -340,7 +375,10 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           WHERE YOU LIVE
         </Typography>
       </Grid>
@@ -355,7 +393,10 @@ function OwnerProfile() {
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
-        <Typography align="right" className={classes.labelStyles}>
+        <Typography
+          align={aboveSm ? "right" : "left"}
+          className={classes.labelStyles}
+        >
           DESCRIBE YOURSELF
         </Typography>
       </Grid>
@@ -377,15 +418,15 @@ function OwnerProfile() {
           style={{
             height: "60px",
             width: "30%",
-            marginTop: "25px",
+            margin: "25px 0",
           }}
           type="submit"
           variant="contained"
           size="large"
-          color="secondary"
+          color="primary"
           onClick={(e) => handleSubmit(e)}
         >
-          SAVE
+          {saveButtonText}
         </Button>
         <AlertMessage alert={alert} />
       </Grid>
@@ -393,4 +434,4 @@ function OwnerProfile() {
   );
 }
 
-export default OwnerProfile;
+export default EditProfile;

@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     "&:focus": {
       outline: "none",
     },
+    padding: "0 50px",
   },
   menuItem: {
     fontSize: "20px",

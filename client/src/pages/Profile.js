@@ -1,70 +1,84 @@
-import React, { useContext } from "react";
+import React from "react";
 import { withRouter } from "react-router-dom";
-import { Grid, Dialog, Hidden, Paper } from "@material-ui/core";
+import { Box, Hidden, Paper, makeStyles } from "@material-ui/core";
 import Menu from "../components/dashboard/Menu";
-import BackButton from "../components/dashboard/BackButton";
-import { UserContext } from "../context/Context";
 import OwnerProfile from "./EditProfile";
 
-function Profile() {
-  const { dashboardDialogOpen } = useContext(UserContext);
+const useStyles = makeStyles(() => ({
+  centerPaper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+}));
 
+function Profile() {
+  const classes = useStyles();
   return (
-    <Grid
-      container
-      style={{ paddingTop: "90px", height: "100vh", width: "80%" }}
+    <Box
+      display="flex"
+      flexWrap="nowrap"
+      style={{ paddingTop: "90px", minHeight: "100vh" }}
+      bgcolor="grey"
     >
-      <Grid item lg={3} md={3} sm={4} xs={12}>
-        <Menu />
-      </Grid>
-      <Hidden xsDown>
-        <Grid
-          item
-          lg={9}
-          md={9}
-          sm={8}
-          style={{
-            width: "100%",
-            padding: "15px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
+      <Hidden smDown>
+        <Box>
+          <Menu />
+        </Box>
+      </Hidden>
+
+      <Hidden smDown>
+        <Box flexGrow={1}>
           <Paper
             square
             elevation={3}
+            className={classes.centerPaper}
             style={{
-              paddingBottom: "75px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              paddingBottom: "50px",
+              marginBottom: "25px",
+              width: "690px",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             <OwnerProfile />
           </Paper>
-        </Grid>
+        </Box>
+      </Hidden>
+      <Hidden xsDown mdUp>
+        <Box flexGrow={1}>
+          <Paper
+            square
+            elevation={3}
+            className={classes.centerPaper}
+            style={{
+              paddingBottom: "50px",
+              marginBottom: "25px",
+              width: "580px",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <OwnerProfile />
+          </Paper>
+        </Box>
       </Hidden>
       <Hidden smUp>
-        <Dialog open={dashboardDialogOpen} fullScreen>
-          <BackButton />
-          <Grid item lg={8} md={8} sm={8} xs={12} style={{ padding: "15px" }}>
-            <Paper
-              square
-              elevation={3}
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <OwnerProfile />
-            </Paper>
-          </Grid>
-        </Dialog>
+        <Box flexGrow={1} style={{}}>
+          <Paper
+            square
+            elevation={3}
+            className={classes.centerPaper}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <OwnerProfile />
+          </Paper>
+        </Box>
       </Hidden>
-    </Grid>
+    </Box>
   );
 }
 
