@@ -124,8 +124,7 @@ function EditProfile() {
     let fullDate;
     if (birthDay > dayArray[dayArray.length - 1]) {
       setBirthDay(dayArray[dayArray.length - 1]);
-      fullDate = `${birthYear}-${birthMonth + 1}-${e.target.value}`;
-      // fullDate = new Date(dayArray[dayArray.length - 1], birthMonth, birthDay);
+      fullDate = new Date(dayArray[dayArray.length - 1], birthMonth, birthDay);
     }
     if (e.target.name === "birthDay") {
       setBirthDay(e.target.value);
