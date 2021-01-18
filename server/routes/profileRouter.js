@@ -10,5 +10,6 @@ router.use(verifyToken);
 router.put("/:id", profileController.updateProfile); // update /profile:id
 router.get("/:id", profileController.getProfile); // get /profile:id
 router.get("/", profileController.getProfileList); // get /profile -- returns a list of profiles
+router.post("/upload/:id", profileController.upload); // upload profile picture
 
 module.exports = router;

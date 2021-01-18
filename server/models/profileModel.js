@@ -32,6 +32,9 @@ const profileSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  profilePicture: {
+    type: String
+  }
 });
 
 const Profile = mongoose.model("Profile", profileSchema);
