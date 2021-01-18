@@ -3,6 +3,8 @@ import { MenuList, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { UserContext } from "../../context/Context";
 import { Link } from "react-router-dom";
+import { AuthDispatchContext } from "../../context/AuthContext";
+import { logout } from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
   root: { flexgrow: 1 },
@@ -23,12 +25,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Menu() {
+  const dispatch = useContext(AuthDispatchContext);
   const { setDashboardDialogOpen } = useContext(UserContext);
 
   const classes = useStyles();
 
   const handleLogout = () => {
-    //API call to back-end to log user out
+    logout(dispatch);
   };
 
   return (

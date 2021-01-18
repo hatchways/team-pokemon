@@ -8,8 +8,9 @@ import { Link } from "react-router-dom";
 import AlertMessage from "./Alert";
 import { register } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
+//import { UserContext } from "../context/Context";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -33,7 +34,7 @@ function SignupForm() {
   //state for alert message to pass into Alert.js component if form validation fails
   const [alert, setAlert] = useState({ error: false, message: "" });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
@@ -45,7 +46,7 @@ function SignupForm() {
   const { isAuthenticated } = useContext(AuthStateContext);
 
   //submitting user's credentials
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {
@@ -83,6 +84,7 @@ function SignupForm() {
     register(dispatch, credentials);
 
     // when receiving data from server, we can setAlert with any errors from BE (BE validation, email already exists, etc)
+    //still to be addressed
   };
 
   //call classes for Material-UI components
@@ -90,7 +92,7 @@ function SignupForm() {
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/profile" />;
+    return <Redirect to="/dashboard/profile" />;
   }
 
   return (
