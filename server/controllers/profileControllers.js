@@ -99,6 +99,10 @@ exports.upload = async (req, res, next) =>{
         if(!ObjectId.isValid(req.params.id)){
             return next(createError(400, "Invalid Profile id!"))
         }
+        const userExist = await Profile.exists({_id: req.params.id})
+        if (!userExist){ // check if profile exists.
+            return next(createError(404, "Profile does not exist!"));
+        }
        const file = req.files.image; // extract image from post request
        //return error if image not included in request
        if(!file){
@@ -112,9 +116,6 @@ exports.upload = async (req, res, next) =>{
            {_id: req.params.id},
            { profilePicture: result.url}, 
            { new: true});
-        if (!updatedProfile){ // check if profile exists.
-            return next(createError(404, "Image upload failed. Profile does not exist!"));
-        }
        res.status(200).send("Image updated!");
 
     }catch (err){
