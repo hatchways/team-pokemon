@@ -8,7 +8,7 @@ import {
 } from "./types";
 
 // Load User (If User Logged In)
-export const getUser = async (dispatch) => {
+export const getUser = async dispatch => {
   try {
     const res = await axios.get("/api/user/getuser");
     dispatch({ type: LOGGED_IN, payload: res.data });
@@ -36,7 +36,7 @@ export const register = async (dispatch, payload) => {
     // dispatch({ type: "REGISTER_ERROR", error: "a validation error ocurred" }); BACKEND ERRORS - Still to implement
     return;
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
   }
 };
 
@@ -53,6 +53,7 @@ export const login = async (dispatch, payload) => {
     const res = await axios.post("/api/user/login", body, config);
     if (res.data) {
       dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+      // dispatch({ type: "LOGIN_ERROR", error: "an error ocurred" }); BACKEND ERRORS - Still to implement
     }
   } catch (err) {
     console.log(err.message);
@@ -60,7 +61,7 @@ export const login = async (dispatch, payload) => {
 };
 
 // Logout User
-export const logout = async (dispatch) => {
+export const logout = async dispatch => {
   try {
     await axios.get("/api/user/logout");
     dispatch({ type: LOGOUT_SUCCESS });
