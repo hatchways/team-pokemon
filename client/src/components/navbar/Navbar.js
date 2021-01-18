@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import MobileNavbar from "./mobileNavbar";
+import { AuthStateContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
 
@@ -33,12 +34,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Navbar() {
-  const {
-    mobileMenuOpen,
-    setMobileMenuOpen,
-    isAuthenticated,
-    setIsAuthenticated,
-  } = useContext(UserContext);
+  const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
+  const { isAuthenticated } = useContext(AuthStateContext);
   const classes = useStyles();
 
   return (

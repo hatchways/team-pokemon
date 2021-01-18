@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const User = require("../models/userModel");
+const Profile = require("../models/profileModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -40,9 +41,14 @@ const createSendToken = (user, statusCode, req, res) => {
 
 exports.register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, firstName, lastName } = req.body;
     // Validate data before creating new user
-    const { error } = registerValidation({ email, password });
+    const { error } = registerValidation({
+      email,
+      password,
+      firstName,
+      lastName,
+    });
 
     if (error) {
       return next(createError(400, error.details[0].message));
@@ -59,15 +65,22 @@ exports.register = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Create new profile and save to database
+    const newProfile = new Profile({
+      firstName,
+      lastName,
+    });
+
+    const savedProfile = await newProfile.save();
+
     // Create new user and save to database
     const newUser = new User({
       email,
       password: hashedPassword,
+      profile: savedProfile,
     });
 
     const savedUser = await newUser.save();
-
-    // ADD LOGIC TO CREATE USER PROFILE
 
     // Create JWT and store in cookie
     createSendToken(savedUser, 201, req, res);
@@ -88,7 +101,6 @@ exports.login = async (req, res, next) => {
 
     // Check if email exists, select password if it does.
     const user = await User.findOne({ email: email }).select("password").exec();
-
     if (!user) {
       return next(createError(400, "Invalid email or password!"));
     }
