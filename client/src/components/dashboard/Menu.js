@@ -3,15 +3,17 @@ import { MenuList, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { UserContext } from "../../context/Context";
 import { Link } from "react-router-dom";
-import { AuthDispatchContext } from "../../context/AuthContext";
 import { logout } from "../../actions/auth";
+import { AuthDispatchContext } from "../../context/AuthContext";
 
-const useStyles = makeStyles(theme => ({
+
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuBox: {
     "&:focus": {
       outline: "none",
     },
+    padding: "0 50px",
   },
   menuItem: {
     fontSize: "20px",
@@ -26,13 +28,10 @@ const useStyles = makeStyles(theme => ({
 
 function Menu() {
   const dispatch = useContext(AuthDispatchContext);
+
   const { setDashboardDialogOpen } = useContext(UserContext);
 
   const classes = useStyles();
-
-  const handleLogout = () => {
-    logout(dispatch);
-  };
 
   return (
     <MenuList className={classes.menuBox}>
@@ -86,7 +85,7 @@ function Menu() {
       </Link>
       <MenuItem
         className={classes.menuItem + " " + classes.logout}
-        onClick={handleLogout}
+        onClick={() => logout(dispatch)}
       >
         Logout
       </MenuItem>
