@@ -14,11 +14,11 @@ const requestSchema = new mongoose.Schema({
     required: true,
   },
   start: {
-    type: Number,
+    type: Date,
     required: true,
   },
   end: {
-    type: Number,
+    type: Date,
     required: true,
   },
   accepted: {
