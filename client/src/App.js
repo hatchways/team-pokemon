@@ -14,13 +14,13 @@ import Login from "./pages/Login";
 import TestingRoute from "./pages/TestingRoute";
 import Navbar from "./components/navbar/Navbar";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 import Photo from "./pages/Photo";
 import Availability from "./pages/Availability";
 import Payment from "./pages/Payment";
 import Security from "./pages/Security";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
 
 //import "./App.css";
 
@@ -42,6 +42,10 @@ function App() {
             <Route path="/login" component={Login} />
             <PrivateRoute path="/" exact component={Profile} />
             <PrivateRoute path="/dashboard/profile" component={Profile} />
+            <PrivateRoute
+              path="/dashboard/editprofile"
+              component={EditProfile}
+            />
             <PrivateRoute path="/dashboard/photo" component={Photo} />
             <PrivateRoute
               path="/dashboard/availability"
