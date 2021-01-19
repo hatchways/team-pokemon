@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import { AuthStateContext, AuthDispatchContext } from "./context/AuthContext";
 import { getUser } from "./actions/auth";
 import { initialState, AuthReducer } from "./reducers/auth";

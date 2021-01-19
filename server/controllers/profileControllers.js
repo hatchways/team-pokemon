@@ -130,7 +130,6 @@ exports.getProfileList = async (req, res, next) => {
  *   with new url returned from cloudinary.
  */
 exports.upload = async (req, res, next) => {
-  console.log(req.files.file.data);
   try {
     //check if ID is valid
     if (!ObjectId.isValid(req.params.id)) {
@@ -148,7 +147,6 @@ exports.upload = async (req, res, next) => {
     }
 
     const result = await cloudinaryUpload.upload(file.tempFilePath);
-    console.log(result);
     //update profile pic with new url
     const updatedProfile = await Profile.findOneAndUpdate(
       { _id: req.params.id },
@@ -162,7 +160,6 @@ exports.upload = async (req, res, next) => {
 };
 
 exports.deletePicture = async (req, res, next) => {
-  console.log(req.body);
   try {
     //check if ID is valid
     if (!ObjectId.isValid(req.params.id)) {

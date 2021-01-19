@@ -108,7 +108,7 @@ function ProfilePhoto() {
       </Grid>
       <Grid item style={{ position: "relative" }}>
         <Avatar
-          alt="Remy Sharp"
+          alt="user"
           src={
             profile && profile.profilePicture
               ? profile.profilePicture
