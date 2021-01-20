@@ -81,10 +81,17 @@ function SignupForm() {
     }
 
     // Register action makes API request and handles all the necessary state changes
-    register(dispatch, credentials);
 
-    // when receiving data from server, we can setAlert with any errors from BE (BE validation, email already exists, etc)
-    //still to be addressed
+    const res = async () => {
+      let response = await register(dispatch, credentials);
+      if (response.error) {
+        setAlert({
+          error: true,
+          message: response.error.message,
+        });
+      }
+    };
+    res();
   };
 
   //call classes for Material-UI components

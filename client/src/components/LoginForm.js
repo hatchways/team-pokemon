@@ -58,7 +58,16 @@ function LoginForm() {
     }
 
     // Login action makes API request and handles all the necessary state changes
-    login(dispatch, credentials);
+    const res = async () => {
+      let response = await login(dispatch, credentials);
+      if (response.error) {
+        setAlert({
+          error: true,
+          message: response.error.message,
+        });
+      }
+    };
+    res();
   };
 
   //call classes for Material-UI components
