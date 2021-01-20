@@ -20,6 +20,7 @@ import Payment from "./pages/Payment";
 import Security from "./pages/Security";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ProfileListings from "./pages/ProfileListings";
 
 
 //import "./App.css";
@@ -40,6 +41,7 @@ function App() {
             <Navbar />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
+            <Route path="/profile/lists" component={ProfileListings} />
             <PrivateRoute path="/" exact component={Profile} />
             <PrivateRoute path="/dashboard/profile" component={Profile} />
             <PrivateRoute path="/dashboard/photo" component={Photo} />
