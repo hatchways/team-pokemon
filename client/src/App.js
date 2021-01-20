@@ -1,17 +1,13 @@
 import React, { useEffect, useReducer } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
-
+import { BrowserRouter, Route } from "react-router-dom";
 import { AuthStateContext, AuthDispatchContext } from "./context/AuthContext";
 import { getUser } from "./actions/auth";
 import { initialState, AuthReducer } from "./reducers/auth";
-
 import PrivateRoute from "./routing/PrivateRoute";
-
 import { theme } from "./themes/theme";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import TestingRoute from "./pages/TestingRoute";
 import Navbar from "./components/navbar/Navbar";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
@@ -23,6 +19,7 @@ import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 //import "./App.css";
+
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
