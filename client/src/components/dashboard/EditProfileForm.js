@@ -11,7 +11,10 @@ import {
 } from "@material-ui/core";
 import { getYears, getMonths, getDays } from "../../utils/birthDate";
 import AlertMessage from "../Alert";
-import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
+import {
+  AuthDispatchContext,
+  AuthStateContext,
+} from "../../context/AuthContext";
 import { updateProfile } from "../../actions/profile";
 
 const useStyles = makeStyles(() => ({
@@ -40,7 +43,7 @@ function EditProfileForm() {
   // Edit profile form's state
   const [profileData, setProfileData] = useState({
     isSitter: false,
-    fistName: "",
+    firstName: "",
     lastName: "",
     gender: "",
     birthDate: "",
@@ -191,7 +194,6 @@ function EditProfileForm() {
     updateProfile(dispatch, profileData, profile._id);
     setSaveButtonText("SAVED");
   };
-
   return (
     <Grid container spacing={3} style={{ width: "80%", paddingTop: "30px" }}>
       <Grid item xs={12}>
