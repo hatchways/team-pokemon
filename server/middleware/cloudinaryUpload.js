@@ -11,8 +11,6 @@ cloudinary.config({
 });
 
 const upload = image => {
-  console.log("image is");
-  console.log(image);
   const imageUrl = cloudinary.uploader.upload(image, function (error, result) {
     if (error) {
       console.log(error);
