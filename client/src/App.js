@@ -19,7 +19,6 @@ import Settings from "./pages/Settings";
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
-
   // Check if user is logged in when App mounts.
   useEffect(() => {
     getUser(dispatch);
@@ -33,29 +32,39 @@ function App() {
             <Navbar />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
-            <PrivateRoute exact path="/" component={Profile} />
-            <PrivateRoute
-              exact
-              path="/dashboard/editprofile"
-              component={EditProfile}
-            />
-            <PrivateRoute exact path="/dashboard/photo" component={Photo} />
-            <PrivateRoute
-              exact
-              path="/dashboard/availability"
-              component={Availability}
-            />
-            <PrivateRoute exact path="/dashboard/payment" component={Payment} />
-            <PrivateRoute
-              exact
-              path="/dashboard/security"
-              component={Security}
-            />
-            <PrivateRoute
-              exact
-              path="/dashboard/settings"
-              component={Settings}
-            />
+            {state.loading ? (
+              <div style={{ marginTop: "60px" }}>Loading...</div>
+            ) : (
+              <>
+                <PrivateRoute exact path="/" component={Profile} />
+                <PrivateRoute
+                  exact
+                  path="/dashboard/editprofile"
+                  component={EditProfile}
+                />
+                <PrivateRoute exact path="/dashboard/photo" component={Photo} />
+                <PrivateRoute
+                  exact
+                  path="/dashboard/availability"
+                  component={Availability}
+                />
+                <PrivateRoute
+                  exact
+                  path="/dashboard/payment"
+                  component={Payment}
+                />
+                <PrivateRoute
+                  exact
+                  path="/dashboard/security"
+                  component={Security}
+                />
+                <PrivateRoute
+                  exact
+                  path="/dashboard/settings"
+                  component={Settings}
+                />
+              </>
+            )}
           </AuthDispatchContext.Provider>
         </AuthStateContext.Provider>
       </BrowserRouter>
