@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Box, Hidden, Paper, makeStyles } from "@material-ui/core";
 import EditProfileForm from "../components/dashboard/EditProfileForm";
 import SettingsMenu from "../components/dashboard/SettingsMenu";
-import { UserContext } from "../context/Context";
 
 const useStyles = makeStyles(() => ({
   centerPaper: {

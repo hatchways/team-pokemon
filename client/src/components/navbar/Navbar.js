@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   AppBar,
   Toolbar,
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Navbar() {
-  const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
+  const { setMobileMenuOpen } = useContext(UserContext);
 
   const { isAuthenticated } = useContext(AuthStateContext);
   const classes = useStyles();
