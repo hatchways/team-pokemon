@@ -118,7 +118,7 @@ exports.getProfile = async (req, res, next) => {
  */
 exports.getProfileList = async (req, res, next) => {
     try{
-        const profileList = await Profile.find();
+        const profileList = await Profile.find({isSitter: true});
         res.status(200).send(profileList);
     }catch (err){
         next(createError(500, err.message));
