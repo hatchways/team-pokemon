@@ -59,11 +59,11 @@ function LoginForm() {
 
     // Login action makes API request and handles all the necessary state changes
     const res = async () => {
-      let response = await login(dispatch, credentials);
-      if (response.error) {
+      let resp = await login(dispatch, credentials);
+      if (resp.response) {
         setAlert({
           error: true,
-          message: response.error.message,
+          message: resp.response.data.error.message,
         });
       }
     };

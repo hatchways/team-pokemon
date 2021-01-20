@@ -37,7 +37,7 @@ export const register = async (dispatch, payload) => {
     return;
   } catch (err) {
     //return error body to flash the message in Alert
-    return err.response.data;
+    return err;
   }
 };
 
@@ -58,7 +58,7 @@ export const login = async (dispatch, payload) => {
     }
   } catch (err) {
     //return error body to flash the message in Alert
-    return err.response.data;
+    return err;
   }
 };
 

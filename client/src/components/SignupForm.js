@@ -83,11 +83,11 @@ function SignupForm() {
     // Register action makes API request and handles all the necessary state changes
 
     const res = async () => {
-      let response = await register(dispatch, credentials);
-      if (response.error) {
+      let resp = await register(dispatch, credentials);
+      if (resp.response) {
         setAlert({
           error: true,
-          message: response.error.message,
+          message: resp.response.data.error.message,
         });
       }
     };
