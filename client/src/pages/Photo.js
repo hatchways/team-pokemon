@@ -1,48 +1,65 @@
-import React, { useContext } from "react";
+import React from "react";
 import { withRouter } from "react-router-dom";
-import { Grid, Dialog, Hidden, Paper } from "@material-ui/core";
-import Menu from "../components/dashboard/Menu";
-import BackButton from "../components/dashboard/BackButton";
-import { UserContext } from "../context/Context";
+import { Box, Hidden, Paper, makeStyles } from "@material-ui/core";
+import SettingsMenu from "../components/dashboard/SettingsMenu";
 import ProfilePhoto from "../components/dashboard/ProfilePhoto";
 
+const useStyles = makeStyles(() => ({
+  centerPaper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+}));
+
 function Photo() {
-  const { dashboardDialogOpen } = useContext(UserContext);
+  const classes = useStyles();
 
   return (
-    <Grid
-      container
-      style={{
-        paddingTop: "90px",
-        minHeight: "100vh",
-        backgroundColor: "#fafafa",
-      }}
+    <Box
+      display="flex"
+      flexWrap="nowrap"
+      style={{ paddingTop: "90px", minHeight: "100vh" }}
+      bgcolor="grey"
     >
-      <Grid item lg={3} md={3} sm={4} xs={12}>
-        <Menu />
-      </Grid>
+      <Hidden smDown>
+        <Box>
+          <SettingsMenu />
+        </Box>
+      </Hidden>
       <Hidden xsDown>
-        <Grid item lg={9} md={9} sm={8} style={{ padding: "15px" }}>
-          <Paper square elevation={3} style={{ width: "100%", height: "100%" }}>
+        <Box flexGrow={1}>
+          <Paper
+            square
+            elevation={3}
+            className={classes.centerPaper}
+            style={{
+              paddingBottom: "30px",
+              width: "80%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
             <ProfilePhoto />
           </Paper>
-        </Grid>
+        </Box>
       </Hidden>
       <Hidden smUp>
-        <Dialog open={dashboardDialogOpen} fullScreen>
-          <BackButton />
-          <Grid item lg={8} md={8} sm={8} xs={12} style={{ padding: "15px" }}>
-            <Paper
-              square
-              elevation={3}
-              style={{ width: "100%", height: "100%" }}
-            >
-              <ProfilePhoto />
-            </Paper>
-          </Grid>
-        </Dialog>
+        <Box flexGrow={1} style={{}}>
+          <Paper
+            square
+            elevation={3}
+            className={classes.centerPaper}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <ProfilePhoto />
+          </Paper>
+        </Box>
       </Hidden>
-    </Grid>
+    </Box>
   );
 }
 

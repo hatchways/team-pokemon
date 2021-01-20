@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -15,7 +15,7 @@ import { AuthStateContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuButton: { marginRight: "auto", color: "red" },
   toolbar: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 function Navbar() {
   const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
+
   const { isAuthenticated } = useContext(AuthStateContext);
   const classes = useStyles();
 
@@ -53,7 +54,7 @@ function Navbar() {
           >
             <MenuIcon />
           </IconButton>
-          <MobileNavbar open={mobileMenuOpen} />
+          <MobileNavbar />
         </Hidden>
         <img src={logo} alt="logo" className={classes.logo} />
         <Hidden smDown>

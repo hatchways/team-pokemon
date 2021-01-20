@@ -1,8 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Box, Hidden, Paper, makeStyles } from "@material-ui/core";
-import Menu from "../components/dashboard/Menu";
-import OwnerProfile from "./EditProfile";
+import Menu from "../components/dashboard/SettingsMenu";
 
 const useStyles = makeStyles(() => ({
   centerPaper: {
@@ -40,9 +39,7 @@ function Profile() {
               marginLeft: "auto",
               marginRight: "auto",
             }}
-          >
-            <OwnerProfile />
-          </Paper>
+          ></Paper>
         </Box>
       </Hidden>
       <Hidden xsDown mdUp>
@@ -58,9 +55,7 @@ function Profile() {
               marginLeft: "auto",
               marginRight: "auto",
             }}
-          >
-            <OwnerProfile />
-          </Paper>
+          ></Paper>
         </Box>
       </Hidden>
       <Hidden smUp>
@@ -73,9 +68,7 @@ function Profile() {
               width: "100%",
               height: "100%",
             }}
-          >
-            <OwnerProfile />
-          </Paper>
+          ></Paper>
         </Box>
       </Hidden>
     </Box>
