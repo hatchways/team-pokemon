@@ -4,19 +4,27 @@ import { Grid, Dialog, Hidden, Paper } from "@material-ui/core";
 import Menu from "../components/dashboard/Menu";
 import BackButton from "../components/dashboard/BackButton";
 import { UserContext } from "../context/Context";
+import ProfilePhoto from "../components/dashboard/ProfilePhoto";
 
 function Photo() {
   const { dashboardDialogOpen } = useContext(UserContext);
 
   return (
-    <Grid container style={{ paddingTop: "90px", height: "100vh" }}>
+    <Grid
+      container
+      style={{
+        paddingTop: "90px",
+        minHeight: "100vh",
+        backgroundColor: "#fafafa",
+      }}
+    >
       <Grid item lg={3} md={3} sm={4} xs={12}>
         <Menu />
       </Grid>
       <Hidden xsDown>
         <Grid item lg={9} md={9} sm={8} style={{ padding: "15px" }}>
           <Paper square elevation={3} style={{ width: "100%", height: "100%" }}>
-            PHOTO
+            <ProfilePhoto />
           </Paper>
         </Grid>
       </Hidden>
@@ -29,7 +37,7 @@ function Photo() {
               elevation={3}
               style={{ width: "100%", height: "100%" }}
             >
-              PROFILE PHOTO
+              <ProfilePhoto />
             </Paper>
           </Grid>
         </Dialog>
