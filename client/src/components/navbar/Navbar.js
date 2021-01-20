@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbarAuth: {
     backgroundColor: "white",
+    padding: "5px",
   },
   sitterLink: { color: "black", marginRight: "30px" },
   logo: {
