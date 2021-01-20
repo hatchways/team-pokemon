@@ -13,6 +13,7 @@ const useStyles = makeStyles(() => ({
 
 function EditProfile() {
   const classes = useStyles();
+
   return (
     <Box
       display="flex"
