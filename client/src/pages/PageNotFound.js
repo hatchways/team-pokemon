@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
     height: "60vh",
     width: "90vw",
     position: "relative",
+    backgroundImage: `url(${dog404})`,
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
@@ -30,6 +31,16 @@ const useStyles = makeStyles(theme => ({
     marginBottom: "auto",
     textAlign: "center",
   },
+  headerBox: {
+    marginTop: "auto",
+  },
+  headerText: {
+    margin: "10px",
+  },
+  profileLink: {
+    color: "red",
+    textDecoration: "none",
+  },
 }));
 
 function PageNotFound() {
@@ -42,22 +53,14 @@ function PageNotFound() {
       alignItems="center"
       direction="column"
     >
-      <Grid item style={{ marginTop: "auto" }}>
-        <Typography variant="h1" style={{ margin: "10px" }}>
-          Woofs!
-        </Typography>
+      <Grid item className={classes.headerBox}>
+        <Typography variant="h1">Woofs!</Typography>
       </Grid>
       <Grid item className={classes.textBox}>
         <Typography variant="h4">
           Seems like such page doesn't exist
           <br />
-          <Link
-            to="/dashboard/profile"
-            style={{
-              color: "red",
-              textDecoration: "none",
-            }}
-          >
+          <Link to="/dashboard/profile" className={classes.profileLink}>
             Back to profile
           </Link>
         </Typography>
@@ -66,9 +69,7 @@ function PageNotFound() {
         <Paper
           square
           elevation={0}
-          style={{
-            backgroundImage: `url(${dog404})`,
-          }}
+          style={{}}
           className={classes.image}
         ></Paper>
       </Grid>
