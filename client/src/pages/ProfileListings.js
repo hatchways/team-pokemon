@@ -61,12 +61,12 @@ function ProfileListings(){
     }
     if(sitters.data){ // set profile data to display
         content = 
-        sitters.data.map((sitter, key) => 
-            <ProfileCard 
+        sitters.data.map((sitter) => 
+            <ProfileCard key = {sitter._id}
                 firstName={sitter.firstName} 
                 lastName={sitter.lastName}
                 profilePicture={sitter.profilePicture}
-                rating="4"
+                rating={4}
                 description={sitter.description} />
         )
     }
@@ -79,7 +79,7 @@ function ProfileListings(){
                     <SearchAndFilter />
                 </Grid>
                 <Grid item>
-                    <Grid container direction="row" spacing={3} justify="center" align="center"  className={classes.gridContainer}>
+                    <Grid container direction="row" spacing={3} justify="center" alignItems="flex-start"  className={classes.gridContainer}>
                     {content}
                     </Grid>
                 </Grid>

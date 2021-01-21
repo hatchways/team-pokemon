@@ -7,7 +7,7 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const useStyles = makeStyles(theme => ({
     textField: {
-        fontWeight:"bold"
+        fontWeight:"450"
     },
     large: {
         marginTop: theme.spacing(2),
@@ -35,15 +35,15 @@ function ProductCard(props){
         <Grid item align="center" className={classes.cardContainer}> 
                 <Card align="center" elevation={3}>
                     <Avatar alt="Avatar" src={props.profilePicture} className={classes.large} />
-                    <CardContent>
+                    <CardContent >
                         <Typography  variant="h5" component="h5" className={classes.textField}>
                             {props.firstName} {props.lastName}
                         </Typography>
-                        <Typography gutterBottom variant="body2" color="textSecondary" component="p" className={classes.textField}>
+                        <Typography gutterBottom variant="body2" color="textSecondary" component="p" className={classes.textField} style={{height: '2vh'}}>
                             Professional dog trainer.
                         </Typography>
-                        <Rating name="read-only" value={props.rating} readOnly />
-                        <Typography gutterBottom variant="body1"  component="p" className={classes.textField}>
+                        <Rating name="read-only" value={props.rating} readOnly  style={{ margin: "1vh", height: '3vh'}}/>
+                        <Typography gutterBottom variant="body1"  component="p" style={{height: '3.5vh'}} className={classes.textField}>
                             {props.description}
                         </Typography>
                     </CardContent>
@@ -55,7 +55,7 @@ function ProductCard(props){
                         style={{borderTop:"1px solid lightgrey", marginTop:"5px"}}>
                         <Grid item style={{margin:"5px"}}>
                             <div className={classes.cardBottom}>
-                                <LocationOnIcon style={{color:"#f04040"}}/>
+                                <LocationOnIcon style={{color:"f04040"}}/>
                                 <Typography  
                                     gutterBottom
                                     variant="body2" 
