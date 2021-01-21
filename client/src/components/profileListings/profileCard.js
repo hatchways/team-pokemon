@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductCard(props) {
   const classes = useStyles();
+  //check for long descriptions and truncate it
   let description = props.description;
   if (description.length > 70) {
     description = description.substring(0, 67) + "...";
