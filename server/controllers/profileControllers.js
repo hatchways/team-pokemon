@@ -143,42 +143,21 @@ exports.upload = async (req, res, next) => {
       // check if profile exists.
       return next(createError(404, "Profile does not exist!"));
     }
-    const file = req.files.file; // extract image from post request
+    const file = req.files.image; // extract image from post request
     //return error if image not included in request
     if (!file) {
       return next(createError(400, "Please include image"));
     }
 
     const result = await cloudinaryUpload.upload(file.tempFilePath);
+
     //update profile pic with new url
     const updatedProfile = await Profile.findOneAndUpdate(
       { _id: req.params.id },
       { profilePicture: result.url },
       { new: true }
     );
-    res.status(200).json({ message: "Image updated!", url: result.url });
-  } catch (err) {
-    next(createError(500, err.message));
-  }
-};
-
-exports.deletePicture = async (req, res, next) => {
-  try {
-    //check if ID is valid
-    if (!ObjectId.isValid(req.params.id)) {
-      return next(createError(400, "Invalid Profile id!"));
-    }
-    const userExist = await Profile.exists({ _id: req.params.id });
-    if (!userExist) {
-      // check if profile exists.
-      return next(createError(404, "Profile does not exist!"));
-    }
-    //update profile (delete profilePicture field)
-    const updatedProfile = await Profile.findOneAndUpdate(
-      { _id: req.params.id },
-      { $unset: { profilePicture: "" } }
-    );
-    res.status(200).send("Image deleted!");
+    res.status(200).send("Image updated!");
   } catch (err) {
     next(createError(500, err.message));
   }

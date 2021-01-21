@@ -100,10 +100,7 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     // Check if email exists, select password if it does.
-    const user = await User.findOne({ email: email })
-      .select(["email", "password", "profile"])
-      .populate("profile");
-
+    const user = await User.findOne({ email: email }).select("password").exec();
     if (!user) {
       return next(createError(400, "Invalid email or password!"));
     }

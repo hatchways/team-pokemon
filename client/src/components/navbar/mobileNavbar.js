@@ -1,16 +1,23 @@
 import React, { useContext } from "react";
-import { IconButton, Box, Dialog, DialogActions } from "@material-ui/core";
+import {
+  IconButton,
+  Button,
+  Box,
+  Dialog,
+  DialogActions,
+  Grid,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import Slide from "@material-ui/core/Slide";
-import SettingsMenu from "../dashboard/SettingsMenu";
+import { Link } from "react-router-dom";
 import { UserContext } from "../../context/Context";
+import Slide from "@material-ui/core/Slide";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="right" ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: { flexgrow: 1 },
   closeButton: {
     position: "absolute",
@@ -36,9 +43,17 @@ function MobileNavbar() {
   const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
   const classes = useStyles();
 
+  const handleClose = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <Dialog open={mobileMenuOpen} fullScreen TransitionComponent={Transition}>
-      <Box>
+      <Box
+        style={{
+          height: "100vh",
+        }}
+      >
         <DialogActions
           style={{
             padding: "0",
@@ -47,16 +62,43 @@ function MobileNavbar() {
           <IconButton
             aria-label="close"
             className={classes.closeButton}
-            style={{ zIndex: 100 }}
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleClose}
           >
             <CloseIcon />
           </IconButton>
+          <Grid
+            container
+            alignItems="center"
+            justify="center"
+            direction="column"
+            style={{
+              margin: "0",
+              height: "100vh",
+            }}
+          >
+            <Grid item className={classes.gridElement}>
+              <Link to="/login" style={{ textDecoration: "none" }}>
+                <Button className={classes.menuButton} onClick={handleClose}>
+                  Login
+                </Button>
+              </Link>
+            </Grid>
+            <Grid item className={classes.gridElement}>
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <Button className={classes.menuButton} onClick={handleClose}>
+                  Sign Up
+                </Button>
+              </Link>
+            </Grid>
+            <Grid item className={classes.gridElement}>
+              <Link to="/*" style={{ textDecoration: "none" }}>
+                <Button className={classes.menuButton} onClick={handleClose}>
+                  Become a Sitter
+                </Button>
+              </Link>
+            </Grid>
+          </Grid>
         </DialogActions>
-      </Box>
-      {/* Settings Menu */}
-      <Box style={{ marginTop: "50px" }}>
-        <SettingsMenu />
       </Box>
     </Dialog>
   );
