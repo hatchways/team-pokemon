@@ -22,7 +22,6 @@ import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ProfileListings from "./pages/ProfileListings";
 
-
 //import "./App.css";
 
 function App() {
@@ -39,19 +38,19 @@ function App() {
         <AuthStateContext.Provider value={state}>
           <AuthDispatchContext.Provider value={dispatch}>
             <Navbar />
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
-            <Route path="/profile/lists" component={ProfileListings} />
-            <PrivateRoute path="/" exact component={Profile} />
-            <PrivateRoute path="/dashboard/profile" component={Profile} />
-            <PrivateRoute path="/dashboard/photo" component={Photo} />
+            <Route path='/signup' component={Signup} />
+            <Route path='/login' component={Login} />
+            <PrivateRoute path='/profile/lists' component={ProfileListings} />
+            <PrivateRoute path='/' exact component={Profile} />
+            <PrivateRoute path='/dashboard/profile' component={Profile} />
+            <PrivateRoute path='/dashboard/photo' component={Photo} />
             <PrivateRoute
-              path="/dashboard/availability"
+              path='/dashboard/availability'
               component={Availability}
             />
-            <PrivateRoute path="/dashboard/payment" component={Payment} />
-            <PrivateRoute path="/dashboard/security" component={Security} />
-            <PrivateRoute path="/dashboard/settings" component={Settings} />
+            <PrivateRoute path='/dashboard/payment' component={Payment} />
+            <PrivateRoute path='/dashboard/security' component={Security} />
+            <PrivateRoute path='/dashboard/settings' component={Settings} />
           </AuthDispatchContext.Provider>
         </AuthStateContext.Provider>
       </BrowserRouter>

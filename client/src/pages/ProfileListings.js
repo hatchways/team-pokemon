@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CssBaseline, Grid } from "@material-ui/core/";
 
 import { makeStyles } from "@material-ui/core/styles";
 import ProfileCard from "../components/profileListings/ProfileCard";
 import SearchAndFilter from "../components/profileListings/SearchAndFilter";
+
+import { AuthStateContext } from "../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -17,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
 
 function ProfileListings() {
   const classes = useStyles();
-  const url = "/api/profile/";
+
+  const { profile } = useContext(AuthStateContext); //get profile from context
+  const url = `/api/profile/list/${profile._id}`;
 
   const [sitters, setSitters] = useState({
     loading: false,
