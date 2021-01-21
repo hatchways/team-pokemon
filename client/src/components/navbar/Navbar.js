@@ -16,7 +16,6 @@ import MobileNavbar from "./mobileNavbar";
 import { AuthStateContext } from "../../context/AuthContext";
 import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
-
 import defaultPicture from "../../img/profile-default.png";
 
 const useStyles = makeStyles(theme => ({
@@ -39,8 +38,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Navbar() {
-  const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
-  const { isAuthenticated, profile } = useContext(AuthStateContext);
+  const { setMobileMenuOpen } = useContext(UserContext);
+
+  const { isAuthenticated } = useContext(AuthStateContext);
   const classes = useStyles();
 
   return (
@@ -57,7 +57,7 @@ function Navbar() {
           >
             <MenuIcon />
           </IconButton>
-          <MobileNavbar open={mobileMenuOpen} />
+          <MobileNavbar />
         </Hidden>
         <img src={logo} alt="logo" className={classes.logo} />
         {isAuthenticated ? (

@@ -20,7 +20,6 @@ import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
-
   // Check if user is logged in when App mounts.
   useEffect(() => {
     getUser(dispatch);
