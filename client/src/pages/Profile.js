@@ -1,75 +1,73 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { Box, Hidden, Paper, makeStyles } from "@material-ui/core";
-import Menu from "../components/dashboard/SettingsMenu";
-
-const useStyles = makeStyles(() => ({
-  centerPaper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-}));
+import { Box, Hidden, Paper, useMediaQuery } from "@material-ui/core";
+import ProfileDetailCard from "../components/profile/ProfileDetailCard";
+import ProfileRequestForm from "../components/profile/ProfileRequestForm";
 
 function Profile() {
-  const classes = useStyles();
+  const aboveMd = useMediaQuery("(min-width:960px)");
   return (
     <Box
       display="flex"
-      flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "100vh" }}
-      bgcolor="grey"
+      flexDirection={aboveMd ? "row" : "column"}
+      justifyContent="space-around"
+      alignItems={aboveMd ? "flex-start" : "center"}
+      style={{
+        paddingTop: "100px",
+        minHeight: "100vh",
+        backgroundColor: "#fafafa",
+      }}
     >
       <Hidden smDown>
-        <Box>
-          <Menu />
-        </Box>
+        <Paper
+          style={{
+            width: "50%",
+            marginBottom: "100px",
+            paddingBottom: "30px",
+            overflow: "hidden",
+          }}
+        >
+          <ProfileDetailCard />
+        </Paper>
       </Hidden>
-
-      <Hidden smDown>
-        <Box flexGrow={1}>
-          <Paper
-            square
-            elevation={3}
-            className={classes.centerPaper}
-            style={{
-              paddingBottom: "50px",
-              marginBottom: "25px",
-              width: "690px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          ></Paper>
-        </Box>
+      <Hidden mdUp>
+        <Paper
+          style={{
+            width: "90%",
+            marginBottom: "30px",
+            paddingBottom: "30px",
+            overflow: "hidden",
+          }}
+        >
+          <ProfileDetailCard />
+        </Paper>
       </Hidden>
-      <Hidden xsDown mdUp>
-        <Box flexGrow={1}>
-          <Paper
-            square
-            elevation={3}
-            className={classes.centerPaper}
-            style={{
-              paddingBottom: "50px",
-              marginBottom: "25px",
-              width: "580px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          ></Paper>
-        </Box>
+      {/* Add check to only display the request card if the user whose profile you are visiting is a sitter */}
+      <Hidden xsDown>
+        <Paper
+          style={{
+            width: "350px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <ProfileRequestForm />
+        </Paper>
       </Hidden>
       <Hidden smUp>
-        <Box flexGrow={1} style={{}}>
-          <Paper
-            square
-            elevation={3}
-            className={classes.centerPaper}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          ></Paper>
-        </Box>
+        <Paper
+          style={{
+            width: "90%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <ProfileRequestForm />
+        </Paper>
       </Hidden>
     </Box>
   );

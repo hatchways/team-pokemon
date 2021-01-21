@@ -16,6 +16,10 @@ import Availability from "./pages/Availability";
 import Payment from "./pages/Payment";
 import Security from "./pages/Security";
 import Settings from "./pages/Settings";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
+//import "./App.css";
+
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
