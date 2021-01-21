@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
-//import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AlertMessage from "./Alert";
@@ -35,6 +34,9 @@ function LoginForm() {
   const dispatch = useContext(AuthDispatchContext);
   const { isAuthenticated } = useContext(AuthStateContext);
 
+  //redirect to where user comes from after authentication
+  const { state } = useLocation();
+
   const handleInputChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
@@ -66,7 +68,7 @@ function LoginForm() {
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/dashboard/profile" />;
+    return <Redirect to={state?.from || "/"} />;
   }
 
   return (
