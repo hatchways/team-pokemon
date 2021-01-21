@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductCard(props) {
   const classes = useStyles();
+  let description = props.description;
+  if (description.length > 70) {
+    description = description.substring(0, 67) + "...";
+  }
   return (
     <Grid item align='center' className={classes.cardContainer}>
       <Card align='center' elevation={3}>
@@ -71,7 +75,7 @@ function ProductCard(props) {
             style={{ height: "3.5vh" }}
             className={classes.textField}
           >
-            {props.description}
+            {description}
           </Typography>
         </CardContent>
         <Grid

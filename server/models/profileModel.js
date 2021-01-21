@@ -31,10 +31,11 @@ const profileSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    default: "",
   },
   profilePicture: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 const Profile = mongoose.model("Profile", profileSchema);
