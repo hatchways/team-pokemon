@@ -18,6 +18,18 @@ const useStyles = makeStyles(theme => ({
     backgroundPosition: "center",
     backgroundColor: "transparent",
   },
+  parentBox: {
+    paddingTop: "90px",
+    minHeight: "100vh",
+    width: "100%",
+    backgroundColor: "#fafafa",
+    marginRight: "0",
+  },
+  textBox: {
+    margin: "10px",
+    marginBottom: "auto",
+    textAlign: "center",
+  },
 }));
 
 function PageNotFound() {
@@ -25,13 +37,7 @@ function PageNotFound() {
   return (
     <Grid
       container
-      style={{
-        paddingTop: "90px",
-        minHeight: "100vh",
-        width: "100%",
-        backgroundColor: "#fafafa",
-        marginRight: "0",
-      }}
+      className={classes.parentBox}
       justify="center"
       alignItems="center"
       direction="column"
@@ -41,14 +47,7 @@ function PageNotFound() {
           Woofs!
         </Typography>
       </Grid>
-      <Grid
-        item
-        style={{
-          margin: "10px",
-          marginBottom: "auto",
-          textAlign: "center",
-        }}
-      >
+      <Grid item className={classes.textBox}>
         <Typography variant="h4">
           Seems like such page doesn't exist
           <br />
