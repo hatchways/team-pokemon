@@ -52,6 +52,8 @@ function MobileNavbar() {
       <Box
         style={{
           height: "100vh",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <DialogActions
