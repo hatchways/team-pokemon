@@ -11,14 +11,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {!loading && ( // wait for reducer to complete setting state before deciding whether to redirect or not.
         <Route
           {...rest}
-          render={props =>
+          render={(props) =>
             !isAuthenticated ? (
-              <Redirect
-                to={{
-                  pathname: "/login",
-                  state: { from: { ...props.location } },
-                }}
-              />
+              <Redirect to="/login" />
             ) : (
               <Component {...props} />
             )

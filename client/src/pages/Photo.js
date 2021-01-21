@@ -1,52 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
-import { Box, Paper, makeStyles } from "@material-ui/core";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
-import ProfilePhoto from "../components/dashboard/ProfilePhoto";
-
-const useStyles = makeStyles((theme) => ({
-  centerPaper: {
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  hideMenu: {
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
-  },
-  breakpoints: {
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-    },
-    [theme.breakpoints.up("sm")]: {
-      width: "75%",
-    },
-  },
-}));
+import { Grid, Dialog, Hidden, Paper } from "@material-ui/core";
+import Menu from "../components/dashboard/Menu";
+import BackButton from "../components/dashboard/BackButton";
+import { UserContext } from "../context/Context";
 
 function Photo() {
-  const classes = useStyles();
+  const { dashboardDialogOpen } = useContext(UserContext);
 
   return (
-    <Box
-      display="flex"
-      flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "100vh" }}
-      bgcolor="grey"
-    >
-      <Box className={classes.hideMenu}>
-        <SettingsMenu />
-      </Box>
-      <Box flexGrow={1}>
-        <Paper
-          square
-          elevation={3}
-          className={classes.centerPaper + " " + classes.breakpoints}
-        >
-          <ProfilePhoto />
-        </Paper>
-      </Box>
-    </Box>
+    <Grid container style={{ paddingTop: "90px", height: "100vh" }}>
+      <Grid item lg={3} md={3} sm={4} xs={12}>
+        <Menu />
+      </Grid>
+      <Hidden xsDown>
+        <Grid item lg={9} md={9} sm={8} style={{ padding: "15px" }}>
+          <Paper square elevation={3} style={{ width: "100%", height: "100%" }}>
+            PHOTO
+          </Paper>
+        </Grid>
+      </Hidden>
+      <Hidden smUp>
+        <Dialog open={dashboardDialogOpen} fullScreen>
+          <BackButton />
+          <Grid item lg={8} md={8} sm={8} xs={12} style={{ padding: "15px" }}>
+            <Paper
+              square
+              elevation={3}
+              style={{ width: "100%", height: "100%" }}
+            >
+              PROFILE PHOTO
+            </Paper>
+          </Grid>
+        </Dialog>
+      </Hidden>
+    </Grid>
   );
 }
 
