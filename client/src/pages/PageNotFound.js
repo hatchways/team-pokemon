@@ -69,7 +69,6 @@ function PageNotFound() {
         <Paper
           square
           elevation={0}
-          style={{}}
           className={classes.image}
         ></Paper>
       </Grid>
