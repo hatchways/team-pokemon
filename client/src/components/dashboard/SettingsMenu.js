@@ -7,6 +7,7 @@ import {
   AuthDispatchContext,
   AuthStateContext,
 } from "../../context/AuthContext";
+import { BECOME_SITTER } from "../../actions/types";
 import { UserContext } from "../../context/Context";
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +44,10 @@ function SettingsMenu() {
   const handleLogout = () => {
     logout(dispatch);
     setMobileMenuOpen(false);
+  };
+  //
+  const handleBecomeSitter = () => {
+    dispatch({ type: BECOME_SITTER });
   };
 
   return (
@@ -91,7 +96,11 @@ function SettingsMenu() {
           >
             <MenuItem className={classes.menuItem}>Settings</MenuItem>
           </Link>
-          <Link className={classes.linkStyle} to="/dashboard/editprofile">
+          <Link
+            className={classes.linkStyle}
+            to="/dashboard/editprofile"
+            onClick={handleBecomeSitter}
+          >
             <MenuItem className={classes.menuItem}>Become a Sitter</MenuItem>
           </Link>
           <MenuItem
@@ -117,7 +126,11 @@ function SettingsMenu() {
           >
             <MenuItem className={classes.menuItem}>Sign Up</MenuItem>
           </Link>
-          <Link to="/signup" className={classes.linkStyle}>
+          <Link
+            to="/signup"
+            className={classes.linkStyle}
+            onClick={handleBecomeSitter}
+          >
             <MenuItem className={classes.menuItem}>Become a Sitter</MenuItem>
           </Link>
         </MenuList>
