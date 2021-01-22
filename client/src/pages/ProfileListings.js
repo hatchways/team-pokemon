@@ -19,10 +19,9 @@ const useStyles = makeStyles(theme => ({
 
 function ProfileListings() {
   const classes = useStyles();
-
-  const { user } = useContext(AuthStateContext); //get profile from context
-  //console.log(user);
-  const url = `/api/profile/list/${user._id}`;
+  
+  const { profile } = useContext(AuthStateContext); //get profile from context
+  const url = `/api/profile/list/${profile._id}`;
 
   const [sitters, setSitters] = useState({
     loading: false,
