@@ -9,12 +9,30 @@ const profileSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: [true, "Please provide your first name."],
-    validate: [validator.isAlpha, "First name must only contain characters."],
+    validate: function (val) {
+      return validator.isAlpha(
+        val,
+        ["en-GB"],
+        {
+          ignore: " -",
+        },
+        "First name must only contain characters, dash and/or space"
+      );
+    },
   },
   lastName: {
     type: String,
     required: [true, "Please provide your last name."],
-    validate: [validator.isAlpha, "Last name must only contain characters."],
+    validate: function (val) {
+      return validator.isAlpha(
+        val,
+        ["en-GB"],
+        {
+          ignore: " -",
+        },
+        "Last name must only contain characters, dash and/or space"
+      );
+    },
   },
   gender: {
     type: String,
@@ -33,8 +51,8 @@ const profileSchema = new mongoose.Schema({
     type: String,
   },
   profilePicture: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 const Profile = mongoose.model("Profile", profileSchema);

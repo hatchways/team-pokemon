@@ -1,16 +1,13 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
-//import MuiAlert from "@material-ui/lab/Alert";
-//import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AlertMessage from "./Alert";
 import { register } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
-//import { UserContext } from "../context/Context";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -34,7 +31,7 @@ function SignupForm() {
   //state for alert message to pass into Alert.js component if form validation fails
   const [alert, setAlert] = useState({ error: false, message: "" });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
@@ -46,7 +43,7 @@ function SignupForm() {
   const { isAuthenticated } = useContext(AuthStateContext);
 
   //submitting user's credentials
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {
@@ -69,7 +66,7 @@ function SignupForm() {
       setAlert({
         error: true,
         message:
-          "Name should start with a letter. Only spaces and letters are allowed",
+          "Name should start with a letter. Only letters, a space and/or hyphen are allowed",
       });
       return;
     } else if (credentials.password.length < 6) {
@@ -84,7 +81,7 @@ function SignupForm() {
 
     const res = async () => {
       let resp = await register(dispatch, credentials);
-      if (resp.response) {
+      if (resp !== undefined && resp.response) {
         setAlert({
           error: true,
           message: resp.response.data.error.message,

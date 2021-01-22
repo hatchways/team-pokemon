@@ -8,7 +8,7 @@ import AlertMessage from "./Alert";
 import { login } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -34,7 +34,6 @@ function LoginForm() {
   const dispatch = useContext(AuthDispatchContext);
   const { isAuthenticated } = useContext(AuthStateContext);
 
-
   //redirect to where user comes from after authentication
   const { state } = useLocation();
 
@@ -43,7 +42,7 @@ function LoginForm() {
     setAlert({ error: false, message: "" });
   };
   //submitting user's credentials
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {
@@ -63,7 +62,7 @@ function LoginForm() {
     // Login action makes API request and handles all the necessary state changes
     const res = async () => {
       let resp = await login(dispatch, credentials);
-      if (resp.response) {
+      if (resp !== undefined && resp.response.data.error.message) {
         setAlert({
           error: true,
           message: resp.response.data.error.message,
@@ -79,7 +78,6 @@ function LoginForm() {
   // Redirect if logged in
   if (isAuthenticated) {
     return <Redirect to={state?.from || "/"} />;
-
   }
 
   return (

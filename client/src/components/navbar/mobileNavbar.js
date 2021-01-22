@@ -54,7 +54,6 @@ function MobileNavbar() {
           </IconButton>
         </DialogActions>
       </Box>
-      {/* Settings Menu */}
       <Box style={{ marginTop: "50px" }}>
         <SettingsMenu />
       </Box>
