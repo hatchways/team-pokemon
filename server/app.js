@@ -9,6 +9,7 @@ const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
 const userRouter = require("./routes/userRouter");
 const profileRouter = require("./routes/profileRouter");
+const requestRouter = require("./routes/requestRouter");
 
 const connectDB = require("./database");
 
@@ -33,6 +34,7 @@ app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 app.use("/api/user", userRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/request", requestRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

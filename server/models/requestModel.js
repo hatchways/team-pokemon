@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const requestSchema = new mongoose.Schema({
   ownerId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Profile",
     index: true,
     required: true,
   },
   sitterId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Profile",
     index: true,
     required: true,
