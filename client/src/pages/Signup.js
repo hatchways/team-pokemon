@@ -1,8 +1,6 @@
 import React from "react";
 import { Grid, Hidden, Paper } from "@material-ui/core";
-//import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
-//import { Route, Link } from "react-router-dom";
 import SignupForm from "../components/SignupForm";
 import dogsPicture from "../img/dogs-main.jpg";
 

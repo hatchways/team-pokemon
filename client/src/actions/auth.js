@@ -36,7 +36,8 @@ export const register = async (dispatch, payload) => {
     // dispatch({ type: "REGISTER_ERROR", error: "a validation error ocurred" }); BACKEND ERRORS - Still to implement
     return;
   } catch (err) {
-    console.log(err);
+    //return error body to flash the message in Alert
+    return err;
   }
 };
 
@@ -56,7 +57,8 @@ export const login = async (dispatch, payload) => {
       // dispatch({ type: "LOGIN_ERROR", error: "an error ocurred" }); BACKEND ERRORS - Still to implement
     }
   } catch (err) {
-    console.log(err.message);
+    //return error body to flash the message in Alert
+    return err;
   }
 };
 

@@ -105,16 +105,19 @@ function EditProfileForm() {
   const dayArray = getDays(birthMonth);
 
   // Year, month, and day arrays are converted to <MenuItem> components which will be passed as options to our <Select> dropdown input.
+
   const yearMenuItem = yearArray.map((year) => (
     <MenuItem key={year} value={year}>
       {year}
     </MenuItem>
   ));
+
   const monthMenuItem = monthArray.map((month) => (
     <MenuItem key={month["idx"]} value={month["idx"]}>
       {month["name"]}
     </MenuItem>
   ));
+
   const dayMenuItem = dayArray.map((day) => (
     <MenuItem key={day} value={day}>
       {day}
@@ -152,6 +155,7 @@ function EditProfileForm() {
   };
 
   // Function that updates the state when changes are made
+
   const onChange = (e) => {
     setSaveButtonText("SAVE");
     setProfileData({
@@ -162,6 +166,7 @@ function EditProfileForm() {
   };
 
   // Handle form submission
+
   const handleSubmit = (e) => {
     setSaveButtonText("SAVING...");
     e.preventDefault();
@@ -172,7 +177,7 @@ function EditProfileForm() {
     }
 
     if (!lastName) {
-      setAlert({ error: true, message: "First Name is Required!" });
+      setAlert({ error: true, message: "Last Name is Required!" });
       setSaveButtonText("SAVE");
       return;
     }

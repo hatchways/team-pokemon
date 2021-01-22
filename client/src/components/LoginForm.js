@@ -34,7 +34,6 @@ function LoginForm() {
   const dispatch = useContext(AuthDispatchContext);
   const { isAuthenticated } = useContext(AuthStateContext);
 
-
   //redirect to where user comes from after authentication
   const { state } = useLocation();
 
@@ -61,7 +60,16 @@ function LoginForm() {
     }
 
     // Login action makes API request and handles all the necessary state changes
-    login(dispatch, credentials);
+    const res = async () => {
+      let resp = await login(dispatch, credentials);
+      if (resp !== undefined && resp.response.data.error.message) {
+        setAlert({
+          error: true,
+          message: resp.response.data.error.message,
+        });
+      }
+    };
+    res();
   };
 
   //call classes for Material-UI components
@@ -70,7 +78,6 @@ function LoginForm() {
   // Redirect if logged in
   if (isAuthenticated) {
     return <Redirect to={state?.from || "/"} />;
-
   }
 
   return (

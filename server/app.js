@@ -18,23 +18,16 @@ var app = express();
 
 connectDB();
 
-//config Cloudinary
-const cloudinary = require("cloudinary").v2;
-if (typeof (process.env.CLOUDINARY_URL) === 'undefined') {
-  console.warn('!! cloudinary config is undefined !!');
-  console.warn('export CLOUDINARY_URL or set dotenv file');
-} else {
-  console.log('cloudinary connected');
-}
-
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
-app.use(fileupload({
-  useTempFiles: true
-}));
+app.use(
+  fileupload({
+    useTempFiles: true,
+  })
+);
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);

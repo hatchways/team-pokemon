@@ -151,7 +151,7 @@ exports.upload = async (req, res, next) => {
 
     const result = await cloudinaryUpload.upload(file.tempFilePath);
     //update profile pic with new url
-    const updatedProfile = await Profile.findOneAndUpdate(
+    await Profile.findOneAndUpdate(
       { _id: req.params.id },
       { profilePicture: result.url },
       { new: true }

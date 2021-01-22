@@ -1,14 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
-//import MuiAlert from "@material-ui/lab/Alert";
-//import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AlertMessage from "./Alert";
 import { register } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
-//import { UserContext } from "../context/Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +66,7 @@ function SignupForm() {
       setAlert({
         error: true,
         message:
-          "Name should start with a letter. Only spaces and letters are allowed",
+          "Name should start with a letter. Only letters, a space and/or hyphen are allowed",
       });
       return;
     } else if (credentials.password.length < 6) {
@@ -81,10 +78,17 @@ function SignupForm() {
     }
 
     // Register action makes API request and handles all the necessary state changes
-    register(dispatch, credentials);
 
-    // when receiving data from server, we can setAlert with any errors from BE (BE validation, email already exists, etc)
-    //still to be addressed
+    const res = async () => {
+      let resp = await register(dispatch, credentials);
+      if (resp !== undefined && resp.response) {
+        setAlert({
+          error: true,
+          message: resp.response.data.error.message,
+        });
+      }
+    };
+    res();
   };
 
   //call classes for Material-UI components
