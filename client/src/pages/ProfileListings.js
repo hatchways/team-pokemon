@@ -21,7 +21,6 @@ function ProfileListings() {
   const classes = useStyles();
 
   const { profile } = useContext(AuthStateContext); //get profile from context
-  console.log(profile);
   const url = `/api/profile/list/${profile._id}`;
 
   const [sitters, setSitters] = useState({
