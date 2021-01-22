@@ -31,8 +31,8 @@ export const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: payload.data,
-        profile: payload.data.profile,
+        user: payload.user,
+        profile: payload.user.profile,
         loading: false,
       };
     case PROFILE_UPDATE_SUCCESS:
