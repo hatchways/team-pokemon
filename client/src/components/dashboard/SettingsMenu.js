@@ -48,6 +48,7 @@ function SettingsMenu() {
   //
   const handleBecomeSitter = () => {
     dispatch({ type: BECOME_SITTER });
+    setMobileMenuOpen(false);
   };
 
   return (
