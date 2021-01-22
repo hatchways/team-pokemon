@@ -49,8 +49,6 @@ function Navbar() {
   const classes = useStyles();
 
   const handleBecomeSitter = () => {
-    console.log("Navbar clicked Become sitter");
-
     dispatch({ type: BECOME_SITTER });
   };
 
@@ -70,7 +68,9 @@ function Navbar() {
           </IconButton>
           <MobileNavbar />
         </Hidden>
-        <img src={logo} alt="logo" className={classes.logo} />
+        <Link to="/profile/lists" style={{ marginRight: "auto" }}>
+          <img src={logo} alt="logo" className={classes.logo} />
+        </Link>
         {isAuthenticated ? (
           <>
             <Hidden smDown>
@@ -100,7 +100,10 @@ function Navbar() {
                 <MailIcon color="primary" fontSize="large" />
               </Link>
             </Hidden>
-            <Link to="/dashboard/profile" style={{ textDecoration: "none" }}>
+            <Link
+              to="/dashboard/editprofile"
+              style={{ textDecoration: "none" }}
+            >
               <Avatar
                 alt="user"
                 src={

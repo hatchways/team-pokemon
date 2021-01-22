@@ -8,7 +8,7 @@ import SearchAndFilter from "../components/profileListings/SearchAndFilter";
 
 import { AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   gridContainer: {
     marginTop: theme.spacing(3),
   },
@@ -21,7 +21,7 @@ function ProfileListings() {
   const classes = useStyles();
 
   const { user } = useContext(AuthStateContext); //get profile from context
-  console.log(user);
+  //console.log(user);
   const url = `/api/profile/list/${user._id}`;
 
   const [sitters, setSitters] = useState({
@@ -38,14 +38,14 @@ function ProfileListings() {
     });
     axios
       .get(url)
-      .then((response) => {
+      .then(response => {
         setSitters({
           loading: false,
           data: response.data,
           error: undefined,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         setSitters({
           loading: false,
           data: null,
@@ -67,7 +67,7 @@ function ProfileListings() {
   }
   if (sitters.data) {
     // set profile data to display
-    content = sitters.data.map((sitter) => (
+    content = sitters.data.map(sitter => (
       <ProfileCard
         key={sitter._id}
         firstName={sitter.firstName}
@@ -81,18 +81,18 @@ function ProfileListings() {
 
   return (
     <React.Fragment>
-      <CssBaseline/>
-      <Grid container direction='column' justify='center' alignItems='center'>
+      <CssBaseline />
+      <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
           <SearchAndFilter />
         </Grid>
         <Grid item>
-          <Grid 
+          <Grid
             container
-            direction='row'
+            direction="row"
             spacing={3}
             align="center"
-            justify='center'
+            justify="center"
             alignItems="center"
             className={classes.gridContainer}
           >

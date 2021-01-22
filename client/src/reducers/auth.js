@@ -53,13 +53,11 @@ export const AuthReducer = (state = initialState, action) => {
         loading: false,
       };
     case BECOME_SITTER:
-      console.log("BECOME SITTER");
       return {
         ...state,
         becomeSitter: true,
       };
     case NOT_BECOME_SITTER:
-      console.log("NOT BECOME SITTER");
       return {
         ...state,
         becomeSitter: false,

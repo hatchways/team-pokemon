@@ -42,10 +42,7 @@ function EditProfileForm() {
   const { user, profile, becomeSitter } = useContext(AuthStateContext);
 
   useEffect(() => {
-    console.log(becomeSitter);
-    console.log("Rendered");
     return () => {
-      console.log("UNrender");
       dispatch({ type: NOT_BECOME_SITTER });
     };
   }, [becomeSitter]);
@@ -212,7 +209,21 @@ function EditProfileForm() {
     // Validation passed
     updateProfile(dispatch, profileData, profile._id);
     setSaveButtonText("SAVED");
+    dispatch({ type: NOT_BECOME_SITTER });
   };
+
+  const handleSwitch = e => {
+    if (!e.target.checked) {
+      dispatch({ type: NOT_BECOME_SITTER });
+    }
+    setSaveButtonText("SAVE");
+    setProfileData({
+      ...profileData,
+      [e.target.name]: e.target.checked,
+    });
+    setAlert({ error: false, message: "" });
+  };
+
   return (
     <Grid container spacing={3} style={{ width: "80%", paddingTop: "30px" }}>
       <Grid item xs={12}>
@@ -237,14 +248,7 @@ function EditProfileForm() {
           color="primary"
           name="isSitter"
           checked={isSitter}
-          onChange={e => {
-            setSaveButtonText("SAVE");
-            setProfileData({
-              ...profileData,
-              [e.target.name]: e.target.checked,
-            });
-            setAlert({ error: false, message: "" });
-          }}
+          onChange={e => handleSwitch(e)}
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
