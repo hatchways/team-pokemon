@@ -8,7 +8,7 @@ import AlertMessage from "./Alert";
 import { login } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -42,7 +42,7 @@ function LoginForm() {
     setAlert({ error: false, message: "" });
   };
   //submitting user's credentials
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {

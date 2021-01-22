@@ -49,6 +49,7 @@ const profileSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    default: "",
   },
   profilePicture: {
     type: String,
