@@ -11,7 +11,7 @@ const {
 
 // HELPER FUNCTIONS
 
-const signToken = (id) => {
+const signToken = id => {
   return jwt.sign({ id }, process.env.TOKEN_SECRET, {
     expiresIn: "5h",
   });
@@ -58,7 +58,7 @@ exports.register = async (req, res, next) => {
     const emailExist = await User.findOne({ email });
 
     if (emailExist) {
-      return next(createError(400, "Email already exists!"));
+      return next(createError(400, "Email already exists"));
     }
 
     // Create salt and hash password
@@ -100,15 +100,18 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     // Check if email exists, select password if it does.
-    const user = await User.findOne({ email: email }).select("password").exec();
+    const user = await User.findOne({ email: email })
+      .select(["email", "password", "profile"])
+      .populate("profile");
+
     if (!user) {
-      return next(createError(400, "Invalid email or password!"));
+      return next(createError(400, "No such email found"));
     }
 
     // Check if password is correct
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return next(createError(400, "Invalid email or password!"));
+      return next(createError(400, "Password is incorrect"));
     }
 
     createSendToken(user, 201, req, res);

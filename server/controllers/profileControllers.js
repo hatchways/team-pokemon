@@ -118,7 +118,10 @@ exports.getProfile = async (req, res, next) => {
  */
 exports.getProfileList = async (req, res, next) => {
   try {
-    const profileList = await Profile.find();
+    const profileList = await Profile.find({
+      _id: { $ne: req.params.id },
+      isSitter: true,
+    });
     res.status(200).send(profileList);
   } catch (err) {
     next(createError(500, err.message));
@@ -148,7 +151,7 @@ exports.upload = async (req, res, next) => {
 
     const result = await cloudinaryUpload.upload(file.tempFilePath);
     //update profile pic with new url
-    const updatedProfile = await Profile.findOneAndUpdate(
+    await Profile.findOneAndUpdate(
       { _id: req.params.id },
       { profilePicture: result.url },
       { new: true }
