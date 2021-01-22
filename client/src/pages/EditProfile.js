@@ -3,7 +3,7 @@ import { Box, Paper, makeStyles } from "@material-ui/core";
 import EditProfileForm from "../components/dashboard/EditProfileForm";
 import SettingsMenu from "../components/dashboard/SettingsMenu";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   centerPaper: {
     display: "flex",
     flexDirection: "column",

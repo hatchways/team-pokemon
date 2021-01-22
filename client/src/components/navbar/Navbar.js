@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -13,12 +13,16 @@ import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import { Link } from "react-router-dom";
 import MobileNavbar from "./mobileNavbar";
-import { AuthStateContext } from "../../context/AuthContext";
+import {
+  AuthStateContext,
+  AuthDispatchContext,
+} from "../../context/AuthContext";
+import { BECOME_SITTER } from "../../actions/types";
 import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
 import defaultPicture from "../../img/profile-default.png";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: { flexgrow: 1 },
   menuButton: { marginRight: "auto", color: "red" },
   toolbar: {
@@ -41,7 +45,14 @@ function Navbar() {
   const { setMobileMenuOpen } = useContext(UserContext);
 
   const { isAuthenticated, profile } = useContext(AuthStateContext);
+  const dispatch = useContext(AuthDispatchContext);
   const classes = useStyles();
+
+  const handleBecomeSitter = () => {
+    console.log("Navbar clicked Become sitter");
+
+    dispatch({ type: BECOME_SITTER });
+  };
 
   return (
     <AppBar
@@ -63,6 +74,17 @@ function Navbar() {
         {isAuthenticated ? (
           <>
             <Hidden smDown>
+              {!profile.isSitter ? (
+                <Link
+                  to="/dashboard/editprofile"
+                  style={{ textDecoration: "none", marginRight: "30px" }}
+                >
+                  <Button size="large" onClick={handleBecomeSitter}>
+                    Become a Sitter
+                  </Button>
+                </Link>
+              ) : null}
+
               <Link
                 to="*"
                 style={{ textDecoration: "none", marginRight: "30px" }}
@@ -92,8 +114,12 @@ function Navbar() {
         ) : (
           <Hidden smDown>
             <Box mr={4} ml={4}>
-              <Link to="*" style={{ textDecorationColor: "black" }}>
-                <Button size="large" className={classes.sitterLink}>
+              <Link to="/signup" style={{ textDecorationColor: "black" }}>
+                <Button
+                  size="large"
+                  className={classes.sitterLink}
+                  onClick={handleBecomeSitter}
+                >
                   Become a Sitter
                 </Button>
               </Link>

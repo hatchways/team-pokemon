@@ -5,6 +5,8 @@ import {
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
   PROFILE_UPDATE_SUCCESS,
+  BECOME_SITTER,
+  NOT_BECOME_SITTER,
 } from "../actions/types";
 
 export const initialState = {
@@ -12,6 +14,7 @@ export const initialState = {
   user: null,
   profile: null,
   loading: true,
+  becomeSitter: false,
   errors: [], // to store validation errors from the back end - STILL TO IMPLEMENT
 };
 
@@ -48,6 +51,18 @@ export const AuthReducer = (state = initialState, action) => {
         isAuthenticated: false,
         user: null,
         loading: false,
+      };
+    case BECOME_SITTER:
+      console.log("BECOME SITTER");
+      return {
+        ...state,
+        becomeSitter: true,
+      };
+    case NOT_BECOME_SITTER:
+      console.log("NOT BECOME SITTER");
+      return {
+        ...state,
+        becomeSitter: false,
       };
     default:
       return state;
