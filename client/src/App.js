@@ -17,6 +17,7 @@ import Payment from "./pages/Payment";
 import Security from "./pages/Security";
 import Settings from "./pages/Settings";
 import PageNotFound from "./pages/PageNotFound";
+import ProfileListings from "./pages/ProfileListings";
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -34,6 +35,7 @@ function App() {
             <Switch>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
+              <PrivateRoute path="/profile/lists" component={ProfileListings} />
               <PrivateRoute path="/" exact component={Profile} />
               <PrivateRoute
                 path="/dashboard/profile"
