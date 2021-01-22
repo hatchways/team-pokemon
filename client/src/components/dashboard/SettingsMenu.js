@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 function SettingsMenu() {
   const dispatch = useContext(AuthDispatchContext);
-  const { isAuthenticated } = useContext(AuthStateContext);
+  const { isAuthenticated, profile } = useContext(AuthStateContext);
   const { setMobileMenuOpen } = useContext(UserContext);
   const classes = useStyles();
 
@@ -96,13 +96,15 @@ function SettingsMenu() {
           >
             <MenuItem className={classes.menuItem}>Settings</MenuItem>
           </Link>
-          <Link
-            className={classes.linkStyle}
-            to="/dashboard/editprofile"
-            onClick={handleBecomeSitter}
-          >
-            <MenuItem className={classes.menuItem}>Become a Sitter</MenuItem>
-          </Link>
+          {profile && !profile.isSitter ? (
+            <Link
+              className={classes.linkStyle}
+              to="/dashboard/editprofile"
+              onClick={handleBecomeSitter}
+            >
+              <MenuItem className={classes.menuItem}>Become a Sitter</MenuItem>
+            </Link>
+          ) : null}
           <MenuItem
             className={classes.menuItem + " " + classes.logout}
             onClick={handleLogout}
