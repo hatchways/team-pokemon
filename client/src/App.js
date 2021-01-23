@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Navbar from "./components/navbar/Navbar";
 import Profile from "./pages/Profile";
+import Bookings from "./pages/Bookings";
 import EditProfile from "./pages/EditProfile";
 import Photo from "./pages/Photo";
 import Availability from "./pages/Availability";
@@ -37,6 +38,7 @@ function App() {
               <Route path="/login" component={Login} />
               <PrivateRoute path="/profile/lists" component={ProfileListings} />
               <PrivateRoute path="/" exact component={Profile} />
+              <PrivateRoute path="/bookings" exact component={Bookings} />
               <PrivateRoute
                 path="/dashboard/profile"
                 exact
