@@ -10,7 +10,10 @@ exports.getRequests = async (req, res, next) => {
     // Search through each request in the database and return the ones whose userId or sitterId matches the current user
     const requests = await Request.find({
       $or: [{ ownerId: req.user.id }, { sitterId: req.user.id }],
-    });
+    }).populate([
+      { path: "sitterId", model: "User", populate: { path: "profile" } },
+      { path: "ownerId", model: "User", populate: { path: "profile" } },
+    ]);
     res.status(200).send(requests);
   } catch (err) {
     next(createError(500, err.message));
