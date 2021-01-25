@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { takeMonth } from "../../modules/calendar";
 import { Button, Grid, makeStyles, useMediaQuery, TextField } from '@material-ui/core';
-import {format, isSameMonth, isSameDay} from "date-fns";
+import {endOfWeek, endOfMonth,format, isSameMonth, isSameDay, startOfMonth, startOfWeek, startOfDay} from "date-fns";
 
 const useStyles = makeStyles(theme => ({
   weekNames: {
@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
   },
   sameDay: {
       backgroundColor: "#f04040",
-      color: "#ffffff"
+      color: "#ffffff",
+      borderRadius: "5px"
   }
 }));
 
@@ -58,12 +59,27 @@ function Calendar(){
         if(!isSameMonth(day, selectedDate)) return classes.notSameMonth;
         if(isSameDay(day, selectedDate)) return classes.sameDay;
     }
+    function prevMonth(){
+        setSelectedDate(startOfWeek(startOfDay(startOfMonth(selectedDate))));
+    }
+    function nextMonth(){
+        setSelectedDate(startOfDay(endOfWeek(endOfMonth(selectedDate))));
+    }
     return(
         <React.Fragment>
-            <Grid container direction="column" justify="center">
+            <TextField id="outlined-basic" label="Price" variant="outlined" />
+            <Grid container spacing={3} justify="center" alignItems="center">
                 <Grid item>
-                    <h1>{format(selectedDate,"MMMM")}</h1>
+                    <Button onClick={prevMonth}> Prev </Button>
                 </Grid>
+                <Grid item>
+                    <h1>{format(selectedDate,"MMMM")}</h1>  
+                </Grid>
+                <Grid item>
+                    <Button onClick={nextMonth}> Next </Button>
+                </Grid>
+            </Grid>
+            <Grid container direction="column" justify="center">
                 <Grid item>
                 <DisplayWeekNames />
                 {
@@ -72,9 +88,8 @@ function Calendar(){
                             week.map(day => 
                             <Grid 
                                 onClick={() => setSelectedDate(day)}
-                                container item xs={1}
+                                item xs={1}
                                 align="center"
-                                justify="center"
                                 className={`${screenSize()} ${dayColor(day)}`}>
                                 {format(day, "d")}
                             </Grid>)
