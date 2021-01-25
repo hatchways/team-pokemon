@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
 import SettingsMenu from "../components/dashboard/SettingsMenu";
+import Calendar from "../components/dashboard/Calendar";
 
 const useStyles = makeStyles((theme) => ({
   centerPaper: {
@@ -40,6 +41,7 @@ function Availability() {
           className={classes.centerPaper + " " + classes.breakpoints}
         >
           {/* Your Component Goes Here */}
+          <Calendar />
         </Paper>
       </Box>
     </Box>

@@ -15,7 +15,6 @@ import {
   AuthDispatchContext,
   AuthStateContext,
 } from "../../context/AuthContext";
-import { NOT_BECOME_SITTER } from "../../actions/types";
 import { updateProfile } from "../../actions/profile";
 
 const useStyles = makeStyles(() => ({
@@ -39,13 +38,7 @@ function EditProfileForm() {
 
   // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
-  const { user, profile, becomeSitter } = useContext(AuthStateContext);
-
-  useEffect(() => {
-    return () => {
-      dispatch({ type: NOT_BECOME_SITTER });
-    };
-  }, [becomeSitter]);
+  const { user, profile } = useContext(AuthStateContext);
 
   // Edit profile form's state
   const [profileData, setProfileData] = useState({
@@ -79,11 +72,7 @@ function EditProfileForm() {
       setBirthMonth(parseInt(profile.birthDate.slice(5, 7)) - 1);
     profile.birthDate && setBirthDay(parseInt(profile.birthDate.slice(8)));
     setProfileData({
-      isSitter: profile.isSitter
-        ? profile.isSitter
-        : becomeSitter
-        ? true
-        : false,
+      isSitter: profile.isSitter ? profile.isSitter : false,
       firstName: profile.firstName ? profile.firstName : "",
       lastName: profile.lastName ? profile.lastName : "",
       gender: profile.gender ? profile.gender : "",
@@ -117,26 +106,26 @@ function EditProfileForm() {
 
   // Year, month, and day arrays are converted to <MenuItem> components which will be passed as options to our <Select> dropdown input.
 
-  const yearMenuItem = yearArray.map(year => (
+  const yearMenuItem = yearArray.map((year) => (
     <MenuItem key={year} value={year}>
       {year}
     </MenuItem>
   ));
 
-  const monthMenuItem = monthArray.map(month => (
+  const monthMenuItem = monthArray.map((month) => (
     <MenuItem key={month["idx"]} value={month["idx"]}>
       {month["name"]}
     </MenuItem>
   ));
 
-  const dayMenuItem = dayArray.map(day => (
+  const dayMenuItem = dayArray.map((day) => (
     <MenuItem key={day} value={day}>
       {day}
     </MenuItem>
   ));
 
   // Function that handles changes to birth date (year, month, and date <Select> input).
-  const handleBirthDateChange = e => {
+  const handleBirthDateChange = (e) => {
     setSaveButtonText("SAVE");
     let fullDate;
     if (birthDay > dayArray[dayArray.length - 1]) {
@@ -167,7 +156,7 @@ function EditProfileForm() {
 
   // Function that updates the state when changes are made
 
-  const onChange = e => {
+  const onChange = (e) => {
     setSaveButtonText("SAVE");
     setProfileData({
       ...profileData,
@@ -178,7 +167,7 @@ function EditProfileForm() {
 
   // Handle form submission
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     setSaveButtonText("SAVING...");
     e.preventDefault();
     if (!firstName) {
@@ -209,21 +198,7 @@ function EditProfileForm() {
     // Validation passed
     updateProfile(dispatch, profileData, profile._id);
     setSaveButtonText("SAVED");
-    dispatch({ type: NOT_BECOME_SITTER });
   };
-
-  const handleSwitch = e => {
-    if (!e.target.checked) {
-      dispatch({ type: NOT_BECOME_SITTER });
-    }
-    setSaveButtonText("SAVE");
-    setProfileData({
-      ...profileData,
-      [e.target.name]: e.target.checked,
-    });
-    setAlert({ error: false, message: "" });
-  };
-
   return (
     <Grid container spacing={3} style={{ width: "80%", paddingTop: "30px" }}>
       <Grid item xs={12}>
@@ -248,7 +223,14 @@ function EditProfileForm() {
           color="primary"
           name="isSitter"
           checked={isSitter}
-          onChange={e => handleSwitch(e)}
+          onChange={(e) => {
+            setSaveButtonText("SAVE");
+            setProfileData({
+              ...profileData,
+              [e.target.name]: e.target.checked,
+            });
+            setAlert({ error: false, message: "" });
+          }}
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
@@ -265,7 +247,7 @@ function EditProfileForm() {
           name="firstName"
           placeholder="John"
           fullWidth={true}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
           value={firstName}
           required
         />
@@ -284,7 +266,7 @@ function EditProfileForm() {
           name="lastName"
           placeholder="Doe"
           fullWidth={true}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
           value={lastName}
           required
         />
@@ -303,7 +285,7 @@ function EditProfileForm() {
           variant="outlined"
           name="gender"
           value={gender ? gender : ""}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
           style={{ width: "50%" }}
         >
           <MenuItem value="Male">Male</MenuItem>
@@ -329,7 +311,7 @@ function EditProfileForm() {
           variant="outlined"
           name="birthMonth"
           label="Month"
-          onChange={e => {
+          onChange={(e) => {
             handleBirthDateChange(e);
           }}
           value={birthMonth}
@@ -342,7 +324,7 @@ function EditProfileForm() {
           variant="outlined"
           name="birthDay"
           label="Day"
-          onChange={e => handleBirthDateChange(e)}
+          onChange={(e) => handleBirthDateChange(e)}
           value={birthDay}
           style={{ width: "30%" }}
         >
@@ -353,7 +335,7 @@ function EditProfileForm() {
           variant="outlined"
           name="birthYear"
           label="Year"
-          onChange={e => handleBirthDateChange(e)}
+          onChange={(e) => handleBirthDateChange(e)}
           value={birthYear}
           style={{ width: "30%" }}
         >
@@ -375,7 +357,7 @@ function EditProfileForm() {
           name="email"
           placeholder="john-doe@gmail.com"
           value={email}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
           fullWidth={true}
           required
         />
@@ -395,7 +377,7 @@ function EditProfileForm() {
           placeholder="Your Phone Number"
           fullWidth={true}
           value={phoneNumber}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
@@ -413,7 +395,7 @@ function EditProfileForm() {
           placeholder="Address"
           fullWidth={true}
           value={address}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
@@ -433,7 +415,7 @@ function EditProfileForm() {
           placeholder="About you"
           fullWidth={true}
           value={description}
-          onChange={e => onChange(e)}
+          onChange={(e) => onChange(e)}
         />
       </Grid>
       <Grid item xs={12} sm={12} align="center">
@@ -448,7 +430,7 @@ function EditProfileForm() {
           variant="contained"
           size="large"
           color="primary"
-          onClick={e => handleSubmit(e)}
+          onClick={(e) => handleSubmit(e)}
         >
           {saveButtonText}
         </Button>

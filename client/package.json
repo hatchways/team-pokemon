@@ -8,6 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "axios": "^0.21.1",
     "cloudinary-react": "^1.6.8",
+    "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
