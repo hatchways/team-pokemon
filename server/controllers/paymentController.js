@@ -2,7 +2,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //retrieve a customer with POST by searching their email
 exports.getCustomer = async (req, res) => {
-  console.log(req.body);
   const { id, name, email } = req.body;
   const customerInfo = {
     id: id,
@@ -10,19 +9,15 @@ exports.getCustomer = async (req, res) => {
     email: email,
     description: "Dog sitter service customer",
   };
-
   let existingCustomer = await stripe.customers.list({
     email: email,
   });
-  console.log(existingCustomer.data[0].default_source);
-  if (existingCustomer.data.length) {
+  if (existingCustomer.data.length > 0) {
     //customer exists -> retrieve their cards
-    console.log("Cx exists");
     const cards = await stripe.customers.listSources(id, {
       object: "card",
       limit: 5,
     });
-    //console.log(cards);
     const customerCards = await cards.data.map(card => {
       return {
         id: card.id,
@@ -34,7 +29,6 @@ exports.getCustomer = async (req, res) => {
           existingCustomer.data[0].default_source == card.id ? true : false,
       };
     });
-    //console.log(customerCards);
     res.json({ error: false, cards: customerCards });
   } else {
     //customer doesn't exist yet -> create new customer
@@ -74,7 +68,6 @@ exports.addCard = async (req, res) => {
     res.json({ error: true, data: null });
   }
   return;
-  //card.brand, card.exp_month, card.exp_year, card.last4
 };
 
 exports.updateDefault = async (req, res) => {

@@ -13,6 +13,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Collapse,
 } from "@material-ui/core";
 import {
   useStripe,
@@ -36,13 +37,20 @@ const CARD_OPTIONS = {
     base: {
       color: "black",
       fontWeight: 500,
+      backgroundColor: "#CFD7DF",
       fontSize: "20px",
-      backgroundColor: "white",
-      ":-webkit-autofill": { color: "#fce883" },
-      "::placeholder": { color: "gray" },
+      "::placeholder": {
+        color: "gray",
+      },
+      ":-webkit-autofill": {
+        color: "#e39f48",
+      },
     },
     invalid: {
-      color: "#ffc7ee",
+      color: "#E25950",
+      "::placeholder": {
+        color: "#FFCCA5",
+      },
     },
   },
 };
@@ -55,6 +63,12 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+    width: "100%",
+    paddingTop: "30px",
+  },
+  pageHeader: {
+    fontWeight: "bold",
+    marginBottom: "20px",
   },
   subHeader: {
     color: "gray",
@@ -65,7 +79,6 @@ const useStyles = makeStyles(theme => ({
     margin: "0",
   },
   formBox: {
-    display: "none",
     width: "100%",
     marginBottom: "50px",
   },
@@ -99,12 +112,14 @@ const useStyles = makeStyles(theme => ({
     color: "orange",
     borderColor: "orange",
   },
+  collapse: {
+    width: "100%",
+  },
   addHintText: {
     textAlign: "center",
     marginBottom: "50px",
   },
   cardForm: {
-    backgroundColor: "#f0f0f0",
     border: "1px solid gray",
     minWidth: "200px",
     width: "60%",
@@ -113,14 +128,17 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center",
     padding: "10px",
     borderRadius: "6px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
-  formHeader: {
-    marginTop: "20px",
-    marginBottom: "40px",
+  cardElementsBox: {
+    width: "100%",
+    height: "200px",
   },
   inputLabel: {
-    marginTop: "20px",
-    marginBottom: "20px",
+    marginTop: "10px",
+    marginBottom: "10px",
     fontSize: "18px",
     color: "black",
     textAlign: "left",
@@ -128,9 +146,10 @@ const useStyles = makeStyles(theme => ({
   submitButton: {
     marginTop: "40px",
     marginBottom: "20px",
+    width: "90%",
   },
   errorMessage: {
-    margin: "10px",
+    marginBottom: "10px",
     color: "red",
     textAlign: "center",
   },
@@ -148,6 +167,7 @@ function PaymentForm() {
   const [cards, setCards] = useState();
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [addCardOpen, setAddCardOpen] = useState(false);
   const { profile, user } = useContext(AuthStateContext);
   const stripe = useStripe();
   const elements = useElements();
@@ -157,6 +177,7 @@ function PaymentForm() {
     profile && getUserCards();
   }, [profile]);
 
+  //Retrieve cards that user saved previously.
   const getUserCards = async () => {
     setLoading(true);
     let resp = await axios.post("/api/payment", {
@@ -166,7 +187,7 @@ function PaymentForm() {
     });
     if (!resp.data.error) {
       setLoading(false);
-      if (resp.data.cards.length < 1 || !resp.data.cards) {
+      if (!resp.data.cards || resp.data.cards.length < 1) {
         return setMessage("No cards added yet");
       }
       setMessage();
@@ -174,13 +195,14 @@ function PaymentForm() {
     } else {
       return setError("Server error occured. Please refresh the page");
     }
-    //setLoading(false);
   };
 
+  //Open card input form to add new card - called via handler to prevent React DOM errors
   const openCardForm = () => {
-    document.getElementById("formBox").style.display = "block";
+    setAddCardOpen(true);
   };
 
+  //Flashing messages if card's data (e.g. exp date) is incorrect
   const handleChange = e => {
     if (e.error) {
       return setError(e.error.message);
@@ -188,6 +210,7 @@ function PaymentForm() {
     return setError(null);
   };
 
+  //create a token for the card that uses wants to add
   const handleSubmit = async e => {
     e.preventDefault();
     const card = elements.getElement(CardNumberElement);
@@ -201,6 +224,7 @@ function PaymentForm() {
     tokenHandler(result.token);
   };
 
+  //send created token to back end
   const tokenHandler = async token => {
     let resp = await axios.post("/api/payment/card", {
       userId: profile._id,
@@ -216,6 +240,7 @@ function PaymentForm() {
     return setError("Error occured. Please try again");
   };
 
+  //choosing particular radio button chooses the corresponding card as a default source
   const handleRadioButton = async card => {
     let resp = await axios.post("/api/payment/default", {
       userId: profile._id,
@@ -228,22 +253,15 @@ function PaymentForm() {
   };
 
   return (
-    <Box
-      className={classes.boxParent}
-      style={{ width: "100%", paddingTop: "30px" }}
-    >
-      <Typography
-        variant="h4"
-        align="center"
-        style={{ fontWeight: "bold", marginBottom: "20px" }}
-      >
+    <Box className={classes.boxParent}>
+      <Typography variant="h4" align="center" className={classes.pageHeader}>
         Payment
       </Typography>
       {loading && <CircularProgress size={40} className={classes.loading} />}
       <Typography variant="h5" className={classes.subHeader}>
         {message ? message : "Saved Payment Profiles:"}
       </Typography>
-      <RadioGroup>
+      <RadioGroup className={classes.userCards}>
         <Grid
           container
           alignItems="center"
@@ -309,49 +327,60 @@ function PaymentForm() {
       <Typography variant="body1" className={classes.addHintText}>
         You can add up to 5 cards
       </Typography>
-      <Box className={classes.formBox} id="formBox">
-        <form onSubmit={e => handleSubmit(e)} className={classes.cardForm}>
-          <Typography variant="h5" className={classes.formHeader}>
-            Card Details
-          </Typography>
-          <Box>
-            <InputLabel htmlFor="card-number" className={classes.inputLabel}>
-              Card Number
-            </InputLabel>
-            <CardNumberElement
-              id="card-number"
-              onChange={handleChange}
-              options={CARD_OPTIONS}
-            ></CardNumberElement>
-            <br />
-            <InputLabel htmlFor="card-expiry" className={classes.inputLabel}>
-              Card Expiry
-            </InputLabel>
-            <CardExpiryElement
-              id="card-expiry"
-              onChange={handleChange}
-              options={CARD_OPTIONS}
-            ></CardExpiryElement>
-            <br />
-            <InputLabel htmlFor="card-cvc" className={classes.inputLabel}>
-              Card Expiry
-            </InputLabel>
-            <CardCvcElement
-              id="card-cvc"
-              onChange={handleChange}
-              options={CARD_OPTIONS}
-            ></CardCvcElement>
-          </Box>
-          <Button
-            type="submit"
-            variant="outlined"
-            color="primary"
-            className={classes.submitButton}
-          >
-            Submit Card
-          </Button>
-        </form>
-      </Box>
+      <Collapse in={addCardOpen} className={classes.collapse}>
+        <Box className={classes.formBox} id="formBox">
+          <form onSubmit={e => handleSubmit(e)} className={classes.cardForm}>
+            <Grid container spacing={3} className={classes.cardElementsBox}>
+              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <InputLabel
+                  htmlFor="card-number"
+                  className={classes.inputLabel}
+                >
+                  Card Number
+                </InputLabel>
+                <CardNumberElement
+                  id="card-number"
+                  onChange={handleChange}
+                  options={CARD_OPTIONS}
+                ></CardNumberElement>
+              </Grid>
+              <br />
+              <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
+                <InputLabel
+                  htmlFor="card-expiry"
+                  className={classes.inputLabel}
+                >
+                  Expiry
+                </InputLabel>
+                <CardExpiryElement
+                  id="card-expiry"
+                  onChange={handleChange}
+                  options={CARD_OPTIONS}
+                ></CardExpiryElement>
+              </Grid>
+              <br />
+              <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
+                <InputLabel htmlFor="card-cvc" className={classes.inputLabel}>
+                  CVC
+                </InputLabel>
+                <CardCvcElement
+                  id="card-cvc"
+                  onChange={handleChange}
+                  options={CARD_OPTIONS}
+                ></CardCvcElement>
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="primary"
+              className={classes.submitButton}
+            >
+              Submit Card
+            </Button>
+          </form>
+        </Box>
+      </Collapse>
       <Typography className={classes.errorMessage} variant="h6">
         {error}
       </Typography>

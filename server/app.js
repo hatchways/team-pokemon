@@ -19,15 +19,7 @@ const { json, urlencoded } = express;
 var app = express();
 
 connectDB();
-/////
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     "Content-Security-Policy",
-//     "connect-src 'self' https://api.stripe.com https:; frame-src https://js.stripe.com https://hooks.stripe.com https:; script-src 'self'  https://js.stripe.com 'sha256-QAj9SgqS0tkqFXsMg6gbHzN3KfNnrPW0N0FCdMzN3MI=' https:"
-//   );
-//   next();
-// });
-/////
+
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
