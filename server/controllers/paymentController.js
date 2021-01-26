@@ -1,7 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const createError = require("http-errors");
 
-//retrieve a customer with POST by searching their email
+//retrieve a customer by searching their email
 exports.getCustomer = async (req, res, next) => {
   try {
     const { id, name, email } = req.body;
@@ -36,7 +36,7 @@ exports.getCustomer = async (req, res, next) => {
       //customer doesn't exist yet -> create new customer
       await stripe.customers.create(customerInfo, (err, data) => {
         if (err) {
-          console.log(err);
+          next(createError(500, err.message));
         }
         if (data) {
           res.json({
@@ -44,16 +44,17 @@ exports.getCustomer = async (req, res, next) => {
             cards: null,
           });
         } else {
-          console.log("Unknown error occured");
+          next(createError(500, err.message));
         }
       });
     }
   } catch (err) {
-    next(createError(500, err.message));
+    res.json({ error: true, message: err.raw.message });
   }
 };
 
-exports.addCard = async (req, res, next) => {
+//add new card
+exports.addCard = async (req, res) => {
   try {
     const { userId, token } = req.body;
     const card = await stripe.customers.createSource(userId, {
@@ -75,11 +76,12 @@ exports.addCard = async (req, res, next) => {
     }
     return;
   } catch (err) {
-    next(createError(500, err.message));
+    res.json({ error: true, message: err.raw.message });
   }
 };
 
-exports.updateDefault = async (req, res, next) => {
+//update cutomer's default source (card)
+exports.updateDefault = async (req, res) => {
   try {
     const { userId, card } = req.body;
     const customer = await stripe.customers.update(userId, {
@@ -92,6 +94,6 @@ exports.updateDefault = async (req, res, next) => {
     }
     return;
   } catch {
-    next(createError(500, err.message));
+    res.json({ error: true, message: err.raw.message });
   }
 };

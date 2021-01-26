@@ -193,7 +193,7 @@ function PaymentForm() {
       setMessage();
       setCards(resp.data.cards);
     } else {
-      return setError("Server error occured. Please refresh the page");
+      return setError("Server error occured");
     }
   };
 
@@ -234,10 +234,10 @@ function PaymentForm() {
       elements.getElement(CardNumberElement).clear();
       elements.getElement(CardExpiryElement).clear();
       elements.getElement(CardCvcElement).clear();
-      document.getElementById("formBox").style.display = "none";
+      setAddCardOpen(false);
       return getUserCards();
     }
-    return setError("Error occured. Please try again");
+    return setError(resp.data.message);
   };
 
   //choosing particular radio button chooses the corresponding card as a default source
@@ -249,7 +249,7 @@ function PaymentForm() {
     if (!resp.data.error) {
       return getUserCards();
     }
-    return setError("Error ocurred. Please try again");
+    return setError(resp.data.message);
   };
 
   return (
