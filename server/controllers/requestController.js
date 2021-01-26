@@ -77,7 +77,7 @@ exports.updateRequest = async (req, res, next) => {
     }
 
     // Only the sitter can accept/decline request
-    if (request.sitterId.id.toString() !== req.user.id) {
+    if (request.sitterId._id.toString() !== req.user.id) {
       return next(
         createError(
           401,
