@@ -1,5 +1,5 @@
-// Filter for accepted requests
-export const acceptedRequests = (requests, today, userId, isSitter) => {
+// Filter for upcoming accepted requests
+export const upcomingAcceptedRequests = (requests, today, userId, isSitter) => {
   if (isSitter) {
     return requests.filter(
       (request) =>
@@ -19,7 +19,7 @@ export const acceptedRequests = (requests, today, userId, isSitter) => {
 
 // Find next sitter booking.
 export const getNextSitterBooking = (requests, today, userId) => {
-  const bookings = acceptedRequests(requests, today, userId, true);
+  const bookings = upcomingAcceptedRequests(requests, today, userId, true);
   if (bookings.length > 0) {
     return bookings[bookings.length - 1];
   } else {
@@ -29,7 +29,7 @@ export const getNextSitterBooking = (requests, today, userId) => {
 
 // Find next owner booking
 export const getNextOwnerBooking = (requests, today, userId) => {
-  const bookings = acceptedRequests(requests, today, userId, false);
+  const bookings = upcomingAcceptedRequests(requests, today, userId, false);
   if (bookings.length > 0) {
     return bookings[bookings.length - 1];
   } else {

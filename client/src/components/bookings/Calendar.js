@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import moment from "moment";
 
-import buildCalendar from "./buildCalendar";
+import buildCalendar from "../../utils/bookingCalendar";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   calendar: {
     boxSizing: "border-box",
     display: "flex",
@@ -126,13 +126,16 @@ function Calendar({ sitterMode, currentSitterBookings, currentOwnerBookings }) {
                   currentSitterBookings.indexOf(
                     moment(day).format("DD MM YY")
                   ) !== -1 &&
-                  !day.isAfter(value.clone().endOf("month"), "day")
+                  !day.isAfter(value.clone().endOf("month"), "day") &&
+                  !day.isBefore(value.clone().startOf("month"), "day")
                     ? classes.daySelected
                     : [
                         !sitterMode &&
                         currentOwnerBookings.indexOf(
                           moment(day).format("DD MM YY")
-                        ) !== -1
+                        ) !== -1 &&
+                        !day.isAfter(value.clone().endOf("month"), "day") &&
+                        !day.isBefore(value.clone().startOf("month"), "day")
                           ? classes.daySelected
                           : classes.day,
                       ]
@@ -144,13 +147,16 @@ function Calendar({ sitterMode, currentSitterBookings, currentOwnerBookings }) {
                     currentSitterBookings.indexOf(
                       moment(day).format("DD MM YY")
                     ) !== -1 &&
-                    !day.isAfter(value.clone().endOf("month"), "day")
+                    !day.isAfter(value.clone().endOf("month"), "day") &&
+                    !day.isBefore(value.clone().startOf("month"), "day")
                       ? classes.selected + " " + classes.day
                       : [
                           !sitterMode &&
                           currentOwnerBookings.indexOf(
                             moment(day).format("DD MM YY")
-                          ) !== -1
+                          ) !== -1 &&
+                          !day.isAfter(value.clone().endOf("month"), "day") &&
+                          !day.isBefore(value.clone().startOf("month"), "day")
                             ? classes.selected + " " + classes.day
                             : [
                                 day.isBefore(

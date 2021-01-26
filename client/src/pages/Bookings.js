@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  loadingSpinner: {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+  },
 }));
 
 function Bookings() {
@@ -51,9 +56,7 @@ function Bookings() {
   return (
     <>
       {!requests ? (
-        <CircularProgress
-          style={{ position: "fixed", top: "50%", left: "50%" }}
-        />
+        <CircularProgress className={classes.loadingSpinner} />
       ) : (
         <Box className={classes.container + " " + classes.containerBreakpoints}>
           <RequestList
