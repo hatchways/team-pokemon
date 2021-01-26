@@ -181,7 +181,7 @@ function PaymentForm() {
   const getUserCards = async () => {
     setLoading(true);
     let resp = await axios.post("/api/payment", {
-      id: profile._id,
+      id: user._id,
       email: user.email,
       name: profile.firstName + " " + profile.lastName,
     });
