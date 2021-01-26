@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "cloudinary-react": "^1.6.8",
     "dotenv": "^8.2.0",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.2.4",
