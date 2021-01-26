@@ -1,74 +1,77 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { Box, Hidden, Paper, useMediaQuery } from "@material-ui/core";
+import { Box, Paper, makeStyles } from "@material-ui/core";
 import ProfileDetailCard from "../components/profile/ProfileDetailCard";
 import ProfileRequestForm from "../components/profile/ProfileRequestForm";
 
+const useStyles = makeStyles((theme) => ({
+  // General
+  container: {
+    display: "flex",
+    justifyContent: "space-around",
+    paddingTop: "100px",
+    minHeight: "100vh",
+    backgroundColor: "#fafafa",
+  },
+  responsiveAlignment: {
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    [theme.breakpoints.up("md")]: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+    },
+  },
+  // Profile Card
+  profileBreakpoints: {
+    [theme.breakpoints.down("md")]: {
+      width: "90%",
+      marginBottom: "30px",
+      paddingBottom: "30px",
+      overflow: "hidden",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "50%",
+      marginBottom: "100px",
+      paddingBottom: "30px",
+      overflow: "hidden",
+    },
+  },
+  // Request Card
+  centerContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  requestBreakpoints: {
+    [theme.breakpoints.down("sm")]: {
+      width: "90%",
+
+      marginBottom: "20px",
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: "350px",
+      marginBottom: "20px",
+    },
+  },
+}));
+
 function Profile() {
-  const aboveMd = useMediaQuery("(min-width:960px)");
+  const classes = useStyles();
+
   return (
-    <Box
-      display="flex"
-      flexDirection={aboveMd ? "row" : "column"}
-      justifyContent="space-around"
-      alignItems={aboveMd ? "flex-start" : "center"}
-      style={{
-        paddingTop: "100px",
-        minHeight: "100vh",
-        backgroundColor: "#fafafa",
-      }}
-    >
-      <Hidden smDown>
-        <Paper
-          style={{
-            width: "50%",
-            marginBottom: "100px",
-            paddingBottom: "30px",
-            overflow: "hidden",
-          }}
-        >
-          <ProfileDetailCard />
-        </Paper>
-      </Hidden>
-      <Hidden mdUp>
-        <Paper
-          style={{
-            width: "90%",
-            marginBottom: "30px",
-            paddingBottom: "30px",
-            overflow: "hidden",
-          }}
-        >
-          <ProfileDetailCard />
-        </Paper>
-      </Hidden>
+    <Box className={classes.container + " " + classes.responsiveAlignment}>
+      <Paper className={classes.profileBreakpoints}>
+        <ProfileDetailCard />
+      </Paper>
+
       {/* Add check to only display the request card if the user whose profile you are visiting is a sitter */}
-      <Hidden xsDown>
-        <Paper
-          style={{
-            width: "350px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <ProfileRequestForm />
-        </Paper>
-      </Hidden>
-      <Hidden smUp>
-        <Paper
-          style={{
-            width: "90%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <ProfileRequestForm />
-        </Paper>
-      </Hidden>
+      <Paper
+        className={classes.requestBreakpoints + " " + classes.centerContent}
+      >
+        <ProfileRequestForm />
+      </Paper>
     </Box>
   );
 }

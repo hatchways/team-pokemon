@@ -33,6 +33,12 @@ exports.createRequest = async (req, res, next) => {
       return next(createError(400, "Please provide a start and end date"));
     }
 
+    if (new Date(end) < new Date(start)) {
+      return next(
+        createError(400, "End date cannot be earlier than the start date!")
+      );
+    }
+
     // Make sure owner and sitter exists
     const user = await User.findById(ownerId);
     const sitter = await User.findById(sitterId);

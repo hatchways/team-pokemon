@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import moment from "moment";
+import Rating from "@material-ui/lab/Rating";
 import {
   Box,
   Button,
   TextField,
   Typography,
-  MenuItem,
   makeStyles,
 } from "@material-ui/core";
-import Rating from "@material-ui/lab/Rating";
+import { AuthStateContext } from "../../context/AuthContext";
+import { createRequest } from "../../actions/request";
 
 const useStyles = makeStyles(() => ({
   centerContent: {
@@ -27,28 +29,133 @@ const useStyles = makeStyles(() => ({
 
 function ProfileRequestForm() {
   const classes = useStyles();
+
+  // Get dispatch method and state from auth context
+  // const dispatch = useContext(AuthDispatchContext);
+  const { user } = useContext(AuthStateContext);
+
   // Today's date to be passed as the minimum and default value to the 'drop off' date picker input.
   const today = new Date();
   const todayFormatted = today.toISOString().split("T")[0];
 
-  const [dropOffDate, setDropOffDate] = useState(todayFormatted);
-  const [pickUpDate, setPickUpDate] = useState(todayFormatted);
+  const [startDate, setStartDate] = useState(todayFormatted);
+  const [endDate, setEndDate] = useState(todayFormatted);
+  const [startTime, setStartTime] = useState(
+    moment()
+      .add(moment().utcOffset() + 30, "minutes")
+      .startOf("hour")
+      .format("HH:mm")
+  );
+  const [endTime, setEndTime] = useState(
+    moment()
+      .add(moment().utcOffset() + 150, "minutes")
+      .startOf("hour")
+      .format("HH:mm")
+  );
+  const [requestFormData, setRequestFormData] = useState({
+    sitterId: "600b0187e8129077501534bc",
+    ownerId: user._id,
+    // Default start date is 30 minutes from now rounded up to the nearest hour
+    start: moment()
+      .add(moment().utcOffset() + 30, "minutes")
+      .startOf("hour")
+      .format(),
+    // Default end date is 2.5 hours from now rounded up to the nearest hour
+    end: moment()
+      .add(moment().utcOffset() + 150, "minutes")
+      .startOf("hour")
+      .format(),
+  });
 
-  const handleDropOffDateChange = (e) => {
-    setDropOffDate(e.target.value);
-    // If drop off date is later than pick up date, change pick up date to same day as drop off.
-    if (e.target.value > pickUpDate) {
-      setPickUpDate(e.target.value);
+  // Handle change in 'Drop Off' (start) date input
+  const handleStartDateChange = (e) => {
+    const formattedStartDate = moment(
+      new Date(`${e.target.value}T${startTime}`)
+    ).format();
+
+    setStartDate(e.target.value);
+
+    // If start date is later than end date, change end date to same day as start date.
+    if (e.target.value > endDate) {
+      const formattedEndDate = moment(
+        new Date(`${e.target.value}T${endTime}`)
+      ).format();
+      setEndDate(e.target.value);
+      setRequestFormData({
+        ...requestFormData,
+        start: formattedStartDate,
+        end: formattedEndDate,
+      });
+    } else {
+      setRequestFormData({
+        ...requestFormData,
+        start: formattedStartDate,
+      });
     }
   };
 
-  const handlePickUpDateChange = (e) => {
-    setPickUpDate(e.target.value);
-    // If pick up date is earlier than drop off date, change drop off date to same day as pick up.
-    if (e.target.value < dropOffDate) {
-      setDropOffDate(e.target.value);
+  // Handle change in 'Pick Up' (end) date input
+  const handleEndDateChange = (e) => {
+    const formattedEndDate = moment(
+      new Date(`${e.target.value}T${endTime}`)
+    ).format();
+
+    setEndDate(e.target.value);
+
+    // If end date is earlier than start date, change start date to same day as end date.
+    if (e.target.value < startDate) {
+      const formattedStartDate = moment(
+        new Date(`${e.target.value}T${startDate}`)
+      ).format();
+
+      setStartDate(e.target.value);
+
+      setRequestFormData({
+        ...requestFormData,
+        start: formattedStartDate,
+        end: formattedEndDate,
+      });
+    } else {
+      setRequestFormData({
+        ...requestFormData,
+        end: formattedEndDate,
+      });
     }
   };
+
+  // Handle change in 'Drop off' (start) time input
+  const handleStartTimeChange = (e) => {
+    const formattedStartDate = moment(
+      new Date(`${startDate}T${e.target.value}`)
+    ).format();
+
+    setStartTime(e.target.value);
+
+    setRequestFormData({
+      ...requestFormData,
+      start: formattedStartDate,
+    });
+  };
+
+  // Handle change in 'Pick Up' (start) time input.
+  const handleEndTimeChange = (e) => {
+    const formattedEndDate = moment(
+      new Date(`${endDate}T${e.target.value}`)
+    ).format();
+
+    setEndTime(e.target.value);
+
+    setRequestFormData({
+      ...requestFormData,
+      end: formattedEndDate,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createRequest(requestFormData);
+  };
+
   return (
     <>
       <Typography
@@ -77,19 +184,23 @@ function ProfileRequestForm() {
               inputProps: { min: todayFormatted },
             }}
             type="date"
-            value={dropOffDate}
-            onChange={(e) => handleDropOffDateChange(e)}
+            value={startDate}
+            onChange={(e) => handleStartDateChange(e)}
             variant="outlined"
           ></TextField>
           <TextField
-            select
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            type="time"
+            value={startTime}
+            className={classes.textField}
             variant="outlined"
-            value={"9 am"}
-            style={{ width: "110px" }}
-          >
-            <MenuItem value={"9 am"}>9 am</MenuItem>
-            <MenuItem value={"9:30 am"}>9:30 am</MenuItem>
-          </TextField>
+            style={{ width: "120px" }}
+            onChange={(e) => {
+              handleStartTimeChange(e);
+            }}
+          />
         </Box>
       </Box>
       <Box>
@@ -99,22 +210,26 @@ function ProfileRequestForm() {
         <Box style={{ marginBottom: "30px" }}>
           <TextField
             InputProps={{
-              inputProps: { min: dropOffDate },
+              inputProps: { min: startDate },
             }}
             type="date"
             variant="outlined"
-            value={pickUpDate}
-            onChange={(e) => handlePickUpDateChange(e)}
+            value={endDate}
+            onChange={(e) => handleEndDateChange(e)}
           ></TextField>
           <TextField
-            select
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            type="time"
+            value={endTime}
+            className={classes.textField}
             variant="outlined"
-            value={"10:30 am"}
-            style={{ width: "110px" }}
-          >
-            <MenuItem value={"9 am"}>9 am</MenuItem>
-            <MenuItem value={"10:30 am"}>10:30 am</MenuItem>
-          </TextField>
+            style={{ width: "120px" }}
+            onChange={(e) => {
+              handleEndTimeChange(e);
+            }}
+          />
         </Box>
       </Box>
       <Button
@@ -123,6 +238,7 @@ function ProfileRequestForm() {
         type="submit"
         size="large"
         className={classes.buttonStyles}
+        onClick={(e) => handleSubmit(e)}
       >
         SEND REQUEST
       </Button>
