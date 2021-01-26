@@ -22,8 +22,7 @@ exports.getRequests = async (req, res, next) => {
 exports.createRequest = async (req, res, next) => {
   try {
     const { sitterId, start, end } = req.body;
-    const ownerId = req.user.id; //USER.ID or PROFILE.ID
-    console.log(ownerId);
+    const ownerId = req.user.id;
     // Validate user input
     if (!start || !end) {
       return next(createError(400, "Please provide a start and end date"));
@@ -40,15 +39,12 @@ exports.createRequest = async (req, res, next) => {
     //check if OWNER has their card(s) added
     await stripe.customers.retrieve(ownerId, async (err, data) => {
       if (err) {
-        console.log("ERROR");
-        return next(createError(400, "No payment method was registered"));
+        return next(createError(400, "User has not registered payment"));
       }
       if (data) {
         if (!data.default_source) {
-          console.log("NO DEFAULT CARD");
-          return next(createError(400, "No payment method was registered"));
+          return next(createError(400, "No payment card was added"));
         }
-        console.log("CREATING REQUEST");
         // Create new request
         const newRequest = new Request({
           ownerId,
@@ -94,8 +90,22 @@ exports.updateRequest = async (req, res, next) => {
     // Update request with approved or declined
     // A sitter can decline a request after they've approved it, hence declined is set to the opposite of accepted and vice versa.
     if (accepted) {
-      request.accepted = true;
-      request.declined = false;
+      //check if sitter is a stripe customer and has added a payment card; if not - can not accept request
+      await stripe.customers.retrieve(req.user.id, async (err, data) => {
+        if (err) {
+          console.log("No stripe");
+          return next(createError(400, "User has not registered payment"));
+        }
+        if (data) {
+          if (!data.default_source) {
+            console.log("No card");
+            return next(createError(400, "No payment card was added"));
+          }
+          console.log("changed request");
+          request.accepted = true;
+          request.declined = false;
+        }
+      });
     }
     if (declined) {
       request.declined = true;
