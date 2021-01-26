@@ -12,5 +12,6 @@ router
   .post(requestController.createRequest);
 
 router.put("/:id", requestController.updateRequest);
+router.post("/:id/pay", requestController.payRequest);
 
 module.exports = router;

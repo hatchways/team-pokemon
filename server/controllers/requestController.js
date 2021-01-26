@@ -3,6 +3,7 @@ const Profile = require("../models/profileModel");
 const Request = require("../models/requestModel");
 const User = require("../models/userModel");
 const ObjectId = require("mongoose").Types.ObjectId;
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Get list of requests for logged in user
 exports.getRequests = async (req, res, next) => {
@@ -21,8 +22,8 @@ exports.getRequests = async (req, res, next) => {
 exports.createRequest = async (req, res, next) => {
   try {
     const { sitterId, start, end } = req.body;
-    const ownerId = req.user.id;
-
+    const ownerId = req.user.id; //USER.ID or PROFILE.ID
+    console.log(ownerId);
     // Validate user input
     if (!start || !end) {
       return next(createError(400, "Please provide a start and end date"));
@@ -36,17 +37,29 @@ exports.createRequest = async (req, res, next) => {
       return next(createError(404, "Can't find user!"));
     }
 
-    // Create new request
-    const newRequest = new Request({
-      ownerId,
-      sitterId,
-      start,
-      end,
+    //check if OWNER has their card(s) added
+    await stripe.customers.retrieve(ownerId, async (err, data) => {
+      if (err) {
+        console.log("ERROR");
+        return next(createError(400, "No payment method was registered"));
+      }
+      if (data) {
+        if (!data.default_source) {
+          console.log("NO DEFAULT CARD");
+          return next(createError(400, "No payment method was registered"));
+        }
+        console.log("CREATING REQUEST");
+        // Create new request
+        const newRequest = new Request({
+          ownerId,
+          sitterId,
+          start,
+          end,
+        });
+        const savedRequest = await newRequest.save();
+        res.status(201).send(savedRequest);
+      }
     });
-
-    const savedRequest = await newRequest.save();
-
-    res.status(201).send(savedRequest);
   } catch (err) {
     next(createError(500, err.message));
   }
@@ -92,6 +105,27 @@ exports.updateRequest = async (req, res, next) => {
     const updatedRequest = await request.save();
 
     res.status(200).send(updatedRequest);
+  } catch (err) {
+    next(createError(500, err.message));
+  }
+};
+
+exports.payRequest = async (req, res, next) => {
+  try {
+    const { amount } = req.body; // -IS IT IN BODY??
+
+    //console.log(ownerStripe);
+
+    // const request = await Request.findById(req.params.id);
+
+    // //if request was accepted and is already finished
+    // if (request.accepted && request.end.getTime() < Date.now()) {
+    //   //make payment in stripe
+
+    //   //update mongo document
+    //   request.paid = true;
+    //   request.save();
+    // }
   } catch (err) {
     next(createError(500, err.message));
   }
