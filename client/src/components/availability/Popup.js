@@ -1,18 +1,33 @@
-import React from 'react';
-import {Dialog, DialogTitle, DialogContent } from '@material-ui/core/';
+import React, { useState } from 'react';
+import {Button, Dialog, DialogTitle, DialogContent } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
+import CancelIcon from '@material-ui/icons/Cancel';
 
+const useStyles = makeStyles(theme => ({
+    title: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "space-around",
+        cursor: "pointer"
+    }
+}))
 function Popup(props){
     const {title, children, openPopup, setOpenPopup} = props; 
+    const classes = useStyles();
+
     return (
-        <Dialog open={openPopup}>
-            <DialogTitle>
-                <div> Add Availability</div>
-            </DialogTitle>
-            <DialogContent>
-                {children}
-            </DialogContent>
-        </Dialog>
+            <Dialog open={openPopup}>
+                <DialogTitle>
+                    <div className={classes.title}>
+                        <h3> Select Times </h3>
+                        <CancelIcon color="primary" fontSize="large" onClick={()=>setOpenPopup(false)}/>
+                    </div>
+                </DialogTitle>
+                <DialogContent>
+                    {children}
+                </DialogContent>
+            </Dialog>
     )
 }
 

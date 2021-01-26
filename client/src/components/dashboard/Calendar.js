@@ -6,7 +6,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AddIcon from '@material-ui/icons/Add';
 import {addMonths,format, isSameMonth, isSameDay, subMonths} from "date-fns";
 import Popup from '../availability/Popup';
-import AddTimeForm from '../availability/AddTimeForm';
+import SelectTimeForm from '../availability/SelectTimeForm';
 
 const useStyles = makeStyles(theme => ({
   weekNames: {
@@ -57,7 +57,7 @@ function Calendar(){
     const classes = useStyles();
     const data = takeMonth(currentDate)();
     const aboveSm = useMediaQuery("(min-width:600px)");
-
+    
     function screenSize(){
         return aboveSm ? classes.daysLgScreen : classes.daysSmScreen
     }
@@ -108,7 +108,7 @@ function Calendar(){
                     </Grid>
             </Grid>
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
-                <AddTimeForm />
+                <SelectTimeForm selectedDate={currentDate} />
             </Popup>
         </React.Fragment>
     );

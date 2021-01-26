@@ -14,10 +14,11 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-function AddTimeForm(){
+function AddTimeForm(props){
+    const {selectedDate} = props;
     const classes = useStyles();
-    const [selectedFrom, setSelectedFrom] = useState();
-    const [selectedTo, setSelectedTo] = useState();
+    const [selectedFrom, setSelectedFrom] = useState("08:00");
+    const [selectedTo, setSelectedTo] = useState("16:00");
     
     const handleFromChange = (event) => {
         setSelectedFrom(event.target.value)
@@ -27,6 +28,7 @@ function AddTimeForm(){
     }
     const handleSubmit = () => {
         const timeData = {
+            date: selectedDate,
             from: selectedFrom,
             to: selectedTo
         }
@@ -40,7 +42,6 @@ function AddTimeForm(){
                 label="From"
                 variant="outlined"
                 type="time"
-                defaultValue="08:00"
                 value={selectedFrom}
                 onChange={handleFromChange}
                 className={classes.textField}
@@ -56,7 +57,6 @@ function AddTimeForm(){
                 label="To"
                 variant="outlined"
                 type="time"
-                defaultValue="09:00"
                 value={selectedTo}
                 onChange={handleToChange}
                 className={classes.textField}
