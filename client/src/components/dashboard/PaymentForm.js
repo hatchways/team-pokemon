@@ -227,7 +227,7 @@ function PaymentForm() {
   //send created token to back end
   const tokenHandler = async token => {
     let resp = await axios.post("/api/payment/card", {
-      userId: profile._id,
+      userId: user._id,
       token: token,
     });
     if (!resp.data.error) {
@@ -243,7 +243,7 @@ function PaymentForm() {
   //choosing particular radio button chooses the corresponding card as a default source
   const handleRadioButton = async card => {
     let resp = await axios.post("/api/payment/default", {
-      userId: profile._id,
+      userId: user._id,
       card: card,
     });
     if (!resp.data.error) {
