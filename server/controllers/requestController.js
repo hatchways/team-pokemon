@@ -10,7 +10,12 @@ exports.getRequests = async (req, res, next) => {
     // Search through each request in the database and return the ones whose userId or sitterId matches the current user
     const requests = await Request.find({
       $or: [{ ownerId: req.user.id }, { sitterId: req.user.id }],
-    });
+    })
+      .populate([
+        { path: "sitterId", model: "User", populate: { path: "profile" } },
+        { path: "ownerId", model: "User", populate: { path: "profile" } },
+      ])
+      .sort({ start: -1 });
     res.status(200).send(requests);
   } catch (err) {
     next(createError(500, err.message));
@@ -61,7 +66,10 @@ exports.updateRequest = async (req, res, next) => {
     if (!ObjectId.isValid(req.params.id)) {
       return next(createError(400, "Invalid Request ID!"));
     }
-    const request = await Request.findById(req.params.id);
+    const request = await Request.findById(req.params.id).populate([
+      { path: "sitterId", model: "User", populate: { path: "profile" } },
+      { path: "ownerId", model: "User", populate: { path: "profile" } },
+    ]);
 
     // Check if request exists
     if (!request) {
@@ -69,7 +77,7 @@ exports.updateRequest = async (req, res, next) => {
     }
 
     // Only the sitter can accept/decline request
-    if (request.sitterId.toString() !== req.user.id) {
+    if (request.sitterId._id.toString() !== req.user.id) {
       return next(
         createError(
           401,
