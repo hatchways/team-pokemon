@@ -71,6 +71,12 @@ const useStyles = makeStyles((theme) => ({
   selectedImage: {
     border: "5px solid #f04040",
   },
+  buttonsBreakpoint: {
+    [theme.breakpoints.down("md")]: {
+      display: "flex",
+      flexDirection: "column",
+    },
+  },
 }));
 
 function ProfilePhoto() {
@@ -131,7 +137,7 @@ function ProfilePhoto() {
           align="center"
           style={{ fontWeight: "bold", marginBottom: "20px" }}
         >
-          Profile Photo
+          Photos
         </Typography>
       </Grid>
       <Grid item style={{ position: "relative" }}>
@@ -191,16 +197,6 @@ function ProfilePhoto() {
           </RootRef>
         </Grid>
       </Hidden>
-      <Grid item style={{ marginTop: "20px", marginBottom: "30px" }}>
-        <Button
-          color="primary"
-          variant="outlined"
-          startIcon={<DeleteForeverIcon />}
-          onClick={handleDelete}
-        >
-          Delete photo
-        </Button>
-      </Grid>
       <Box
         style={{
           width: "100%",
@@ -208,14 +204,18 @@ function ProfilePhoto() {
           boxSizing: "border-box",
         }}
       >
-        <Box display="flex" justifyContent="space-between">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          className={classes.buttonsBreakpoint}
+        >
           <Typography style={{ fontSize: "20px", fontWeight: "bold" }}>
             Your Photos
           </Typography>
-          {selectedPhoto !== "" && (
+          {selectedPhoto !== "" && ( 
             <ButtonGroup>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 onClick={() => handleSetAsProfilePhoto("profile")}
               >
