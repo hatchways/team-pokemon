@@ -1,13 +1,16 @@
-import React, { useState }from 'react';
+import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, TextField} from '@material-ui/core';
 import {format} from "date-fns";
+import { addAvailability } from "../../actions/availability";
+import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
+import AlertMessage from "../Alert";
 
 const useStyles = makeStyles((theme) => ({
     container: {
       display: 'flex',
       flexWrap: 'wrap',
-      
+      alignItems: 'center'
     },
     textField: {
       margin: theme.spacing(1),
@@ -20,23 +23,45 @@ function AddTimeForm(props){
     const classes = useStyles();
     const [selectedFrom, setSelectedFrom] = useState("08:00");
     const [selectedTo, setSelectedTo] = useState("16:00");
+    const [alert, setAlert] = useState({ error: false, message: "" });
+    const [addText, setAddText] = useState("ADD");
+    const [color, setColor] = useState("primary");
+    const [disabled, setDisabled] = useState(false);
+    const dispatch = useContext(AuthDispatchContext);
+    const { profile } = useContext(AuthStateContext);
     
     const handleFromChange = (event) => {
+        setAddText("ADD");
+        setColor("primary");
+        setDisabled(false)
         setSelectedFrom(event.target.value)
     }
     const handleToChange = (event) => {
-        setSelectedTo(event.target.value)
+        setAddText("ADD");
+        setColor("primary");
+        setDisabled(false);
+        setSelectedTo(event.target.value);
     }
-    const handleSubmit = () => {
-        const timeData = {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setAddText("ADDING...");
+        if(!selectedDate){
+            setAlert({error:true, message: "Please Select Date!"});
+            setAddText("ADD");
+        }
+        const availabilityData = {
             date: selectedDate,
             from: selectedFrom,
             to: selectedTo
         }
-        console.log(timeData);
+        //send time data to back-end
+        addAvailability(dispatch, availabilityData, profile._id);
+        setAddText("ADDED");
+        setColor("success");
+        setDisabled(true);
     }
     return (
-        <form className={classes.container} noValidate>
+        <form className={classes.container} >
             <div>
             <TextField
                 id="start"
@@ -70,8 +95,9 @@ function AddTimeForm(props){
             />
             </div>
             <div>
-                <Button color="primary" onClick={handleSubmit}> Add </Button>
+                <Button variant="contained" color={color} disabled={disabled} onClick={handleSubmit}> {addText} </Button>
             </div>
+            <AlertMessage alert={alert} />
         </form>
       );
 }

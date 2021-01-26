@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   sameDay: {
       backgroundColor: "#f04040",
       color: "#ffffff",
-      borderRadius: "5px"
+      borderRadius: "25px"
   }
 }));
 
@@ -71,9 +71,16 @@ function Calendar(){
     function nextMonth(){
         setCurrentDate(addMonths(currentDate, 1));
     }
+    const handleClick = (day) => {
+        if(isSameDay(day, currentDate)){
+            setOpenPopup(true);
+            return;
+        }
+        setCurrentDate(day);
+    }
     return(
         <React.Fragment>
-            <TextField id="outlined-basic" label="Price" variant="outlined" />
+            <h2>Set Your Availability</h2>
             <Grid container justify="center" alignItems="center">
                 <Grid item>
                     <Button onClick={prevMonth}> <ArrowLeftIcon /> </Button>
@@ -85,18 +92,18 @@ function Calendar(){
                     <Button onClick={nextMonth}> <ArrowRightIcon /> </Button>
                 </Grid>
                 <Grid item>
-                    <Button onClick={()=> setOpenPopup(true)}> <AddIcon fontSize="large"/> </Button>
+                    <Button onClick={()=> setOpenPopup(true)}> <AddIcon fontSize="medium"/> </Button>
                 </Grid>
             </Grid>
             <Grid container direction="column" justify="center">
                 <Grid item>
                 <DisplayWeekNames />
                 {
-                    data.map(week => <Grid container item spacing={0} direction="row" justify="center" alignItems="center">
+                    data.map(week => <Grid container item spacing={0} direction="row" justify="center" alignItems="center" alignContent="flex-start">
                         {
                             week.map(day => 
                             <Grid 
-                                onClick={() => setCurrentDate(day)}
+                                onClick={() => handleClick(day)}
                                 item xs={1}
                                 align="center"
                                 className={`${screenSize()} ${dayColor(day)}`}>
