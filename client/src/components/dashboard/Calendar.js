@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { takeMonth } from "../../modules/calendar";
 import { Button, Grid, makeStyles, useMediaQuery, TextField } from '@material-ui/core';
-import {endOfWeek, endOfMonth,format, isSameMonth, isSameDay, startOfMonth, startOfWeek, startOfDay} from "date-fns";
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import AddIcon from '@material-ui/icons/Add';
+import {addMonths,format, isSameMonth, isSameDay, subMonths} from "date-fns";
+import Popup from '../availability/Popup';
+import AddTimeForm from '../availability/AddTimeForm';
 
 const useStyles = makeStyles(theme => ({
   weekNames: {
       color: "#f04040",
-      height: theme.spacing(5)
+      height: theme.spacing(3)
     },
-  daysLg: {
+  daysLgScreen: {
     height: theme.spacing(8),
     padding: theme.spacing(4),
     cursor: "pointer"
   },
-  daysSm: {
+  daysSmScreen: {
     height: theme.spacing(4),
   },
   notSameMonth: {
@@ -47,47 +52,51 @@ function DisplayWeekNames(){
 )}
  
 function Calendar(){
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const[openPopup, setOpenPopup] = useState(false);
     const classes = useStyles();
-    const data = takeMonth(selectedDate)();
+    const data = takeMonth(currentDate)();
     const aboveSm = useMediaQuery("(min-width:600px)");
 
     function screenSize(){
-        return aboveSm ? classes.daysLg : classes.daysSm
+        return aboveSm ? classes.daysLgScreen : classes.daysSmScreen
     }
     function dayColor(day){
-        if(!isSameMonth(day, selectedDate)) return classes.notSameMonth;
-        if(isSameDay(day, selectedDate)) return classes.sameDay;
+        if(!isSameMonth(day, currentDate)) return classes.notSameMonth;
+        if(isSameDay(day, currentDate)) return classes.sameDay;
     }
     function prevMonth(){
-        setSelectedDate(startOfWeek(startOfDay(startOfMonth(selectedDate))));
+        setCurrentDate(subMonths(currentDate, 1))
     }
     function nextMonth(){
-        setSelectedDate(startOfDay(endOfWeek(endOfMonth(selectedDate))));
+        setCurrentDate(addMonths(currentDate, 1));
     }
     return(
         <React.Fragment>
             <TextField id="outlined-basic" label="Price" variant="outlined" />
-            <Grid container spacing={3} justify="center" alignItems="center">
+            <Grid container justify="center" alignItems="center">
                 <Grid item>
-                    <Button onClick={prevMonth}> Prev </Button>
+                    <Button onClick={prevMonth}> <ArrowLeftIcon /> </Button>
                 </Grid>
                 <Grid item>
-                    <h1>{format(selectedDate,"MMMM")}</h1>  
+                    <h3>{format(currentDate,"MMM yyyy")}</h3>  
                 </Grid>
                 <Grid item>
-                    <Button onClick={nextMonth}> Next </Button>
+                    <Button onClick={nextMonth}> <ArrowRightIcon /> </Button>
+                </Grid>
+                <Grid item>
+                    <Button onClick={()=> setOpenPopup(true)}> <AddIcon fontSize="large"/> </Button>
                 </Grid>
             </Grid>
             <Grid container direction="column" justify="center">
                 <Grid item>
                 <DisplayWeekNames />
                 {
-                    data.map(week => <Grid container item direction="row" justify="center" alignItems="center">
+                    data.map(week => <Grid container item spacing={0} direction="row" justify="center" alignItems="center">
                         {
                             week.map(day => 
                             <Grid 
-                                onClick={() => setSelectedDate(day)}
+                                onClick={() => setCurrentDate(day)}
                                 item xs={1}
                                 align="center"
                                 className={`${screenSize()} ${dayColor(day)}`}>
@@ -98,6 +107,9 @@ function Calendar(){
                     }
                     </Grid>
             </Grid>
+            <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
+                <AddTimeForm />
+            </Popup>
         </React.Fragment>
     );
 }
