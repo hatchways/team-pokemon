@@ -1,19 +1,15 @@
 import React, { useState, useContext } from "react";
+import moment from "moment";
 import Rating from "@material-ui/lab/Rating";
 import {
   Box,
   Button,
   TextField,
   Typography,
-  MenuItem,
   makeStyles,
 } from "@material-ui/core";
-import {
-  AuthDispatchContext,
-  AuthStateContext,
-} from "../../context/AuthContext";
+import { AuthStateContext } from "../../context/AuthContext";
 import { createRequest } from "../../actions/request";
-import { formatDateTime } from "../../utils/formatDateTime";
 
 const useStyles = makeStyles(() => ({
   centerContent: {
@@ -44,24 +40,46 @@ function ProfileRequestForm() {
 
   const [startDate, setStartDate] = useState(todayFormatted);
   const [endDate, setEndDate] = useState(todayFormatted);
-  const [startTime, setStartTime] = useState("09:00:00");
-  const [endTime, setEndTime] = useState("10:30:00");
+  const [startTime, setStartTime] = useState(
+    moment()
+      .add(moment().utcOffset() + 30, "minutes")
+      .startOf("hour")
+      .format("HH:mm")
+  );
+  const [endTime, setEndTime] = useState(
+    moment()
+      .add(moment().utcOffset() + 150, "minutes")
+      .startOf("hour")
+      .format("HH:mm")
+  );
   const [requestFormData, setRequestFormData] = useState({
     sitterId: "600b0187e8129077501534bc",
     ownerId: user._id,
-    start: "",
-    end: "",
+    // Default start date is 30 minutes from now rounded up to the nearest hour
+    start: moment()
+      .add(moment().utcOffset() + 30, "minutes")
+      .startOf("hour")
+      .format(),
+    // Default end date is 2.5 hours from now rounded up to the nearest hour
+    end: moment()
+      .add(moment().utcOffset() + 150, "minutes")
+      .startOf("hour")
+      .format(),
   });
 
   // Handle change in 'Drop Off' (start) date input
   const handleStartDateChange = (e) => {
-    const formattedStartDate = formatDateTime(e.target.value, startTime);
+    const formattedStartDate = moment(
+      new Date(`${e.target.value}T${startTime}`)
+    ).format();
 
     setStartDate(e.target.value);
 
     // If start date is later than end date, change end date to same day as start date.
     if (e.target.value > endDate) {
-      const formattedEndDate = formatDateTime(e.target.value, endTime);
+      const formattedEndDate = moment(
+        new Date(`${e.target.value}T${endTime}`)
+      ).format();
       setEndDate(e.target.value);
       setRequestFormData({
         ...requestFormData,
@@ -78,14 +96,20 @@ function ProfileRequestForm() {
 
   // Handle change in 'Pick Up' (end) date input
   const handleEndDateChange = (e) => {
-    const formattedEndDate = formatDateTime(e.target.value, endTime);
+    const formattedEndDate = moment(
+      new Date(`${e.target.value}T${endTime}`)
+    ).format();
 
     setEndDate(e.target.value);
 
     // If end date is earlier than start date, change start date to same day as end date.
-    if (e.target.value < endDate) {
-      const formattedStartDate = formatDateTime(e.target.value, startTime);
+    if (e.target.value < startDate) {
+      const formattedStartDate = moment(
+        new Date(`${e.target.value}T${startDate}`)
+      ).format();
+
       setStartDate(e.target.value);
+
       setRequestFormData({
         ...requestFormData,
         start: formattedStartDate,
@@ -101,7 +125,9 @@ function ProfileRequestForm() {
 
   // Handle change in 'Drop off' (start) time input
   const handleStartTimeChange = (e) => {
-    const formattedStartDate = formatDateTime(startDate, e.target.value);
+    const formattedStartDate = moment(
+      new Date(`${startDate}T${e.target.value}`)
+    ).format();
 
     setStartTime(e.target.value);
 
@@ -113,7 +139,9 @@ function ProfileRequestForm() {
 
   // Handle change in 'Pick Up' (start) time input.
   const handleEndTimeChange = (e) => {
-    const formattedEndDate = formatDateTime(endDate, e.target.value);
+    const formattedEndDate = moment(
+      new Date(`${endDate}T${e.target.value}`)
+    ).format();
 
     setEndTime(e.target.value);
 
@@ -161,17 +189,18 @@ function ProfileRequestForm() {
             variant="outlined"
           ></TextField>
           <TextField
-            select
-            variant="outlined"
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            type="time"
             value={startTime}
-            style={{ width: "110px" }}
+            className={classes.textField}
+            variant="outlined"
+            style={{ width: "120px" }}
             onChange={(e) => {
               handleStartTimeChange(e);
             }}
-          >
-            <MenuItem value={"09:00:00"}>9 am</MenuItem>
-            <MenuItem value={"09:30:00"}>9:30 am</MenuItem>
-          </TextField>
+          />
         </Box>
       </Box>
       <Box>
@@ -189,18 +218,18 @@ function ProfileRequestForm() {
             onChange={(e) => handleEndDateChange(e)}
           ></TextField>
           <TextField
-            select
-            variant="outlined"
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            type="time"
             value={endTime}
-            style={{ width: "110px" }}
+            className={classes.textField}
+            variant="outlined"
+            style={{ width: "120px" }}
             onChange={(e) => {
               handleEndTimeChange(e);
             }}
-          >
-            <MenuItem value={"09:00:00"}>9 am</MenuItem>
-            <MenuItem value={"10:30:00"}>10:30 am</MenuItem>
-            <MenuItem value={"14:30:00"}>2:30 pm</MenuItem>
-          </TextField>
+          />
         </Box>
       </Box>
       <Button
