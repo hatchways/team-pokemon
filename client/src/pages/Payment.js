@@ -1,8 +1,15 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
 import SettingsMenu from "../components/dashboard/SettingsMenu";
+import PaymentForm from "../components/dashboard/PaymentForm";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+const stripePromise = loadStripe(
+  "pk_test_51IAijpJ7csOfuHoFgBcxsKFgf6AeSeeEmRzrvKVKhIISSVSMkpaWhrfrqcSRAAAqNGBlK0fjR2j2NstZveJgXdSD00UkdnKqHS",
+  { locale: "en" }
+);
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   centerPaper: {
     display: "flex",
     flexDirection: "column",
@@ -27,7 +34,11 @@ function Payment() {
     <Box
       display="flex"
       flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "100vh" }}
+      style={{
+        paddingTop: "90px",
+        minHeight: "80vh",
+        paddingBottom: "50px",
+      }}
       bgcolor="grey"
     >
       <Box className={classes.hideMenu}>
@@ -37,9 +48,12 @@ function Payment() {
         <Paper
           square
           elevation={3}
+          style={{ width: "75%", margin: "auto" }}
           className={classes.centerPaper + " " + classes.breakpoints}
         >
-          {/* Your Component Goes Here */}
+          <Elements stripe={stripePromise}>
+            <PaymentForm />
+          </Elements>
         </Paper>
       </Box>
     </Box>
