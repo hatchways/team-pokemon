@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  ButtonGroup,
-  Card,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Card, makeStyles, Typography } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
 import moment from "moment";
-import UserAvatarPic from "../../img/profilePhoto.jpg";
+import ProfileDefault from "../../img/profile-default.png";
+import RequestStatus from "./RequestStatus";
 
 const useStyles = makeStyles((theme) => ({
   requestSpacing: {
@@ -18,6 +11,11 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "10px",
     padding: "15px",
     border: "3px solid #e6e6e6",
+  },
+  requestSpacingBreakpoint: {
+    [theme.breakpoints.down("xs")]: {
+      padding: "5px",
+    },
   },
   avatarSize: {
     width: theme.spacing(7),
@@ -28,21 +26,80 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     letterSpacing: "1.5px",
   },
+  dateTimeHeading: {
+    fontSize: "1.2rem",
+    fontWeight: "bold",
+  },
+  dateTimeHeadingBreakpoint: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.9rem",
+      fontWeight: "bold",
+    },
+  },
+  dateTimeContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  requestBodyContainer: {
+    marginTop: "10px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "flex",
+  },
+  requestBodyContainerBreakpoint: {
+    [theme.breakpoints.down("xs")]: {
+      display: "flex",
+      justifyContent: "space-around",
+    },
+  },
+  requestBodyGap: {
+    marginRight: "15px",
+  },
+  alignVert: {
+    display: "flex",
+    alignItems: "center",
+  },
+  avatarNameBreakpoint: {
+    [theme.breakpoints.down("xs")]: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+    },
+  },
+  nameStyle: {
+    fontSize: "20px",
+  },
+  nameStyleBreakpoint: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "16px",
+    },
+  },
 }));
 
-function Request({ request }) {
+function Request({ request, modeTime, sitterMode }) {
   const classes = useStyles();
-  console.log(request);
   const today = new Date();
   const offset = today.getTimezoneOffset() / 60;
-  console.log("offset: ", offset);
+
   return (
     <>
       {request && (
-        <Card variant="outlined" className={classes.requestSpacing}>
+        <Card
+          variant="outlined"
+          className={
+            classes.requestSpacing + " " + classes.requestSpacingBreakpoint
+          }
+        >
           {/* Date and Settings */}
-          <Box style={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+          <Box className={classes.dateTimeContainer}>
+            <Typography
+              className={
+                classes.dateTimeHeading +
+                " " +
+                classes.dateTimeHeadingBreakpoint
+              }
+            >
               {`${moment(
                 new Date(request.start).setHours(
                   new Date(request.start).getHours() + offset
@@ -88,32 +145,52 @@ function Request({ request }) {
           </Box>
           {/* Avatar, Name, Status */}
           <Box
-            style={{
-              marginTop: "10px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+            className={
+              classes.requestBodyContainer +
+              " " +
+              classes.requestBodyContainerBreakpoint
+            }
           >
-            <Box style={{ display: "flex", alignItems: "center" }}>
-              <Avatar
-                className={classes.avatarSize}
-                style={{ marginRight: "15px" }}
-                alt="user"
-                src={UserAvatarPic}
-                size="large"
-              />
-              <Typography style={{ fontSize: "20px" }}>Jane Doe</Typography>
-            </Box>
-            {/* <Box className={classes.lightGreyColor}>ACCEPTED</Box> */}
-            <Box className={classes.lightGreyColor}>
-              <ButtonGroup>
-                <Button variant="contained" color="primary">
-                  Accept
-                </Button>
-                <Button color="secondary">Decline</Button>
-              </ButtonGroup>
-            </Box>
+            {sitterMode ? (
+              <Box
+                className={
+                  classes.alignVert + " " + classes.avatarNameBreakpoint
+                }
+              >
+                <Avatar
+                  className={classes.avatarSize + " " + classes.requestBodyGap}
+                  alt="user"
+                  src={
+                    request.ownerId.profile.profilePicture
+                      ? request.ownerId.profile.profilePicture
+                      : ProfileDefault
+                  }
+                  size="large"
+                />
+                <Typography
+                  className={
+                    classes.nameStyle + " " + classes.nameStyleBreakpoint
+                  }
+                >{`${request.ownerId.profile.firstName} ${request.ownerId.profile.lastName}`}</Typography>
+              </Box>
+            ) : (
+              <Box className={classes.alignVert}>
+                <Avatar
+                  className={classes.avatarSize + " " + classes.requestBodyGap}
+                  alt="user"
+                  src={
+                    request.sitterId.profile.profilePicture
+                      ? request.sitterId.profile.profilePicture
+                      : ProfileDefault
+                  }
+                  size="large"
+                />
+                <Typography
+                  className={classes.nameStyle}
+                >{`${request.sitterId.profile.firstName} ${request.sitterId.profile.lastName}`}</Typography>
+              </Box>
+            )}
+            <RequestStatus request={request} modeTime={modeTime} />
           </Box>
         </Card>
       )}
