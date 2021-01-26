@@ -3,6 +3,7 @@ const Profile = require("../models/profileModel");
 const ObjectId = require("mongoose").Types.ObjectId;
 const cloudinaryUpload = require("../middleware/cloudinaryUpload");
 const User = require("../models/userModel");
+const base64url = require("base64url");
 
 /**
  * CREATE /profile
@@ -153,10 +154,59 @@ exports.upload = async (req, res, next) => {
     //update profile pic with new url
     await Profile.findOneAndUpdate(
       { _id: req.params.id },
-      { profilePicture: result.url },
+      { $push: { photoAlbum: result.url } },
       { new: true }
     );
+    // await Profile.findOneAndUpdate(
+    //   { _id: req.params.id },
+    //   { profilePicture: result.url },
+    //   { new: true }
+    // );
     res.status(200).json({ message: "Image updated!", url: result.url });
+  } catch (err) {
+    next(createError(500, err.message));
+  }
+};
+
+/**
+ * set profile photo categories (i.e. profile photo, header photo)
+ */
+exports.setPhotoCategory = async (req, res, next) => {
+  try {
+    //check if ID is valid
+    if (!ObjectId.isValid(req.params.id)) {
+      return next(createError(400, "Invalid Profile id!"));
+    }
+    const userExist = await Profile.exists({ _id: req.params.id });
+    if (!userExist) {
+      // check if profile exists.
+      return next(createError(404, "Profile does not exist!"));
+    }
+    const { photoUrl, category } = req.body; // extract image from post request
+
+    //return error if image not included in request
+    if (!photoUrl) {
+      return next(createError(400, "Please include image"));
+    }
+
+    let updatedProfile;
+    // update profile pic with new url
+    if (category === "profile") {
+      updatedProfile = await Profile.findOneAndUpdate(
+        { _id: req.params.id },
+        { profilePicture: photoUrl },
+        { new: true }
+      );
+    }
+
+    if (category === "header") {
+      updatedProfile = await Profile.findOneAndUpdate(
+        { _id: req.params.id },
+        { headerPicture: photoUrl },
+        { new: true }
+      );
+    }
+    res.status(200).send(updatedProfile);
   } catch (err) {
     next(createError(500, err.message));
   }
@@ -168,18 +218,33 @@ exports.deletePicture = async (req, res, next) => {
     if (!ObjectId.isValid(req.params.id)) {
       return next(createError(400, "Invalid Profile id!"));
     }
-    const userExist = await Profile.exists({ _id: req.params.id });
-    if (!userExist) {
+
+    const profile = await Profile.findById(req.params.id);
+    if (!profile) {
       // check if profile exists.
       return next(createError(404, "Profile does not exist!"));
     }
-    //update profile (delete profilePicture field)
-    const updatedProfile = await Profile.findOneAndUpdate(
-      { _id: req.params.id },
-      { $unset: { profilePicture: "" } }
-    );
-    res.status(200).send("Image deleted!");
+
+    const photoUrl = base64url.decode(req.params.photoUrl);
+
+    // update profile (delete photo)
+    profile.photoAlbum.pull(photoUrl);
+
+    // If photo is profile picture, remove profile picture
+    if (profile.profilePicture === photoUrl) {
+      profile.profilePicture = "";
+    }
+
+    // If photo is header picture, remove header picture
+    if (profile.headerPicture === photoUrl) {
+      profile.headerPicture = "";
+    }
+
+    const updatedProfile = await profile.save();
+
+    res.status(200).send(updatedProfile);
   } catch (err) {
+    console.log(err.message);
     next(createError(500, err.message));
   }
 };
