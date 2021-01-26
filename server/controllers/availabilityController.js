@@ -17,7 +17,7 @@ exports.add = async (req, res, next) => {
         //update time interval if date is already available
         if(findAvailability){
             findAvailability.timesAvailable.push({from: from, to: to});
-            res.status(200).send({findAvailability})
+            return res.status(200).send({findAvailability})
         }
         //create new availability 
         const newAvailability = new Availability({
@@ -28,7 +28,7 @@ exports.add = async (req, res, next) => {
             ]
         });
         const savedAvailability = await newAvailability.save();
-        res.status(200).send(savedAvailability)
+        res.status(200).send(savedAvailability);
     }catch (err){
         next(createError(500, err.message))
     }
