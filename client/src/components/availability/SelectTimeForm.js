@@ -1,6 +1,7 @@
 import React, { useState }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, TextField} from '@material-ui/core';
+import {format} from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function AddTimeForm(props){
-    const {selectedDate} = props;
+    const selectedDate = format(props.selectedDate, "yyyy-MM-dd");
     const classes = useStyles();
     const [selectedFrom, setSelectedFrom] = useState("08:00");
     const [selectedTo, setSelectedTo] = useState("16:00");
