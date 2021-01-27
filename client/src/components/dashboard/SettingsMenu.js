@@ -10,7 +10,7 @@ import {
 import { BECOME_SITTER } from "../../actions/types";
 import { UserContext } from "../../context/Context";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuBox: {
     "&:focus": {
@@ -67,7 +67,7 @@ function SettingsMenu() {
             to="/dashboard/photo"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <MenuItem className={classes.menuItem}>Profile Photo</MenuItem>
+            <MenuItem className={classes.menuItem}>Photos</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
