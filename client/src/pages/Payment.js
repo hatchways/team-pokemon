@@ -9,11 +9,20 @@ const stripePromise = loadStripe(
   { locale: "en" }
 );
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
+  boxContainer: {
+    paddingTop: "90px",
+    minHeight: "80vh",
+    paddingBottom: "50px",
+  },
   centerPaper: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  stylePaper: {
+    width: "75%",
+    margin: "auto",
   },
   hideMenu: {
     [theme.breakpoints.down("sm")]: {
@@ -34,11 +43,7 @@ function Payment() {
     <Box
       display="flex"
       flexWrap="nowrap"
-      style={{
-        paddingTop: "90px",
-        minHeight: "80vh",
-        paddingBottom: "50px",
-      }}
+      className={classes.boxContainer}
       bgcolor="grey"
     >
       <Box className={classes.hideMenu}>
@@ -48,8 +53,13 @@ function Payment() {
         <Paper
           square
           elevation={3}
-          style={{ width: "75%", margin: "auto" }}
-          className={classes.centerPaper + " " + classes.breakpoints}
+          className={
+            classes.centerPaper +
+            " " +
+            classes.breakpoints +
+            " " +
+            classes.stylePaper
+          }
         >
           <Elements stripe={stripePromise}>
             <PaymentForm />

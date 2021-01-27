@@ -15,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
   elements: {
     marginBottom: theme.spacing(2),
   },
+  gridContainer: {
+    paddingTop: "25px",
+  },
+  heading: { marginTop: "20px", marginBottom: "20px" },
+  linkColor: { color: "#f04040" },
   text: {
     width: "300px",
     maxWidth: "100%",
@@ -87,13 +92,10 @@ function LoginForm() {
       alignItems="center"
       direction="column"
       spacing={0}
-      style={{ paddingTop: "25px" }}
+      className={classes.gridContainer}
     >
       <Grid item className={classes.elements}>
-        <Typography
-          variant="h4"
-          style={{ marginTop: "20px", marginBottom: "20px" }}
-        >
+        <Typography variant="h4" className={classes.heading}>
           Login
         </Typography>
       </Grid>
@@ -138,7 +140,7 @@ function LoginForm() {
       <Grid item className={classes.elements}>
         <Typography variant="subtitle1">
           Don't have an account yet?{" "}
-          <Link to="/signup" style={{ color: "red" }}>
+          <Link to="/signup" className={classes.linkColor}>
             Sign Up
           </Link>
         </Typography>
