@@ -129,9 +129,8 @@ exports.getProfileList = async (req, res, next) => {
   }
 };
 /**
- * upload image for profile
- * - takes image file and uploads it to cloudinary. Updates profile picture
- *   with new url returned from cloudinary.
+ * upload images for profile
+ * - takes image file and uploads it to cloudinary.
  */
 exports.upload = async (req, res, next) => {
   try {
@@ -149,20 +148,21 @@ exports.upload = async (req, res, next) => {
     if (!file) {
       return next(createError(400, "Please include image"));
     }
+    const profile = await Profile.findById(req.params.id);
+
+    // User can only have a max of 5 images.
+    if (profile.photoAlbum.length >= 5) {
+      return next(createError(400, "You can not upload more than 5 images!"));
+    }
 
     const result = await cloudinaryUpload.upload(file.tempFilePath);
-    //update profile pic with new url
-    await Profile.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { photoAlbum: result.url } },
-      { new: true }
-    );
-    // await Profile.findOneAndUpdate(
-    //   { _id: req.params.id },
-    //   { profilePicture: result.url },
-    //   { new: true }
-    // );
-    res.status(200).json({ message: "Image updated!", url: result.url });
+
+    // Add new photo url to photoAlbum
+    profile.photoAlbum.push(result.url);
+
+    await profile.save();
+
+    res.status(200).json({ message: "Image uploaded!", url: result.url });
   } catch (err) {
     next(createError(500, err.message));
   }
