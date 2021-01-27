@@ -10,7 +10,7 @@ import {
 import { BECOME_SITTER } from "../../actions/types";
 import { UserContext } from "../../context/Context";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuBox: {
     "&:focus": {
@@ -57,42 +57,42 @@ function SettingsMenu() {
         <MenuList className={classes.menuBox}>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/editprofile"
+            to="/settings/editprofile"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Edit Profile</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/photo"
+            to="/settings/photo"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Profile Photo</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/availability"
+            to="/settings/availability"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Availability</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/payment"
+            to="/settings/payment"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Payment</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/security"
+            to="/settings/security"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Security</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/settings"
+            to="/settings/account"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Settings</MenuItem>
@@ -100,7 +100,7 @@ function SettingsMenu() {
           {profile && !profile.isSitter ? (
             <Link
               className={classes.linkStyle}
-              to="/dashboard/editprofile"
+              to="/settings/editprofile"
               onClick={handleBecomeSitter}
             >
               <MenuItem className={classes.menuItem}>Become a Sitter</MenuItem>

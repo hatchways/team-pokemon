@@ -22,7 +22,7 @@ import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
 import defaultPicture from "../../img/profile-default.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuButton: { marginRight: "auto", color: "red" },
   toolbar: {
@@ -68,7 +68,7 @@ function Navbar() {
           </IconButton>
           <MobileNavbar />
         </Hidden>
-        <Link to="/profile/lists" style={{ marginRight: "auto" }}>
+        <Link to="/listings" style={{ marginRight: "auto" }}>
           <img src={logo} alt="logo" className={classes.logo} />
         </Link>
         {isAuthenticated ? (
@@ -76,7 +76,7 @@ function Navbar() {
             <Hidden smDown>
               {!profile.isSitter ? (
                 <Link
-                  to="/dashboard/editprofile"
+                  to="/settings/editprofile"
                   style={{ textDecoration: "none", marginRight: "30px" }}
                 >
                   <Button size="large" onClick={handleBecomeSitter}>
@@ -100,10 +100,7 @@ function Navbar() {
                 <MailIcon color="primary" fontSize="large" />
               </Link>
             </Hidden>
-            <Link
-              to="/dashboard/editprofile"
-              style={{ textDecoration: "none" }}
-            >
+            <Link to="/settings/editprofile" style={{ textDecoration: "none" }}>
               <Avatar
                 alt="user"
                 src={

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
+import SettingsMenu from "../components/settings/SettingsMenu";
 
 const useStyles = makeStyles((theme) => ({
   centerPaper: {

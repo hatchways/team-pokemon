@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
-import EditProfileForm from "../components/dashboard/EditProfileForm";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
+import EditProfileForm from "../components/settings/EditProfileForm";
+import SettingsMenu from "../components/settings/SettingsMenu";
 
 const useStyles = makeStyles(theme => ({
   centerPaper: {

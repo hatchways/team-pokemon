@@ -1,8 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Box, Paper, makeStyles } from "@material-ui/core";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
-import ProfilePhoto from "../components/dashboard/ProfilePhoto";
+import SettingsMenu from "../components/settings/SettingsMenu";
+import ProfilePhoto from "../components/settings/ProfilePhoto";
 
 const useStyles = makeStyles(theme => ({
   centerPaper: {

@@ -16,7 +16,7 @@ import Photo from "./pages/Photo";
 import Availability from "./pages/Availability";
 import Payment from "./pages/Payment";
 import Security from "./pages/Security";
-import Settings from "./pages/Settings";
+import Settings from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
 
@@ -36,26 +36,22 @@ function App() {
             <Switch>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
-              <PrivateRoute path="/profile/lists" component={ProfileListings} />
-              <PrivateRoute path="/" exact component={Profile} />
+              <PrivateRoute path="/listings" component={ProfileListings} />
+              <PrivateRoute path="/profile" exact component={Profile} />
+              <PrivateRoute path="/profile" exact component={Profile} />
               <PrivateRoute path="/bookings" exact component={Bookings} />
               <PrivateRoute
-                path="/dashboard/profile"
-                exact
-                component={Profile}
-              />
-              <PrivateRoute
-                path="/dashboard/editprofile"
+                path="/settings/editprofile"
                 component={EditProfile}
               />
-              <PrivateRoute path="/dashboard/photo" component={Photo} />
+              <PrivateRoute path="/settings/photo" component={Photo} />
               <PrivateRoute
-                path="/dashboard/availability"
+                path="/settings/availability"
                 component={Availability}
               />
-              <PrivateRoute path="/dashboard/payment" component={Payment} />
-              <PrivateRoute path="/dashboard/security" component={Security} />
-              <PrivateRoute path="/dashboard/settings" component={Settings} />
+              <PrivateRoute path="/settings/payment" component={Payment} />
+              <PrivateRoute path="/settings/security" component={Security} />
+              <PrivateRoute path="/settings/account" component={Settings} />
               <PrivateRoute path="*" component={PageNotFound} />
             </Switch>
           </AuthDispatchContext.Provider>

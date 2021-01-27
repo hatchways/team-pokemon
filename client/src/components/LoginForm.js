@@ -37,7 +37,7 @@ function LoginForm() {
   //redirect to where user comes from after authentication
   const { state } = useLocation();
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
@@ -77,7 +77,7 @@ function LoginForm() {
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to={state?.from || "/"} />;
+    return <Redirect to={state?.from || "/profile"} />;
   }
 
   return (

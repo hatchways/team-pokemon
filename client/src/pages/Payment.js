@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
-import PaymentForm from "../components/dashboard/PaymentForm";
+import SettingsMenu from "../components/settings/SettingsMenu";
+import PaymentForm from "../components/settings/PaymentForm";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 const stripePromise = loadStripe(

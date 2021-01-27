@@ -3,7 +3,7 @@ import { IconButton, Box, Dialog, DialogActions } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
-import SettingsMenu from "../dashboard/SettingsMenu";
+import SettingsMenu from "../settings/SettingsMenu";
 import { UserContext } from "../../context/Context";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
