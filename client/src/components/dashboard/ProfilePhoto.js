@@ -12,6 +12,7 @@ import {
   Avatar,
   CircularProgress,
   useMediaQuery,
+  Card,
 } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 import base64url from "base64url";
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loading: {
     position: "absolute",
-    top: "50%",
+    top: "75%",
     left: "50%",
     marginLeft: "-20px",
     marginTop: "-20px",
@@ -66,6 +67,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "30px",
   },
   headingStyles: { fontWeight: "bold", marginBottom: "20px" },
+  headerPicture: {
+    width: "90%",
+    height: "220px",
+    position: "absolute",
+    transform: "translateX(5%)",
+    backgroundColor: "#e6e6e6",
+    borderRadius: "5px",
+  },
+  profilePicture: {
+    margin: "auto",
+    border: "5px solid white",
+    transform: "translateY(25%)",
+    },
   userImages: {
     marginTop: "10px",
     marginRight: "10px",
@@ -90,11 +104,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "30px",
     boxSizing: "border-box",
   },
-  avatarPositioning: { position: "relative" },
+  mainPicturePositioning: { position: "relative", width: "100%" },
   uploadSectionPositioning: {
     width: "80%",
     height: "200px",
-    marginTop: "30px",
+    marginTop: "50px",
   },
   uploadSectionPositioningMobile: {
     width: "70%",
@@ -175,7 +189,11 @@ function ProfilePhoto() {
           Photos
         </Typography>
       </Grid>
-      <Grid item className={classes.avatarPositioning}>
+      <Grid item className={classes.mainPicturePositioning}>
+        <CardMedia
+          image={profile && profile.headerPicture ? profile.headerPicture : ""}
+          className={classes.headerPicture}
+        />
         <Avatar
           alt="user"
           src={
@@ -183,7 +201,7 @@ function ProfilePhoto() {
               ? profile.profilePicture
               : defaultPicture
           }
-          className={classes.large}
+          className={classes.large + " " + classes.profilePicture}
         />
         {loading && <CircularProgress size={40} className={classes.loading} />}
       </Grid>
