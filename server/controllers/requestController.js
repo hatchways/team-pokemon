@@ -106,7 +106,12 @@ exports.updateRequest = async (req, res, next) => {
       { _id: req.params.id },
       async (err, data) => {
         if (err) return err;
-
+        if (declined) {
+          updatedRequest.declined = true;
+          updatedRequest.accepted = false;
+          await updatedRequest.save();
+          return res.status(200).send(updatedRequest);
+        }
         await stripe.customers.retrieve(
           req.user.id,
           async (error, customer) => {
@@ -127,11 +132,6 @@ exports.updateRequest = async (req, res, next) => {
                 updatedRequest.accepted = true;
                 updatedRequest.declined = false;
               }
-              if (declined) {
-                updatedRequest.declined = true;
-                updatedRequest.accepted = false;
-              }
-
               await updatedRequest.save();
               res.status(200).send(updatedRequest);
             }
