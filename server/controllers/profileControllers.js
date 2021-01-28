@@ -122,10 +122,15 @@ exports.getProfile = async (req, res, next) => {
  */
 exports.getProfileList = async (req, res, next) => {
   try {
-    const profileList = await Profile.find({
+    // Get list of all users
+    const userList = await User.find({
       _id: { $ne: req.params.id },
-      isSitter: true,
-    });
+    })
+      .populate({ path: "profile", match: { isSitter: { $eq: true } } })
+      .select("-email");
+
+    // Filter out profiles that isSitter is set to false
+    const profileList = userList.filter((user) => user.profile !== null);
     res.status(200).send(profileList);
   } catch (err) {
     next(createError(500, err.message));

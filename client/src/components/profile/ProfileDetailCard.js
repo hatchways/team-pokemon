@@ -1,9 +1,8 @@
 import React from "react";
 import { Box, CardMedia, Typography, makeStyles } from "@material-ui/core";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import UserAvatar from "../../img/profilePhoto.jpg";
+import DefaultAvatar from "../../img/profile-default.png";
 import Background from "../../img/background.jpg";
-import Dogs from "../../img/dogs-main.jpg";
 
 const useStyles = makeStyles(() => ({
   centerContent: {
@@ -20,21 +19,33 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function ProfileDetailCard() {
+function ProfileDetailCard({ profileDetails }) {
   const classes = useStyles();
-
   return (
     <Box className={classes.centerContent}>
       {/* Header Background Image */}
       <CardMedia
-        image={Background}
+        image={
+          profileDetails.headerPicture
+            ? profileDetails.headerPicture
+            : Background
+        }
         alt="bg"
-        style={{ width: "100%", height: "300px", objectFit: "cover" }}
+        style={{
+          width: "100%",
+          height: "300px",
+          objectFit: "cover",
+          backgroundColor: "#e6e6e6",
+        }}
       />
       {/* User's Profile Image */}
       <CardMedia
-        image={UserAvatar}
-        alt="header"
+        image={
+          profileDetails.profilePicture
+            ? profileDetails.profilePicture
+            : DefaultAvatar
+        }
+        alt="avatar"
         style={{
           height: "150px",
           width: "150px",
@@ -53,49 +64,55 @@ function ProfileDetailCard() {
           fontWeight: "bold",
         }}
       >
-        Jane Doe
+        {`${profileDetails.firstName} ${profileDetails.lastName}`}
       </Typography>
 
       {/* User's Location */}
-      <Typography
-        style={{
-          display: "flex",
-          alignItems: "center",
-          fontSize: "15px",
-          color: "grey",
-          marginBottom: "50px",
-        }}
-      >
-        <LocationOnIcon color="primary" style={{ marginRight: "10px" }} />
-        Toronto, Ontario
-      </Typography>
-      <Box style={{ width: "90%", marginBottom: "30px" }}>
-        {/* About Me Section  */}
+      {profileDetails.address && (
         <Typography
-          variant="h5"
-          style={{ marginBottom: "20px", fontWeight: "bold" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: "15px",
+            color: "grey",
+            marginBottom: "50px",
+          }}
         >
-          About me
+          <LocationOnIcon color="primary" style={{ marginRight: "10px" }} />
+          {`${profileDetails.address}`}
         </Typography>
-        <Typography>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et saepe
-          porro voluptatibus maxime, quisquam natus expedita cupiditate! Amet
-          consectetur nobis corrupti reprehenderit laudantium? Repellat animi
-          rerum voluptatem doloribus, laudantium quis. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Hic aspernatur, quia tempore sint
-          ex cum explicabo, possimus saepe odit sed placeat porro atque
-          consectetur quis quam voluptatum? Blanditiis, animi nulla.
-        </Typography>
-      </Box>
+      )}
+      {profileDetails.description && (
+        <Box style={{ width: "90%", marginBottom: "30px" }}>
+          {/* About Me Section  */}
+
+          <Typography
+            variant="h5"
+            style={{ marginBottom: "20px", fontWeight: "bold" }}
+          >
+            About me
+          </Typography>
+          <Typography>{profileDetails.description}</Typography>
+        </Box>
+      )}
       {/* User's Uploaded Images */}
-      <Box
-        display="flex"
-        justifyContent="flex-start"
-        style={{ flexWrap: "wrap", width: "90%", marginBottom: "40px" }}
-      >
-        <CardMedia image={Dogs} className={classes.userImages} />
-        <CardMedia image={UserAvatar} className={classes.userImages} />
-      </Box>
+      {profileDetails && (
+        <Box
+          display="flex"
+          justifyContent="flex-start"
+          style={{ flexWrap: "wrap", width: "90%", marginBottom: "40px" }}
+        >
+          {profileDetails.photoAlbum &&
+            profileDetails.photoAlbum.length > 0 &&
+            profileDetails.photoAlbum.map((photo) => (
+              <CardMedia
+                key={photo}
+                image={photo}
+                className={classes.userImages}
+              />
+            ))}
+        </Box>
+      )}
     </Box>
   );
 }
