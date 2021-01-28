@@ -3,6 +3,7 @@ import { AuthStateContext } from "../../context/AuthContext";
 import axios from "axios";
 import {makeStyles} from "@material-ui/core/styles"
 import {CircularProgress, Grid, Grow, Paper } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -68,17 +69,22 @@ function DisplayAvailability(props){
         // set profile data to display
         content = timeIntervals.data.map(timeInterval => (
             <Grow in timeout={1000}>
-                <Grid item>
-                    <Paper elevation={3} className={classes.paper}>
+                <Grid container md={3}>
+                    <Grid item>
+                        <Paper elevation={3} className={classes.paper}>
                         {timeInterval.from} - {timeInterval.to}
-                    </Paper>
+                        </Paper>
+                    </Grid>
+                    <Grid item>
+                        <DeleteIcon />
+                    </Grid>
                 </Grid>
             </Grow>
         ));
     }
     return (
         <div className={classes.container}>
-            <Grid container spacing={3}>
+            <Grid container direction="row" spacing={3}>
                  {content}
             </Grid>
         </div>
