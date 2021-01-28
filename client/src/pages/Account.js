@@ -3,6 +3,10 @@ import { Box, Paper, makeStyles } from "@material-ui/core";
 import SettingsMenu from "../components/settings/SettingsMenu";
 
 const useStyles = makeStyles((theme) => ({
+  boxContainer: {
+    paddingTop: "90px",
+    minHeight: "100vh",
+  },
   centerPaper: {
     display: "flex",
     flexDirection: "column",
@@ -24,12 +28,7 @@ function Account() {
   const classes = useStyles();
 
   return (
-    <Box
-      display="flex"
-      flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "100vh" }}
-      bgcolor="grey"
-    >
+    <Box display="flex" flexWrap="nowrap" bgcolor="grey">
       <Box className={classes.hideMenu}>
         <SettingsMenu />
       </Box>

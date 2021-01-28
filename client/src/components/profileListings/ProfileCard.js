@@ -32,6 +32,26 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     width: 300,
   },
+  blurbHeight: {
+    height: "2vh",
+  },
+  ratingStyles: {
+    marginBottom: "2vh",
+    height: "2vh",
+  },
+  descriptionStyles: {
+    height: "3.5vh",
+  },
+  cardFooterContainer: {
+    borderTop: "1px solid lightgrey",
+    marginTop: "5px",
+  },
+  locationContainer: {
+    margin: "5px",
+  },
+  locationIconColor: {
+    color: "#f04040",
+  },
 }));
 
 function ProfileCard(props) {
@@ -42,39 +62,37 @@ function ProfileCard(props) {
     description = description.substring(0, 67) + "...";
   }
   return (
-    <Grid item align='center' className={classes.cardContainer}>
-      <Card align='center' elevation={3}>
+    <Grid item align="center" className={classes.cardContainer}>
+      <Card align="center" elevation={3}>
         <Avatar
-          alt='Avatar'
+          alt="Avatar"
           src={props.profilePicture}
           className={classes.large}
         />
         <CardContent>
-          <Typography variant='h5' component='h5' className={classes.textField}>
+          <Typography variant="h5" component="h5" className={classes.textField}>
             {props.firstName} {props.lastName}
           </Typography>
           <Typography
             gutterBottom
-            variant='body2'
-            color='textSecondary'
-            component='p'
-            className={classes.textField}
-            style={{ height: "2vh" }}
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            className={classes.textField + " " + classes.blurbHeight}
           >
             Professional dog trainer.
           </Typography>
           <Rating
-            name='read-only'
+            name="read-only"
             value={props.rating}
             readOnly
-            style={{ marginBottom: "2vh", height: "2vh" }}
+            className={classes.ratingStyles}
           />
           <Typography
             gutterBottom
-            variant='body1'
-            component='p'
-            style={{ height: "3.5vh" }}
-            className={classes.textField}
+            variant="body1"
+            component="p"
+            className={classes.textField + " " + classes.descriptionStyles}
           >
             {description}
           </Typography>
@@ -82,18 +100,18 @@ function ProfileCard(props) {
         <Grid
           container
           spacing={2}
-          direction='row'
-          justify='space-around'
-          style={{ borderTop: "1px solid lightgrey", marginTop: "5px" }}
+          direction="row"
+          justify="space-around"
+          className={classes.cardFooterContainer}
         >
-          <Grid item style={{ margin: "5px" }}>
+          <Grid item className={classes.locationContainer}>
             <div className={classes.cardBottom}>
-              <LocationOnIcon style={{ color: "f04040" }} />
+              <LocationOnIcon className={classes.locationIconColor} />
               <Typography
                 gutterBottom
-                variant='body2'
-                color='textSecondary'
-                component='p'
+                variant="body2"
+                color="textSecondary"
+                component="p"
                 className={classes.textField}
               >
                 Toronto, Ontario
@@ -103,8 +121,8 @@ function ProfileCard(props) {
           <Grid item>
             <Typography
               gutterBottom
-              variant='body1'
-              component='p'
+              variant="body1"
+              component="p"
               className={classes.textField}
             >
               $14/hr

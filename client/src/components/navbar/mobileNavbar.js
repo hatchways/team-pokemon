@@ -30,6 +30,15 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     fontSize: "30px",
   },
+  dialogStyling: {
+    padding: "0",
+  },
+  hamburgerIcon: {
+    zIndex: 100,
+  },
+  settingsMenuAlignment: {
+    marginTop: "50px",
+  },
 }));
 
 function MobileNavbar() {
@@ -39,22 +48,17 @@ function MobileNavbar() {
   return (
     <Dialog open={mobileMenuOpen} fullScreen TransitionComponent={Transition}>
       <Box>
-        <DialogActions
-          style={{
-            padding: "0",
-          }}
-        >
+        <DialogActions className={classes.dialogStyling}>
           <IconButton
             aria-label="close"
-            className={classes.closeButton}
-            style={{ zIndex: 100 }}
+            className={classes.closeButton + " " + classes.hamburgerIcon}
             onClick={() => setMobileMenuOpen(false)}
           >
             <CloseIcon />
           </IconButton>
         </DialogActions>
       </Box>
-      <Box style={{ marginTop: "50px" }}>
+      <Box className={classes.settingsMenuAlignment}>
         <SettingsMenu />
       </Box>
     </Dialog>
