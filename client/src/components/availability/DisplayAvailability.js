@@ -1,19 +1,14 @@
 import React, { useState, useEffect, useContext }from 'react';
-import { AuthStateContext } from "../../context/AuthContext";
+import { AuthStateContext, AuthDispatchContext } from "../../context/AuthContext";
 import axios from "axios";
 import {makeStyles} from "@material-ui/core/styles"
-import {CircularProgress, Grid, Grow, Paper } from "@material-ui/core";
+import {CircularProgress, Grid, Grow, IconButton, Paper, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
-    container: {
-      flexGrow: 1,
-      margin: theme.spacing(2)
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      border: `1px solid ${theme.palette.primary.main}`
+    timeCard: {
+        margin: theme.spacing(2),
+        border: `1px solid ${theme.palette.primary.main}`
     },
   }));
 
@@ -23,6 +18,7 @@ function DisplayAvailability(props){
 
     const { profile } = useContext(AuthStateContext); //get profile from context
     const url = `/api/availability/user/${profile._id}?date=${currentDate}`;
+    const dispatch = useContext(AuthDispatchContext);
 
     const [timeIntervals, setTimeIntervals] = useState({
         loading: false,
@@ -68,23 +64,24 @@ function DisplayAvailability(props){
     if (timeIntervals.data) {
         // set profile data to display
         content = timeIntervals.data.map(timeInterval => (
-            <Grow in timeout={1000}>
-                <Grid container md={3}>
+            
+                <Grid container item md={2} justify="center" className={classes.timeCard} spacing={3} wrap="nowrap">
                     <Grid item>
-                        <Paper elevation={3} className={classes.paper}>
+                        <Typography>
                         {timeInterval.from} - {timeInterval.to}
-                        </Paper>
+                        </Typography>
                     </Grid>
                     <Grid item>
-                        <DeleteIcon />
+                        <IconButton>
+                            <DeleteIcon />
+                        </IconButton>
                     </Grid>
                 </Grid>
-            </Grow>
         ));
     }
     return (
-        <div className={classes.container}>
-            <Grid container direction="row" spacing={3}>
+        <div>
+            <Grid container spacing={3}>
                  {content}
             </Grid>
         </div>

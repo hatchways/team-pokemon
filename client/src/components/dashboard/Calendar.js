@@ -9,6 +9,7 @@ import Popup from '../availability/Popup';
 import SelectTimeForm from '../availability/SelectTimeForm';
 import DisplayAvailability from '../availability/DisplayAvailability';
 
+
 const useStyles = makeStyles(theme => ({
     container:{
         height: "100vh",
@@ -107,7 +108,7 @@ function Calendar(){
                         </Tooltip>
                     </ButtonGroup>            
                 </Grid>
-                <Grid item justify="center">
+                <Grid container item justify="center">
                     <DisplayWeekNames />
                     {
                         data.map(week => <Grid container item spacing={0} direction="row" wrap="nowrap" justify="center">

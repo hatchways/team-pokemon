@@ -25,20 +25,17 @@ function AddTimeForm(props){
     const [selectedTo, setSelectedTo] = useState("16:00");
     const [alert, setAlert] = useState({ error: false, message: "" });
     const [addText, setAddText] = useState("ADD");
-    const [color, setColor] = useState("primary");
     const [disabled, setDisabled] = useState(false);
     const dispatch = useContext(AuthDispatchContext);
     const { profile } = useContext(AuthStateContext);
     
     const handleFromChange = (event) => {
         setAddText("ADD");
-        setColor("primary");
         setDisabled(false)
         setSelectedFrom(event.target.value)
     }
     const handleToChange = (event) => {
         setAddText("ADD");
-        setColor("primary");
         setDisabled(false);
         setSelectedTo(event.target.value);
     }
@@ -57,7 +54,6 @@ function AddTimeForm(props){
         //send time data to back-end
         addAvailability(dispatch, availabilityData, profile._id);
         setAddText("ADDED");
-        setColor("success");
         setDisabled(true);
     }
     return (
@@ -95,7 +91,7 @@ function AddTimeForm(props){
             />
             </div>
             <div>
-                <Button variant="contained" color={color} disabled={disabled} onClick={handleSubmit}> {addText} </Button>
+                <Button variant="contained" disabled={disabled} onClick={handleSubmit}> {addText} </Button>
             </div>
             <AlertMessage alert={alert} />
         </form>

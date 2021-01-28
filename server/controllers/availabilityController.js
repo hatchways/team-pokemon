@@ -68,3 +68,19 @@ exports.getAvailability = async (req, res, next) => {
         next(createError(500, err.message))
     }
 }
+exports.delete = async (req, res, next) => {
+    try {
+        const profileId = req.params.id;
+        const date = req.params.date;
+
+        if (!id) {
+            return next(createError(400, "No profile id!"));
+        }
+        if (!ObjectId.isValid(id)) {
+            return next(createError(400, "Invalid Profile id!"));
+        }
+
+    }catch(err){
+        next(createError(500, err.message))
+    }
+}
