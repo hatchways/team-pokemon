@@ -45,7 +45,7 @@ function EditProfile() {
   const classes = useStyles();
 
   return (
-    <Box display="flex" flexWrap="nowrap" bgcolor="grey">
+    <Box className={classes.boxContainer} display="flex" flexWrap="nowrap" bgcolor="grey">
       <Box className={classes.hideMenu}>
         <SettingsMenu />
       </Box>
