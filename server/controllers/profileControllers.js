@@ -124,7 +124,7 @@ exports.getProfileList = async (req, res, next) => {
   try {
     // Get list of all users
     const userList = await User.find({
-      _id: { $ne: req.params.id },
+      _id: { $ne: req.user.id },
     })
       .populate({ path: "profile", match: { isSitter: { $eq: true } } })
       .select("-email");
@@ -173,6 +173,7 @@ exports.upload = async (req, res, next) => {
 
     res.status(200).json({ message: "Image uploaded!", url: result.url });
   } catch (err) {
+    console.log(err.message);
     next(createError(500, err.message));
   }
 };
