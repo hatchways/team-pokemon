@@ -20,8 +20,8 @@ function Popup(props){
             <Dialog open={openPopup}>
                 <DialogTitle>
                     <div className={classes.title}>
-                        <h3> Select Times </h3>
-                        <CancelIcon color="primary" fontSize="large" onClick={()=>setOpenPopup(false)}/>
+                        <h3> Add Availability </h3>
+                        <CancelIcon color="secondary" fontSize="large" onClick={()=>setOpenPopup(false)}/>
                     </div>
                 </DialogTitle>
                 <DialogContent>

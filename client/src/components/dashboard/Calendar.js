@@ -1,33 +1,47 @@
 import React, { useState } from 'react';
 import { takeMonth } from "../../modules/calendar";
-import { Button, Grid, makeStyles, useMediaQuery, TextField } from '@material-ui/core';
+import { Button, ButtonGroup,Grid, makeStyles, useMediaQuery, Typography, Tooltip, Container } from '@material-ui/core';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AddIcon from '@material-ui/icons/Add';
 import {addMonths,format, isSameMonth, isSameDay, subMonths} from "date-fns";
 import Popup from '../availability/Popup';
 import SelectTimeForm from '../availability/SelectTimeForm';
+import DisplayAvailability from '../availability/DisplayAvailability';
 
 const useStyles = makeStyles(theme => ({
+    container:{
+        height: "100vh",
+        width: "100vw",
+    },
   weekNames: {
-      color: "#f04040",
-      height: theme.spacing(3)
+      color: "#ffffff",
+      height: theme.spacing(4),
+      paddingBottom: theme.spacing(2),
+      minWidth: 35,
+      background: theme.palette.primary.main
     },
   daysLgScreen: {
-    height: theme.spacing(8),
-    padding: theme.spacing(4),
-    cursor: "pointer"
+    height: theme.spacing(10),
+    padding: theme.spacing(1),
+    cursor: "pointer",
+    border: "1px solid #cfd7e3"
   },
   daysSmScreen: {
-    height: theme.spacing(4),
+    height: theme.spacing(5),
+    border: "1px solid #cfd7e3",
+    minWidth: 35,
   },
   notSameMonth: {
-      color: "grey"
+      color: "grey",
+      background: "#e4e9f0"
   },
   sameDay: {
-      backgroundColor: "#f04040",
+      backgroundColor: theme.palette.primary.main,
       color: "#ffffff",
-      borderRadius: "25px"
+  },
+  header: {
+      margin: theme.spacing(1)
   }
 }));
 
@@ -37,11 +51,13 @@ function DisplayWeekNames(){
     return(
     <Grid container item spacing={0} 
         direction="row"
+        alignItems="center"
+        wrap="nowrap"
         justify="center"
-        alignItems="center">
+        >
     {
-        ["S", "M", "T", "W", "T", "F", "S"].map(dayName => (
-            <Grid item xs={1}
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(dayName => (
+            <Grid item xs={2}
                 align="center"
                 className={classes.weekNames}>
                 {dayName}
@@ -80,43 +96,39 @@ function Calendar(){
     }
     return(
         <React.Fragment>
-            <h2>Set Your Availability</h2>
-            <Grid container justify="center" alignItems="center">
-                <Grid item>
-                    <Button onClick={prevMonth}> <ArrowLeftIcon /> </Button>
+            <Container >
+                <Grid container item justify="space-between" alignItems="center" className={classes.header}>
+                    <Typography variant="h5" align="center" component="h5">{format(currentDate,"MMM yyyy")}</Typography> 
+                    <ButtonGroup size="small" color="primary"align="center" aria-label="small outlined button group">
+                        <Button onClick={prevMonth}><ArrowLeftIcon /></Button>
+                        <Button onClick={nextMonth}><ArrowRightIcon /></Button>
+                        <Tooltip title="Add Availability" aria-label="add">
+                            <Button variant="contained" color="primary" onClick={()=> setOpenPopup(true)}><AddIcon/></Button>
+                        </Tooltip>
+                    </ButtonGroup>            
                 </Grid>
-                <Grid item>
-                    <h3>{format(currentDate,"MMM yyyy")}</h3>  
-                </Grid>
-                <Grid item>
-                    <Button onClick={nextMonth}> <ArrowRightIcon /> </Button>
-                </Grid>
-                <Grid item>
-                    <Button onClick={()=> setOpenPopup(true)}> <AddIcon fontSize="medium"/> </Button>
-                </Grid>
-            </Grid>
-            <Grid container direction="column" justify="center">
-                <Grid item>
-                <DisplayWeekNames />
-                {
-                    data.map(week => <Grid container item spacing={0} direction="row" justify="center" alignItems="center" alignContent="flex-start">
-                        {
-                            week.map(day => 
-                            <Grid 
-                                onClick={() => handleClick(day)}
-                                item xs={1}
-                                align="center"
-                                className={`${screenSize()} ${dayColor(day)}`}>
-                                {format(day, "d")}
-                            </Grid>)
+                <Grid item justify="center">
+                    <DisplayWeekNames />
+                    {
+                        data.map(week => <Grid container item spacing={0} direction="row" wrap="nowrap" justify="center">
+                            {
+                                week.map(day => 
+                                <Grid 
+                                    onClick={() => handleClick(day)}
+                                    item xs={2}
+                                    align="right"
+                                    className={`${screenSize()} ${dayColor(day)}`}>
+                                    <Typography>{format(day, "d")}</Typography>
+                                </Grid>)
+                            }
+                        </Grid> )
                         }
-                    </Grid> )
-                    }
-                    </Grid>
-            </Grid>
+                </Grid>
+            </Container>
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
                 <SelectTimeForm selectedDate={currentDate} />
             </Popup>
+            <DisplayAvailability currentDate={format(currentDate, "yyyy-MM-dd")}/>
         </React.Fragment>
     );
 }
