@@ -61,11 +61,11 @@ function AddTimeForm(props){
         setAddText("ADDING...");
         if(!selectedDate){
             setAlert({error:true, message: "Please Select Date!"});
-            setAddText("ADD");
             return
         }
         if(isPast(selectedDate)){
             setAlert({error: true, message: "Can't add availability to past date"});
+            setAddText("ADD");
             return
         }
         const month = getMonth(selectedDate); // extract month, year and date
