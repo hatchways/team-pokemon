@@ -12,5 +12,6 @@ router.get("/:id", profileController.getProfile); // get /profile:id
 router.post("/upload/:id", profileController.upload); // upload profile picture
 router.delete("/delete/:id", profileController.deletePicture); // delete profile picture
 router.get("/list/:id", profileController.getProfileList); // get /profile -- returns a list of profiles
-
+router.put("/availability/:id", profileController.addAvailability) //add availability
+router.put("/availability/update/:id", profileController.editAvailability)
 module.exports = router;

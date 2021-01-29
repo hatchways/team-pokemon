@@ -1,8 +1,8 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, TextField} from '@material-ui/core';
-import {format} from "date-fns";
-import { addAvailability } from "../../actions/availability";
+import {getMonth, getYear, getDay} from "date-fns";
+import { addAvailability } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
 import AlertMessage from "../Alert";
 
@@ -19,10 +19,10 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function AddTimeForm(props){
-    const selectedDate = format(props.selectedDate, "yyyy-MM-dd");
+    const {selectedDate} = props;
     const classes = useStyles();
-    const [selectedFrom, setSelectedFrom] = useState("08:00");
-    const [selectedTo, setSelectedTo] = useState("16:00");
+    const [start, setStart] = useState("08:00");
+    const [end, setEnd] = useState("16:00");
     const [alert, setAlert] = useState({ error: false, message: "" });
     const [addText, setAddText] = useState("ADD");
     const [disabled, setDisabled] = useState(false);
@@ -32,12 +32,12 @@ function AddTimeForm(props){
     const handleFromChange = (event) => {
         setAddText("ADD");
         setDisabled(false)
-        setSelectedFrom(event.target.value)
+        setStart(event.target.value)
     }
     const handleToChange = (event) => {
         setAddText("ADD");
         setDisabled(false);
-        setSelectedTo(event.target.value);
+        setEnd(event.target.value);
     }
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -46,11 +46,18 @@ function AddTimeForm(props){
             setAlert({error:true, message: "Please Select Date!"});
             setAddText("ADD");
         }
+        const month = getMonth(selectedDate);
+        const year = getYear(selectedDate);
+        const day = getDay(selectedDate);
+        const start_hour = parseInt(start.substring(0,2))
+        const start_minute = parseInt(start.substring(3))
+        const end_hour = parseInt(end.substring(0,2))
+        const end_minute = parseInt(end.substring(3))
         const availabilityData = {
-            date: selectedDate,
-            from: selectedFrom,
-            to: selectedTo
+            start: new Date(year,month,day,start_hour,start_minute),
+            end: new Date(year,month,day,end_hour,end_minute)
         }
+        //console.log(availabilityData)
         //send time data to back-end
         addAvailability(dispatch, availabilityData, profile._id);
         setAddText("ADDED");
@@ -64,7 +71,7 @@ function AddTimeForm(props){
                 label="From"
                 variant="outlined"
                 type="time"
-                value={selectedFrom}
+                value={start}
                 onChange={handleFromChange}
                 className={classes.textField}
                 InputLabelProps={{
@@ -79,7 +86,7 @@ function AddTimeForm(props){
                 label="To"
                 variant="outlined"
                 type="time"
-                value={selectedTo}
+                value={end}
                 onChange={handleToChange}
                 className={classes.textField}
                 InputLabelProps={{

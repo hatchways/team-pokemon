@@ -183,3 +183,48 @@ exports.deletePicture = async (req, res, next) => {
     next(createError(500, err.message));
   }
 };
+exports.addAvailability = async (req, res, next) => {
+  try{
+    //check request ID
+    if(!ObjectId.isValid(req.params.id)){
+      return next(createError(400, "Invalid Profile id!"));
+    }
+
+    const profile = await Profile.findOne({ _id: req.params.id });
+    if (!profile) {
+      // check if profile exists.
+      return next(createError(404, "Profile does not exist!"));
+    }
+    //extract start and end date from body if profile exist
+    const {start, end} = req.body;
+    //check for start and end date
+    if(!start || !end){
+      return next(createError(400, "Missing start & end date"));
+    }
+    profile.availability.push({start: start, end: end});
+    profile.save();
+    res.status(200).send(profile);
+  }catch (err){
+    next(createError(500, err.message));
+  }
+}
+
+exports.editAvailability = async (req, res, next) => {
+  try {
+    if(!ObjectId.isValid(req.params.id)){
+      return next(createError(400, "Invalid Profile id"));
+    }
+    const {id, start, end} = req.body;
+    const filter = {_id: req.params.id, "availability._id": id}
+    const update = {$set: {"availability.start": start, "availability.end": end}}
+    const updatedProfile = await Profile.findOneAndUpdate(filter, update, {
+      new: true
+    });
+    if(!updatedProfile){
+      return next(createError(400, "Profile not found!"))
+    }
+    res.status(200).send(updatedProfile);
+  }catch(err){
+    next(createError(500, err.message))
+  }
+}
