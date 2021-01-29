@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     border: "5px solid white",
     transform: "translateY(25%)",
-    },
+  },
   userImages: {
     marginTop: "10px",
     marginRight: "10px",
@@ -132,7 +132,6 @@ function ProfilePhoto() {
   // picture chosen
   const onDrop = useCallback(async (acceptedFiles) => {
     setLoading(true);
-    console.log("uploading");
     const url = `/api/profile/upload/${profile._id}`;
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
