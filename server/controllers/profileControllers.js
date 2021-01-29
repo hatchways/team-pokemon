@@ -220,10 +220,21 @@ exports.editAvailability = async (req, res, next) => {
     const updatedProfile = await Profile.findOneAndUpdate(filter, update, {
       new: true
     });
+
     if(!updatedProfile){
-      return next(createError(400, "Profile not found!"))
+      return next(createError(404, "Profile not found!"))
     }
     res.status(200).send(updatedProfile);
+  }catch(err){
+    next(createError(500, err.message))
+  }
+}
+exports.deleteAvailability = async (req, res, next) => {
+  try{
+    if(!ObjectId.isValid(req.params.id)){
+      return next(createError(400, "Invalid Profile id!"))
+    }
+
   }catch(err){
     next(createError(500, err.message))
   }
