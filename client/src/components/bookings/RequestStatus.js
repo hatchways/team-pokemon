@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AuthDispatchContext } from "../../context/AuthContext";
+import PaymentModal from "./PaymentModal";
 
 const useStyles = makeStyles((theme) => ({
   requestSpacing: {
@@ -35,13 +36,16 @@ function RequestStatus({ request, modeTime }) {
   const classes = useStyles();
   const [acceptButtonSubmitting, setAcceptButtonSubmitting] = useState(false);
   const [declineButtonSubmitting, setDeclineButtonSubmitting] = useState(false);
+  const [paymentModal, togglePaymentModal] = useState(false);
 
   // Get dispatch method from context
   const dispatch = useContext(AuthDispatchContext);
 
   return (
     <Box className={classes.lightGreyColor}>
-      {/* Show Accept/Decline Buttons if:
+      {paymentModal && <PaymentModal togglePaymentModal={togglePaymentModal} />}
+      {/* 
+      Show Accept/Decline Buttons if:
       - User is in sitter mode,
       - the request is current,
       - the request hasn't been accepted or declined yet  
@@ -57,6 +61,25 @@ function RequestStatus({ request, modeTime }) {
 
         Show 'Accepted' Text if:
       - The request was accepted
+      - The request is current
+
+        Show 'Pay' Button if:
+      - User is in owner mode,
+      - The request was accepted,
+      - The booking end date is in the past,
+      - The booking hasn't been paid
+
+        Show 'Paid' Text if:
+      - User is in owner mode,
+      - The request was accepted,
+      - The booking end date is in the past,
+      - The booking has been paid
+
+        Show 'Awaiting Payment' Text if:
+      - User is in sitter mode,
+      - The request was accepted,
+      - The booking end date is in the past,
+      - The booking hasn't been paid
 
         Show 'Declined' Text if:
       - The request was declined
@@ -97,26 +120,66 @@ function RequestStatus({ request, modeTime }) {
         </ButtonGroup>
       ) : (
         [
-          modeTime === "ownerCurrent" &&
-          !request.accepted &&
-          !request.declined ? (
-            <Typography className={classes.lightGreyColor}>PENDING</Typography>
+          modeTime === "ownerPast" && request.accepted && !request.paid ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.buttonWidth}
+              onClick={() => togglePaymentModal(true)}
+            >
+              {acceptButtonSubmitting ? (
+                <CircularProgress color="white" size={20} />
+              ) : (
+                `PAY`
+              )}
+            </Button>
           ) : (
             [
-              modeTime === "past" && !request.accepted && !request.declined ? (
+              modeTime === "sitterPast" && request.accepted && !request.paid ? (
                 <Typography className={classes.lightGreyColor}>
-                  EXPIRED
+                  AWAITING PAYMENT
                 </Typography>
               ) : (
                 [
-                  request.accepted ? (
+                  (modeTime === "ownerPast" || modeTime === "sitterPast") &&
+                  request.accepted &&
+                  request.paid ? (
                     <Typography className={classes.lightGreyColor}>
-                      ACCEPTED
+                      PAID
                     </Typography>
                   ) : (
-                    <Typography className={classes.lightGreyColor}>
-                      DECLINED
-                    </Typography>
+                    [
+                      modeTime === "ownerCurrent" &&
+                      !request.accepted &&
+                      !request.declined ? (
+                        <Typography className={classes.lightGreyColor}>
+                          PENDING
+                        </Typography>
+                      ) : (
+                        [
+                          (modeTime === "ownerPast" ||
+                            modeTime === "sitterPast") &&
+                          !request.accepted &&
+                          !request.declined ? (
+                            <Typography className={classes.lightGreyColor}>
+                              EXPIRED
+                            </Typography>
+                          ) : (
+                            [
+                              request.accepted ? (
+                                <Typography className={classes.lightGreyColor}>
+                                  ACCEPTED
+                                </Typography>
+                              ) : (
+                                <Typography className={classes.lightGreyColor}>
+                                  DECLINED
+                                </Typography>
+                              ),
+                            ]
+                          ),
+                        ]
+                      ),
+                    ]
                   ),
                 ]
               ),

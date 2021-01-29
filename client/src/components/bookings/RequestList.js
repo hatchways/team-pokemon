@@ -105,7 +105,7 @@ function RequestList({ requests, user, sitterMode, setSitterMode }) {
         key={request._id}
         request={request}
         sitterMode={sitterMode}
-        modeTime="past"
+        modeTime="sitterPast"
       />
     ));
 
@@ -119,7 +119,7 @@ function RequestList({ requests, user, sitterMode, setSitterMode }) {
         key={request._id}
         request={request}
         sitterMode={sitterMode}
-        modeTime="past"
+        modeTime="ownerPast"
       />
     ));
 
