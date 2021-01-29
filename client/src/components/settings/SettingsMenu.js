@@ -67,7 +67,7 @@ function SettingsMenu() {
             to="/settings/photo"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <MenuItem className={classes.menuItem}>Profile Photo</MenuItem>
+            <MenuItem className={classes.menuItem}>Photos</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}

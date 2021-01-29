@@ -9,6 +9,7 @@ import {
   NOT_BECOME_SITTER,
   GET_REQUEST_SUCCESS,
   REQUEST_UPDATED,
+  PHOTO_CATEGORY_UPDATED,
 } from "../actions/types";
 
 export const initialState = {
@@ -69,6 +70,11 @@ export const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         requests: payload,
+      };
+    case PHOTO_CATEGORY_UPDATED:
+      return {
+        ...state,
+        profile: payload,
       };
     case REQUEST_UPDATED:
       return {

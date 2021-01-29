@@ -13,6 +13,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Checkbox,
   Collapse,
 } from "@material-ui/core";
 import {
@@ -90,6 +91,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     justifyContent: "space-between",
   },
+  debitCard: {
+    fontWeight: "600",
+    backgroundColor: "#ccc",
+    padding: "3px",
+    marginLeft: "-18px",
+  },
   cardLogo: {
     height: "50px",
     width: "60px",
@@ -101,6 +108,7 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: "10px",
     right: "10px",
+    padding: "0",
   },
   expDate: {
     color: "gray",
@@ -118,6 +126,12 @@ const useStyles = makeStyles(theme => ({
   addHintText: {
     textAlign: "center",
     marginBottom: "50px",
+  },
+  sitterHintText: {
+    backgroundColor: "#f28f8f",
+    fontWeight: "700",
+    margin: "5px",
+    padding: "5px",
   },
   cardForm: {
     border: "1px solid gray",
@@ -165,9 +179,11 @@ const useStyles = makeStyles(theme => ({
 function PaymentForm() {
   const [loading, setLoading] = useState(false);
   const [cards, setCards] = useState();
+  const [payout, setPayout] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [addCardOpen, setAddCardOpen] = useState(false);
+  const [checked, setChecked] = useState(false);
   const { profile, user } = useContext(AuthStateContext);
   const stripe = useStripe();
   const elements = useElements();
@@ -177,6 +193,13 @@ function PaymentForm() {
     profile && getUserCards();
   }, [profile]);
 
+  useEffect(() => {
+    cards &&
+      setPayout(() => {
+        return cards.some(card => card.payout === true);
+      });
+  }, [cards]);
+
   //Retrieve cards that user saved previously.
   const getUserCards = async () => {
     setLoading(true);
@@ -184,6 +207,7 @@ function PaymentForm() {
       id: user._id,
       email: user.email,
       name: profile.firstName + " " + profile.lastName,
+      isSitter: profile.isSitter,
     });
     if (!resp.data.error) {
       setLoading(false);
@@ -213,8 +237,11 @@ function PaymentForm() {
   //create a token for the card that uses wants to add
   const handleSubmit = async e => {
     e.preventDefault();
+    if (profile.isSitter && !profile.hasOwnProperty("birthDate")) {
+      return setError("Birth Date is required to register a card");
+    }
     const card = elements.getElement(CardNumberElement);
-    const result = await stripe.createToken(card);
+    const result = await stripe.createToken(card, { currency: "cad" });
     if (result.error) {
       // Inform the user if there was an error
       return setError(result.error.message);
@@ -228,7 +255,10 @@ function PaymentForm() {
   const tokenHandler = async token => {
     let resp = await axios.post("/api/payment/card", {
       userId: user._id,
+      email: user.email,
       token: token,
+      profileId: profile._id,
+      payoutCard: checked,
     });
     if (!resp.data.error) {
       elements.getElement(CardNumberElement).clear();
@@ -287,17 +317,26 @@ function PaymentForm() {
                       }
                     />
                     <CardActions className={classes.cardCheck}>
-                      <FormControlLabel
-                        value={card.brand}
-                        control={
-                          <Radio
-                            icon={<RadioButtonUncheckedIcon />}
-                            checkedIcon={<CheckCircleIcon />}
-                            checked={card.isDefault}
-                            onChange={e => handleRadioButton(card.id)}
-                          />
-                        }
-                      />
+                      {card.payout ? (
+                        <Typography
+                          variant="subtitle1"
+                          className={classes.debitCard}
+                        >
+                          PayOut
+                        </Typography>
+                      ) : (
+                        <FormControlLabel
+                          value={card.brand}
+                          control={
+                            <Radio
+                              icon={<RadioButtonUncheckedIcon />}
+                              checkedIcon={<CheckCircleIcon />}
+                              checked={card.isDefault}
+                              onChange={e => handleRadioButton(card.id)}
+                            />
+                          }
+                        />
+                      )}
                     </CardActions>
                     <CardContent>
                       <Typography variant="h5">
@@ -327,6 +366,14 @@ function PaymentForm() {
       <Typography variant="body1" className={classes.addHintText}>
         You can add up to 5 cards
       </Typography>
+      {profile && profile.isSitter && !payout && (
+        <Typography
+          variant="subtitle1"
+          className={classes.addHintText + " " + classes.sitterHintText}
+        >
+          To receive payouts for dog sitting service you need to add DEBIT card!
+        </Typography>
+      )}
       <Collapse in={addCardOpen} className={classes.collapse}>
         <Box className={classes.formBox} id="formBox">
           <form onSubmit={e => handleSubmit(e)} className={classes.cardForm}>
@@ -370,6 +417,18 @@ function PaymentForm() {
                 ></CardCvcElement>
               </Grid>
             </Grid>
+            {profile && profile.isSitter ? (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={checked}
+                    onChange={e => setChecked(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label=" I want to receive payouts to this card (DEBIT only!)"
+              />
+            ) : null}
             <Button
               type="submit"
               variant="outlined"
