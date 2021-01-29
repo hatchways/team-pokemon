@@ -4,7 +4,7 @@ import { Box, Paper, makeStyles } from "@material-ui/core";
 import SettingsMenu from "../components/dashboard/SettingsMenu";
 import ProfilePhoto from "../components/dashboard/ProfilePhoto";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   centerPaper: {
     marginLeft: "auto",
     marginRight: "auto",
@@ -31,7 +31,7 @@ function Photo() {
     <Box
       display="flex"
       flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "100vh" }}
+      style={{ paddingTop: "90px", minHeight: "80vh" }}
       bgcolor="grey"
     >
       <Box className={classes.hideMenu}>

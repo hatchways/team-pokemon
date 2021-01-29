@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "base64url": "^3.0.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.23.0",
     "cookie-parser": "^1.4.5",
@@ -20,6 +21,7 @@
     "mongoose": "^5.11.11",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.6",
+    "stripe": "^8.132.0",
     "validator": "^13.5.2"
   },
   "devDependencies": {

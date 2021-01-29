@@ -7,6 +7,9 @@ import {
   PROFILE_UPDATE_SUCCESS,
   BECOME_SITTER,
   NOT_BECOME_SITTER,
+  GET_REQUEST_SUCCESS,
+  REQUEST_UPDATED,
+  PHOTO_CATEGORY_UPDATED,
 } from "../actions/types";
 
 export const initialState = {
@@ -15,6 +18,7 @@ export const initialState = {
   profile: null,
   loading: true,
   becomeSitter: false,
+  requests: null,
   errors: [], // to store validation errors from the back end - STILL TO IMPLEMENT
 };
 
@@ -61,6 +65,27 @@ export const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         becomeSitter: false,
+      };
+    case GET_REQUEST_SUCCESS:
+      return {
+        ...state,
+        requests: payload,
+      };
+    case PHOTO_CATEGORY_UPDATED:
+      return {
+        ...state,
+        profile: payload,
+      };
+    case REQUEST_UPDATED:
+      return {
+        ...state,
+        requests: state.requests.map((request) => {
+          if (request._id === payload.requestId) {
+            return { ...request, ...payload.payload };
+          } else {
+            return request;
+          }
+        }),
       };
     default:
       return state;
