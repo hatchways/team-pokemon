@@ -12,8 +12,7 @@ import DisplayAvailability from '../availability/DisplayAvailability';
 
 const useStyles = makeStyles(theme => ({
     container:{
-        height: "100vh",
-        width: "100vw",
+        margin: theme.spacing(2)
     },
   weekNames: {
       color: "#ffffff",
@@ -97,9 +96,9 @@ function Calendar(){
     }
     return(
         <React.Fragment>
-            <Container >
+            <Container className={classes.container}>
                 <Grid container item justify="space-between" alignItems="center" className={classes.header}>
-                    <Typography variant="h5" align="center" component="h5">{format(currentDate,"MMM yyyy")}</Typography> 
+                    <Typography variant="h4" align="center">{format(currentDate,"MMM yyyy")}</Typography> 
                     <ButtonGroup size="small" color="primary"align="center" aria-label="small outlined button group">
                         <Button onClick={prevMonth}><ArrowLeftIcon /></Button>
                         <Button onClick={nextMonth}><ArrowRightIcon /></Button>

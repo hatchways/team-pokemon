@@ -1,8 +1,8 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Checkbox, FormControlLabel, Grid, TextField} from '@material-ui/core';
-import {getMonth, getYear, getDay} from "date-fns";
-import { addAvailability } from "../../actions/profile";
+import {getMonth, getYear, getDate} from "date-fns";
+import { updateProfile } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
 import AlertMessage from "../Alert";
 
@@ -22,14 +22,18 @@ const useStyles = makeStyles((theme) => ({
 function AddTimeForm(props){
     const {selectedDate} = props;
     const classes = useStyles();
+    //start and end time
     const [start, setStart] = useState("08:00");
     const [end, setEnd] = useState("16:00");
     const [alert, setAlert] = useState({ error: false, message: "" });
+    //text add button displays
     const [addText, setAddText] = useState("ADD");
     const [disabled, setDisabled] = useState(false);
     const dispatch = useContext(AuthDispatchContext);
-    const { profile } = useContext(AuthStateContext);
+    const { user, profile } = useContext(AuthStateContext);
     const [checked, setChecked] = useState(true);
+    const email = user.email;
+    const [availability, setAvailability ] = useState(profile.availability)
     
     const handleFromChange = (event) => {
         setAddText("ADD");
@@ -59,22 +63,31 @@ function AddTimeForm(props){
             setAlert({error:true, message: "Please Select Date!"});
             setAddText("ADD");
         }
-        const month = getMonth(selectedDate);
+        const month = getMonth(selectedDate); // extract month, year and date
         const year = getYear(selectedDate);
-        const day = getDay(selectedDate);
-        const start_hour = parseInt(start.substring(0,2))
+        const date = getDate(selectedDate);
+
+        const start_hour = parseInt(start.substring(0,2)) // extract start hour and end hour
         const start_minute = parseInt(start.substring(3))
         const end_hour = parseInt(end.substring(0,2))
         const end_minute = parseInt(end.substring(3))
+        //construct new date with for start and end 
+        const newDate = {
+            start: new Date(year,month,date,start_hour,start_minute),
+            end: new Date(year,month,date,end_hour,end_minute)
+        }
+        setAvailability(availability.push(newDate))
+        //set availability to updated data
         const availabilityData = {
-            start: new Date(year,month,day,start_hour,start_minute),
-            end: new Date(year,month,day,end_hour,end_minute)
+            email: email,
+            availability: availability
         }
         //send time data to back-end
-        addAvailability(dispatch, availabilityData, profile._id);
+        updateProfile(dispatch, availabilityData, profile._id);
         setAddText("ADDED");
         setDisabled(true);
     }
+    
     return (
         <form className={classes.container} >
             <Grid container>
