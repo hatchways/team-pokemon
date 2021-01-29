@@ -57,8 +57,8 @@ function DisplayWeekNames(){
         justify="center"
         >
     {
-        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(dayName => (
-            <Grid item xs={2}
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName, key) => (
+            <Grid key={key} item xs={2}
                 align="center"
                 className={classes.weekNames}>
                 {dayName}
@@ -111,10 +111,10 @@ function Calendar(){
                 <Grid container item justify="center">
                     <DisplayWeekNames />
                     {
-                        data.map(week => <Grid container item spacing={0} direction="row" wrap="nowrap" justify="center">
+                        data.map((week, key) => <Grid key={key} container item spacing={0} direction="row" wrap="nowrap" justify="center">
                             {
-                                week.map(day => 
-                                <Grid 
+                                week.map((day, key) => 
+                                <Grid key={key}
                                     onClick={() => handleClick(day)}
                                     item xs={2}
                                     align="right"
@@ -129,7 +129,7 @@ function Calendar(){
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
                 <SelectTimeForm selectedDate={currentDate} />
             </Popup>
-            <DisplayAvailability currentDate={format(currentDate, "yyyy-MM-dd")}/>
+            <DisplayAvailability currentDate={currentDate}/>
         </React.Fragment>
     );
 }

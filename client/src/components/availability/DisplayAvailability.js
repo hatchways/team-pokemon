@@ -44,8 +44,7 @@ function DisplayAvailability(props){
     if (timeIntervals.data) {
         // set profile data to display
         content = timeIntervals.data.map(timeInterval => (
-            
-                <Grid container item md={2} justify="center" className={classes.timeCard} spacing={3} wrap="nowrap">
+                <Grid key={timeInterval._id} container item md={2} justify="center" className={classes.timeCard} spacing={3} wrap="nowrap">
                     <Grid item>
                         <Typography>
                         {timeInterval.start} - {timeInterval.end}

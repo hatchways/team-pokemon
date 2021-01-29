@@ -1,6 +1,6 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, TextField} from '@material-ui/core';
+import {Button, Checkbox, FormControlLabel,TextField} from '@material-ui/core';
 import {getMonth, getYear, getDay} from "date-fns";
 import { addAvailability } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
@@ -28,6 +28,7 @@ function AddTimeForm(props){
     const [disabled, setDisabled] = useState(false);
     const dispatch = useContext(AuthDispatchContext);
     const { profile } = useContext(AuthStateContext);
+    const [checked, setChecked] = useState(true);
     
     const handleFromChange = (event) => {
         setAddText("ADD");
@@ -38,6 +39,13 @@ function AddTimeForm(props){
         setAddText("ADD");
         setDisabled(false);
         setEnd(event.target.value);
+    }
+    const handleCheck = async (event) => {
+        await setChecked(!checked)
+        if(checked === true){
+            setStart("00:00")
+            setEnd("23:59")
+        }
     }
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -57,7 +65,7 @@ function AddTimeForm(props){
             start: new Date(year,month,day,start_hour,start_minute),
             end: new Date(year,month,day,end_hour,end_minute)
         }
-        //console.log(availabilityData)
+        console.log(availabilityData)
         //send time data to back-end
         addAvailability(dispatch, availabilityData, profile._id);
         setAddText("ADDED");
@@ -65,6 +73,17 @@ function AddTimeForm(props){
     }
     return (
         <form className={classes.container} >
+            <FormControlLabel
+                control={
+                <Checkbox
+                    checked={!checked}
+                    onChange={handleCheck}
+                    name="checked"
+                    color="primary"
+                />
+                }
+                label="All day"
+            />
             <div>
             <TextField
                 id="start"
