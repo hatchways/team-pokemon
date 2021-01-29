@@ -146,43 +146,48 @@ exports.updateRequest = async (req, res, next) => {
 
 exports.payRequest = async (req, res, next) => {
   try {
-    //THIS AMOUNT WILL COME FROM BODY
-    const amount = 127.5;
+    // Get variables from request body
+    const { amount } = req.body;
 
     const fee = Math.round((amount * 0.03 + Number.EPSILON) * 100) / 100;
     //Retrieve a request
     await Request.findById(req.params.id, async (err, data) => {
-      if (err)
+      if (err) {
         return res.status(500).json({
           error: true,
           message: "Database error occured. Please Try again",
         });
+      }
 
-      if (data.paid)
+      if (data.paid) {
         return res.status(400).json({
           error: true,
           message: "This request was already paid",
         });
+      }
 
       if (data.accepted && data.end.getTime() < Date.now()) {
         //Looking for sitter first
         await stripe.customers.retrieve(
           data.sitterId.toString(),
           async (err, sitter) => {
-            if (err)
+            if (err) {
               return res.status(400).json({
                 error: true,
-                message: "Unable to pay the sitter",
+                message:
+                  "Sitter has not set up their payment account. You cannot pay the sitter at this moment.",
               });
+            }
             //Look for owner's customer instance now
             await stripe.customers.retrieve(
               req.user.id,
               async (err, customer) => {
-                if (err)
+                if (err) {
                   return res.status(400).json({
                     error: true,
                     message: "Unable to make payment",
                   });
+                }
                 //If there is no card added to Owner's account
                 if (!customer.default_source) {
                   return res.status(403).json({
@@ -211,6 +216,8 @@ exports.payRequest = async (req, res, next) => {
                   }
                   data.paid = true;
                   await data.save();
+
+                  return res.status(200).send("Payment Successful");
                 }
               }
             );
