@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AVAILABILITY_UPDATE_SUCCESS, PROFILE_UPDATE_SUCCESS } from "./types";
+import { PROFILE_UPDATE_SUCCESS } from "./types";
 
 // Update Profile
 export const updateProfile = async (dispatch, payload, profileId) => {
