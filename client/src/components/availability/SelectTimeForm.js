@@ -1,6 +1,6 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Checkbox, FormControlLabel,TextField} from '@material-ui/core';
+import {Button, Checkbox, FormControlLabel, Grid, TextField} from '@material-ui/core';
 import {getMonth, getYear, getDay} from "date-fns";
 import { addAvailability } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
@@ -9,6 +9,7 @@ import AlertMessage from "../Alert";
 const useStyles = makeStyles((theme) => ({
     container: {
       display: 'flex',
+      flexDirection: 'column',
       flexWrap: 'wrap',
       alignItems: 'center'
     },
@@ -40,11 +41,15 @@ function AddTimeForm(props){
         setDisabled(false);
         setEnd(event.target.value);
     }
-    const handleCheck = async (event) => {
-        await setChecked(!checked)
+    const handleCheck = (event) => {
+        setChecked(!checked)
         if(checked === true){
             setStart("00:00")
             setEnd("23:59")
+        }
+        else if(checked === false){
+            setStart("08:00")
+            setEnd("16:00")
         }
     }
     const handleSubmit = (event) => {
@@ -65,7 +70,6 @@ function AddTimeForm(props){
             start: new Date(year,month,day,start_hour,start_minute),
             end: new Date(year,month,day,end_hour,end_minute)
         }
-        console.log(availabilityData)
         //send time data to back-end
         addAvailability(dispatch, availabilityData, profile._id);
         setAddText("ADDED");
@@ -73,6 +77,7 @@ function AddTimeForm(props){
     }
     return (
         <form className={classes.container} >
+            <Grid container>
             <FormControlLabel
                 control={
                 <Checkbox
@@ -84,7 +89,6 @@ function AddTimeForm(props){
                 }
                 label="All day"
             />
-            <div>
             <TextField
                 id="start"
                 label="From"
@@ -115,9 +119,9 @@ function AddTimeForm(props){
                 step: 300, // 5 min
                 }}
             />
-            </div>
+            </Grid>
             <div>
-                <Button variant="contained" disabled={disabled} onClick={handleSubmit}> {addText} </Button>
+                <Button color="primary" variant="contained" disabled={disabled} onClick={handleSubmit}> {addText} </Button>
             </div>
             <AlertMessage alert={alert} />
         </form>

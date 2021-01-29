@@ -8,8 +8,9 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: "center",
-        justifyContent: "space-around",
-        cursor: "pointer"
+        justifyContent: "space-between",
+        cursor: "pointer",
+        borderBottom: "1px solid"
     }
 }))
 function Popup(props){
