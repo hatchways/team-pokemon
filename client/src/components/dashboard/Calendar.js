@@ -128,7 +128,7 @@ function Calendar(){
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
                 <SelectTimeForm selectedDate={currentDate} />
             </Popup>
-            <DisplayAvailability currentDate={currentDate}/>
+            <DisplayAvailability />
         </React.Fragment>
     );
 }

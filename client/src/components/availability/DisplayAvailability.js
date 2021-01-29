@@ -2,10 +2,9 @@ import React, { useState, useEffect, useContext }from 'react';
 import { AuthStateContext, AuthDispatchContext } from "../../context/AuthContext";
 import { updateProfile } from "../../actions/profile";
 import {makeStyles} from "@material-ui/core/styles"
-import {CircularProgress, Grid, Grow, IconButton, Tooltip, Typography } from "@material-ui/core";
+import { Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {format} from "date-fns";
-import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme) => ({
     timeCard: {
@@ -22,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-function DisplayAvailability(props){
+function DisplayAvailability(){
     const classes= useStyles();
-    const currentDate = props.currentDate;
 
     const { user, profile } = useContext(AuthStateContext); //get profile from context
     const dispatch = useContext(AuthDispatchContext)

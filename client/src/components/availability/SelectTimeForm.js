@@ -1,7 +1,7 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Checkbox, FormControlLabel, Grid, TextField} from '@material-ui/core';
-import {getMonth, getYear, getDate} from "date-fns";
+import {getMonth, getYear, getDate, isPast} from "date-fns";
 import { updateProfile } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
 import AlertMessage from "../Alert";
@@ -62,6 +62,11 @@ function AddTimeForm(props){
         if(!selectedDate){
             setAlert({error:true, message: "Please Select Date!"});
             setAddText("ADD");
+            return
+        }
+        if(isPast(selectedDate)){
+            setAlert({error: true, message: "Can't add availability to past date"});
+            return
         }
         const month = getMonth(selectedDate); // extract month, year and date
         const year = getYear(selectedDate);
@@ -87,7 +92,7 @@ function AddTimeForm(props){
         setAddText("ADDED");
         setDisabled(true);
     }
-    
+
     return (
         <form className={classes.container} >
             <Grid container>
