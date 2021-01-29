@@ -36,6 +36,7 @@ function RequestStatus({ request, modeTime }) {
   const classes = useStyles();
   const [acceptButtonSubmitting, setAcceptButtonSubmitting] = useState(false);
   const [declineButtonSubmitting, setDeclineButtonSubmitting] = useState(false);
+  const [cards, setCards] = useState(null);
   const [paymentModal, togglePaymentModal] = useState(false);
 
   // Get dispatch method from context
@@ -43,7 +44,14 @@ function RequestStatus({ request, modeTime }) {
 
   return (
     <Box className={classes.lightGreyColor}>
-      {paymentModal && <PaymentModal togglePaymentModal={togglePaymentModal} />}
+      {paymentModal && (
+        <PaymentModal
+          togglePaymentModal={togglePaymentModal}
+          request={request}
+          cards={cards}
+          setCards={setCards}
+        />
+      )}
       {/* 
       Show Accept/Decline Buttons if:
       - User is in sitter mode,
