@@ -58,6 +58,7 @@ exports.updateProfile = async (req, res, next) => {
       phoneNumber,
       address,
       description,
+      availability,
     } = req.body;
 
     const profileFields = {};
@@ -70,6 +71,7 @@ exports.updateProfile = async (req, res, next) => {
     if (phoneNumber) profileFields.phoneNumber = phoneNumber;
     if (address) profileFields.address = address;
     if (description) profileFields.description = description;
+    if (availability) profileFields.availability = availability;
 
     // retrieve user and update email field
     const user = await User.findById(req.user.id);
