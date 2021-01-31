@@ -126,7 +126,7 @@ function Calendar(){
                 </Grid>
             </Container>
             <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
-                <SelectTimeForm selectedDate={currentDate} />
+                <SelectTimeForm selectedDate={currentDate} setOpenPopup={setOpenPopup} />
             </Popup>
             <DisplayAvailability />
         </React.Fragment>

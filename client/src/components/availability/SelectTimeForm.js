@@ -1,7 +1,7 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Checkbox, FormControlLabel, Grid, TextField} from '@material-ui/core';
-import {getMonth, getYear, getDate, isPast} from "date-fns";
+import {getMonth, getYear, getDate, isPast, isSameDay} from "date-fns";
 import { updateProfile } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
 import AlertMessage from "../Alert";
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function AddTimeForm(props){
-    const {selectedDate} = props;
+    const {selectedDate, setOpenPopup} = props;
     const classes = useStyles();
     //start and end time
     const [start, setStart] = useState("08:00");
@@ -57,13 +57,13 @@ function AddTimeForm(props){
         }
     }
     const handleSubmit = (event) => {
-        event.preventDefault();
         setAddText("ADDING...");
+        event.preventDefault();
         if(!selectedDate){
             setAlert({error:true, message: "Please Select Date!"});
             return
         }
-        if(isPast(selectedDate)){
+        if(isPast(selectedDate) && !isSameDay(selectedDate, new Date())){
             setAlert({error: true, message: "Can't add availability to past date"});
             setAddText("ADD");
             return
@@ -81,7 +81,7 @@ function AddTimeForm(props){
             start: new Date(year,month,date,start_hour,start_minute),
             end: new Date(year,month,date,end_hour,end_minute)
         }
-        setAvailability([...availability, newDate]);
+        setAvailability(availability.push(newDate));
         //set availability to updated data
         const availabilityData = {
             email: email,
@@ -89,8 +89,8 @@ function AddTimeForm(props){
         }
         //send time data to back-end
         updateProfile(dispatch, availabilityData, profile._id);
-        setAddText("ADDED");
-        setDisabled(true);
+        console.log(availability)
+        setOpenPopup(false)
     }
 
     return (
