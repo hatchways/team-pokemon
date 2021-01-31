@@ -10,6 +10,47 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  headerImage: {
+    width: "100%",
+    height: "300px",
+    objectFit: "cover",
+  },
+  avatar: {
+    height: "150px",
+    width: "150px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    transform: "translateY(-50%)",
+    border: "5px solid white",
+  },
+  userName: {
+    marginTop: "-75px",
+    marginBottom: "15px",
+    fontWeight: "bold",
+  },
+  userLocation: {
+    display: "flex",
+    alignItems: "center",
+    fontSize: "15px",
+    color: "grey",
+    marginBottom: "50px",
+  },
+  locationIcon: {
+    marginRight: "10px",
+  },
+  aboutMeContainer: {
+    width: "90%",
+    marginBottom: "30px",
+  },
+  aboutMeHeading: {
+    marginBottom: "20px",
+    fontWeight: "bold",
+  },
+  userImagesContainer: {
+    flexWrap: "wrap",
+    width: "90%",
+    marginBottom: "40px",
+  },
   userImages: {
     marginTop: "10px",
     marginRight: "10px",
@@ -31,12 +72,7 @@ function ProfileDetailCard({ profileDetails }) {
             : Background
         }
         alt="bg"
-        style={{
-          width: "100%",
-          height: "300px",
-          objectFit: "cover",
-          backgroundColor: "#e6e6e6",
-        }}
+        className={classes.headerImage}
       />
       {/* User's Profile Image */}
       <CardMedia
@@ -46,50 +82,25 @@ function ProfileDetailCard({ profileDetails }) {
             : DefaultAvatar
         }
         alt="avatar"
-        style={{
-          height: "150px",
-          width: "150px",
-          borderRadius: "50%",
-          objectFit: "cover",
-          transform: "translateY(-50%)",
-          border: "5px solid white",
-        }}
+        className={classes.avatar}
       />
       {/* User's Name */}
-      <Typography
-        variant="h3"
-        style={{
-          marginTop: "-75px",
-          marginBottom: "15px",
-          fontWeight: "bold",
-        }}
-      >
+      <Typography variant="h3" className={classes.userName}>
         {`${profileDetails.firstName} ${profileDetails.lastName}`}
       </Typography>
 
       {/* User's Location */}
       {profileDetails.address && (
-        <Typography
-          style={{
-            display: "flex",
-            alignItems: "center",
-            fontSize: "15px",
-            color: "grey",
-            marginBottom: "50px",
-          }}
-        >
-          <LocationOnIcon color="primary" style={{ marginRight: "10px" }} />
+        <Typography className={classes.userLocation}>
+          <LocationOnIcon color="primary" className={classes.locationIcon} />
           {`${profileDetails.address}`}
         </Typography>
       )}
       {profileDetails.description && (
-        <Box style={{ width: "90%", marginBottom: "30px" }}>
+        <Box className={classes.aboutMeContainer}>
           {/* About Me Section  */}
 
-          <Typography
-            variant="h5"
-            style={{ marginBottom: "20px", fontWeight: "bold" }}
-          >
+          <Typography variant="h5" className={classes.aboutMeHeading}>
             About me
           </Typography>
           <Typography>{profileDetails.description}</Typography>
@@ -100,7 +111,7 @@ function ProfileDetailCard({ profileDetails }) {
         <Box
           display="flex"
           justifyContent="flex-start"
-          style={{ flexWrap: "wrap", width: "90%", marginBottom: "40px" }}
+          className={classes.userImagesContainer}
         >
           {profileDetails.photoAlbum &&
             profileDetails.photoAlbum.length > 0 &&
