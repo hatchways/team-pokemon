@@ -97,7 +97,7 @@ function Profile({ match }) {
                 classes.requestBreakpoints + " " + classes.centerContent
               }
             >
-              <ProfileRequestForm />
+              <ProfileRequestForm sitterId={match.params.user_id} />
             </Paper>
           )}
         </>
