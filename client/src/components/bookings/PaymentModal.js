@@ -41,7 +41,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
-  modalWidthBreakPoints: {},
+  modalWidthBreakPoints: {
+    [theme.breakpoints.down("sm")]: {
+      width: "90%",
+    },
+  },
   close: {
     alignSelf: "flex-end",
     "&:hover": { color: "black", cursor: "pointer" },
@@ -156,7 +160,7 @@ function PaymentModal({ request, togglePaymentModal, cards, setCards }) {
 
   return (
     <Box className={classes.modalBackground}>
-      <Box className={classes.modal}>
+      <Box className={classes.modal + " " + classes.modalWidthBreakPoints}>
         <CloseIcon
           fontSize="large"
           className={classes.close}
