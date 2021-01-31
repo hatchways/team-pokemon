@@ -16,9 +16,19 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
     backgroundColor: "#e6e6e6",
   },
+  cardContainerBreakpoints: {
+    [theme.breakpoints.down("xs")]: {
+      textAlign: "center",
+    },
+  },
   cardLogo: {
     width: "50px",
     height: "50px",
+  },
+  cardLogoBreakpoints: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
   },
   cardText: {
     color: "black",
@@ -37,9 +47,11 @@ function PaymentCardItem({ card }) {
   // payout: true
   // year: "2023"
   return (
-    <Box className={classes.cardContainer}>
+    <Box
+      className={classes.cardContainer + " " + classes.cardContainerBreakpoints}
+    >
       <CardMedia
-        className={classes.cardLogo}
+        className={classes.cardLogo + " " + classes.cardLogoBreakpoints}
         image={
           card.brand === "Visa"
             ? visa
