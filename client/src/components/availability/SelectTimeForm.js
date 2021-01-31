@@ -81,8 +81,6 @@ function AddTimeForm(props){
             start: new Date(year,month,date,start_hour,start_minute),
             end: new Date(year,month,date,end_hour,end_minute)
         }
-
-        console.log(availability)
         setAvailability([...availability, newDate]);
         //set availability to updated data
         const availabilityData = {
