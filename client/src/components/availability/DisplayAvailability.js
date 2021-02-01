@@ -28,30 +28,35 @@ function DisplayAvailability(){
     const dispatch = useContext(AuthDispatchContext)
     const [availability, setAvailability] = useState({
         data: null,
-        error: undefined
     });
 
     const handleDelete =  (event, key) => {
       event.preventDefault();
-     
+
+      const arr = availability.data
+      arr.splice(key,1)
+
       setAvailability({
-        data: availability.data.splice(key,1)
+        data: null
       })
+
       const updatedData = {
         email: user.email,
-        availability: availability.data
+        availability: arr
       }
       updateProfile(dispatch, updatedData, profile._id)
+      setAvailability({
+        data: arr
+      })
     }
 
     useEffect(() => {
       setAvailability({
-        data: profile.availability
+        data: profile.availability,
       })
     }, [profile.availability]);
 
     let content = null;
-    
     if (availability.data) {
         // set profile data to display
         content = availability.data.map((timeInterval, key) => (

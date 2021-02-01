@@ -62,6 +62,9 @@ const profileSchema = new mongoose.Schema({
     type: String,
   },
   photoAlbum: [{ type: String }],
+  price: {
+    type: mongoose.Decimal128
+  }
 });
 
 const Profile = mongoose.model("Profile", profileSchema);

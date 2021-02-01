@@ -2,7 +2,7 @@ import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Checkbox, FormControlLabel, Grid, TextField} from '@material-ui/core';
 import {getMonth, getYear, getDate, isPast, isSameDay, isAfter} from "date-fns";
-import { updateProfile } from "../../actions/profile";
+import { addAvailability } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
 import AlertMessage from "../Alert";
 
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function AddTimeForm(props){
-    const {selectedDate, setOpenPopup} = props;
+    const {selectedDate, setOpenPopup } = props;
     const classes = useStyles();
     //start and end time
     const [start, setStart] = useState("08:00");
@@ -30,10 +30,8 @@ function AddTimeForm(props){
     const [addText, setAddText] = useState("ADD");
     const [disabled, setDisabled] = useState(false);
     const dispatch = useContext(AuthDispatchContext);
-    const { user, profile } = useContext(AuthStateContext);
+    const { profile } = useContext(AuthStateContext);
     const [checked, setChecked] = useState(true);
-    const email = user.email;
-    const [availability, setAvailability ] = useState(profile.availability)
     
     const handleFromChange = (event) => {
         setAddText("ADD");
@@ -56,7 +54,7 @@ function AddTimeForm(props){
             setEnd("16:00")
         }
     }
-    const handleSubmit = (event) => {
+    const handleSubmit =  (event) => {
         setAddText("ADDING...");
         event.preventDefault();
         //Date checking
@@ -89,14 +87,9 @@ function AddTimeForm(props){
             setAddText("ADD");
             return
         }
-        availability.push(newDate);
-        //set availability to updated data
-        const availabilityData = {
-            email: email,
-            availability: availability
-        }
         //send time data to back-end
-        updateProfile(dispatch, availabilityData, profile._id);
+        addAvailability(dispatch, newDate, profile._id);
+        profile.availability.push(newDate)
         setOpenPopup(false)
     }
 
