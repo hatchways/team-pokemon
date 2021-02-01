@@ -1,7 +1,7 @@
 import React, { useState, useContext }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Checkbox, FormControlLabel, Grid, TextField} from '@material-ui/core';
-import {getMonth, getYear, getDate, isPast, isSameDay} from "date-fns";
+import {getMonth, getYear, getDate, isPast, isSameDay, isAfter} from "date-fns";
 import { updateProfile } from "../../actions/profile";
 import { AuthDispatchContext, AuthStateContext } from "../../context/AuthContext";
 import AlertMessage from "../Alert";
@@ -59,15 +59,18 @@ function AddTimeForm(props){
     const handleSubmit = (event) => {
         setAddText("ADDING...");
         event.preventDefault();
+        //Date checking
         if(!selectedDate){
             setAlert({error:true, message: "Please Select Date!"});
             return
         }
+        //check if date is in the past
         if(isPast(selectedDate) && !isSameDay(selectedDate, new Date())){
             setAlert({error: true, message: "Can't add availability to past date"});
             setAddText("ADD");
             return
         }
+
         const month = getMonth(selectedDate); // extract month, year and date
         const year = getYear(selectedDate);
         const date = getDate(selectedDate);
@@ -81,7 +84,12 @@ function AddTimeForm(props){
             start: new Date(year,month,date,start_hour,start_minute),
             end: new Date(year,month,date,end_hour,end_minute)
         }
-        setAvailability(availability.push(newDate));
+        if(isAfter(newDate.start, newDate.end)){
+            setAlert({error: true, message: "Invalid time interval. Start-time cannot be after end-time"});
+            setAddText("ADD");
+            return
+        }
+        availability.push(newDate);
         //set availability to updated data
         const availabilityData = {
             email: email,
@@ -89,7 +97,6 @@ function AddTimeForm(props){
         }
         //send time data to back-end
         updateProfile(dispatch, availabilityData, profile._id);
-        console.log(availability)
         setOpenPopup(false)
     }
 
