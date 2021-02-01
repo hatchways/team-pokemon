@@ -10,6 +10,7 @@ import {
   GET_REQUEST_SUCCESS,
   REQUEST_UPDATED,
   PHOTO_CATEGORY_UPDATED,
+  AVAILABILITY_UPDATE_SUCCESS,
 } from "../actions/types";
 
 export const initialState = {
@@ -87,6 +88,11 @@ export const AuthReducer = (state = initialState, action) => {
           }
         }),
       };
+    case AVAILABILITY_UPDATE_SUCCESS:
+      return {
+        ...state,
+        profile: payload
+      }
     default:
       return state;
   }

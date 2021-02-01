@@ -33,21 +33,15 @@ function DisplayAvailability(){
     const handleDelete =  (event, key) => {
       event.preventDefault();
 
+      //create array to hold availability
       const arr = availability.data
       arr.splice(key,1)
-
-      setAvailability({
-        data: null
-      })
 
       const updatedData = {
         email: user.email,
         availability: arr
       }
       updateProfile(dispatch, updatedData, profile._id)
-      setAvailability({
-        data: arr
-      })
     }
 
     useEffect(() => {

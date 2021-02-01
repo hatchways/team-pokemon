@@ -89,7 +89,6 @@ function AddTimeForm(props){
         }
         //send time data to back-end
         addAvailability(dispatch, newDate, profile._id);
-        profile.availability.push(newDate)
         setOpenPopup(false)
     }
 
