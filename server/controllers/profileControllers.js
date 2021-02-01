@@ -95,6 +95,7 @@ exports.updateProfile = async (req, res, next) => {
     next(createError(500, err.message));
   }
 };
+
 /**
  * GET /profile/:id
  * - Given an ID, return profile with that ID
@@ -105,31 +106,39 @@ exports.getProfile = async (req, res, next) => {
     if (!ObjectId.isValid(req.params.id)) {
       return next(createError(400, "Invalid Profile id!"));
     }
-    //retrieve profile by id
-    const profile = await Profile.findById(req.params.id);
-    if (!profile) {
+    //retrieve user by id
+    const user = await User.findById(req.params.id).populate("profile");
+    if (!user) {
       return next(createError(404, "Profile does not exist!"));
     }
-    res.status(200).send(profile);
+    res.status(200).send(user.profile);
   } catch (err) {
+    console.log(err.message);
     next(createError(500, err.message));
   }
 };
+
 /**
  * GET /profile
  * - A list of profiles
  */
 exports.getProfileList = async (req, res, next) => {
   try {
-    const profileList = await Profile.find({
-      _id: { $ne: req.params.id },
-      isSitter: true,
-    });
+    // Get list of all users
+    const userList = await User.find({
+      _id: { $ne: req.user.id },
+    })
+      .populate({ path: "profile", match: { isSitter: { $eq: true } } })
+      .select("-email");
+
+    // Filter out profiles that isSitter is set to false
+    const profileList = userList.filter((user) => user.profile !== null);
     res.status(200).send(profileList);
   } catch (err) {
     next(createError(500, err.message));
   }
 };
+
 /**
  * upload images for profile
  * - takes image file and uploads it to cloudinary.
@@ -166,6 +175,7 @@ exports.upload = async (req, res, next) => {
 
     res.status(200).json({ message: "Image uploaded!", url: result.url });
   } catch (err) {
+    console.log(err.message);
     next(createError(500, err.message));
   }
 };
