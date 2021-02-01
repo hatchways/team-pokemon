@@ -53,6 +53,32 @@ function RequestStatus({ request, modeTime }) {
     }
   }, [errors.length]);
 
+  // Conditional variables to be used to determine which status to show on the request
+
+  const showAcceptDeclineButtons =
+    modeTime === "sitterCurrent" && !request.accepted && !request.declined;
+
+  const showPayButton =
+    modeTime === "ownerPast" && request.accepted && !request.paid;
+
+  const showAwaitingPayment =
+    modeTime === "sitterPast" && request.accepted && !request.paid;
+
+  const showPaid =
+    (modeTime === "ownerPast" || modeTime === "sitterPast") &&
+    request.accepted &&
+    request.paid;
+
+  const showPending =
+    modeTime === "ownerCurrent" && !request.accepted && !request.declined;
+
+  const showExpired =
+    (modeTime === "ownerPast" || modeTime === "sitterPast") &&
+    !request.accepted &&
+    !request.declined;
+
+  const showAccepted = request.accepted;
+
   return (
     <Box className={classes.lightGreyColor}>
       {paymentModal && (
@@ -63,49 +89,7 @@ function RequestStatus({ request, modeTime }) {
           setCards={setCards}
         />
       )}
-      {/* 
-      Show Accept/Decline Buttons if:
-      - User is in sitter mode,
-      - the request is current,
-      - the request hasn't been accepted or declined yet  
-      
-        Show 'Pending' Text if:
-      - User is in owner mode,
-      - the request is current,
-      - the request hasn't been accepted or declined yet
-
-        Show 'Expired' Text if:
-      - it is a past request,
-      - the request wasn't accepted or declined.
-
-        Show 'Accepted' Text if:
-      - The request was accepted
-      - The request is current
-
-        Show 'Pay' Button if:
-      - User is in owner mode,
-      - The request was accepted,
-      - The booking end date is in the past,
-      - The booking hasn't been paid
-
-        Show 'Paid' Text if:
-      - User is in owner mode,
-      - The request was accepted,
-      - The booking end date is in the past,
-      - The booking has been paid
-
-        Show 'Awaiting Payment' Text if:
-      - User is in sitter mode,
-      - The request was accepted,
-      - The booking end date is in the past,
-      - The booking hasn't been paid
-
-        Show 'Declined' Text if:
-      - The request was declined
-      */}
-      {modeTime === "sitterCurrent" &&
-      !request.accepted &&
-      !request.declined ? (
+      {showAcceptDeclineButtons ? (
         <ButtonGroup>
           <Button
             variant="contained"
@@ -139,7 +123,7 @@ function RequestStatus({ request, modeTime }) {
         </ButtonGroup>
       ) : (
         [
-          modeTime === "ownerPast" && request.accepted && !request.paid ? (
+          showPayButton ? (
             <Button
               variant="contained"
               color="primary"
@@ -154,38 +138,31 @@ function RequestStatus({ request, modeTime }) {
             </Button>
           ) : (
             [
-              modeTime === "sitterPast" && request.accepted && !request.paid ? (
+              showAwaitingPayment ? (
                 <Typography className={classes.lightGreyColor}>
                   AWAITING PAYMENT
                 </Typography>
               ) : (
                 [
-                  (modeTime === "ownerPast" || modeTime === "sitterPast") &&
-                  request.accepted &&
-                  request.paid ? (
+                  showPaid ? (
                     <Typography className={classes.lightGreyColor}>
                       PAID
                     </Typography>
                   ) : (
                     [
-                      modeTime === "ownerCurrent" &&
-                      !request.accepted &&
-                      !request.declined ? (
+                      showPending ? (
                         <Typography className={classes.lightGreyColor}>
                           PENDING
                         </Typography>
                       ) : (
                         [
-                          (modeTime === "ownerPast" ||
-                            modeTime === "sitterPast") &&
-                          !request.accepted &&
-                          !request.declined ? (
+                          showExpired ? (
                             <Typography className={classes.lightGreyColor}>
                               EXPIRED
                             </Typography>
                           ) : (
                             [
-                              request.accepted ? (
+                              showAccepted ? (
                                 <Typography className={classes.lightGreyColor}>
                                   ACCEPTED
                                 </Typography>
