@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  PROFILE_UPDATE_SUCCESS,
-  PHOTO_CATEGORY_UPDATED,
-  SET_ALERT,
-} from "./types";
+import { PROFILE_UPDATE_SUCCESS, PHOTO_CATEGORY_UPDATED } from "./types";
 import { setAlert } from "../actions/alert";
 
 // Update Profile

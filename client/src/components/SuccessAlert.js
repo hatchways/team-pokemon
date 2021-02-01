@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Snackbar, makeStyles } from "@material-ui/core";
+import React, { useContext } from "react";
+import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 import { removeAlert } from "../actions/alert";
@@ -13,7 +13,6 @@ function SuccessAlert() {
   const dispatch = useContext(AuthDispatchContext);
 
   const handleClose = (id) => {
-    console.log(id);
     removeAlert(dispatch, id);
   };
 
