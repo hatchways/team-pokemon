@@ -13,6 +13,7 @@ import {
   PAY_BOOKING_SUCCESS,
   PAY_BOOKING_FAILURE,
   CLEAR_ERRORS,
+  REQUEST_ACCEPT_ERROR,
 } from "../actions/types";
 
 export const initialState = {
@@ -112,6 +113,7 @@ export const AuthReducer = (state = initialState, action) => {
         errors: [],
       };
     case PAY_BOOKING_FAILURE:
+    case REQUEST_ACCEPT_ERROR:
       return {
         ...state,
         errors: [...state.errors, payload],

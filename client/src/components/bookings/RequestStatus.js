@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { updateRequest } from "../../actions/requests";
 import {
   Box,
@@ -8,7 +8,11 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { AuthDispatchContext } from "../../context/AuthContext";
+import {
+  AuthDispatchContext,
+  AuthStateContext,
+} from "../../context/AuthContext";
+import Alert from "../Alert";
 import PaymentModal from "./PaymentModal";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +45,13 @@ function RequestStatus({ request, modeTime }) {
 
   // Get dispatch method from context
   const dispatch = useContext(AuthDispatchContext);
+  const { errors } = useContext(AuthStateContext);
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      setAcceptButtonSubmitting(false);
+    }
+  }, [errors.length]);
 
   return (
     <Box className={classes.lightGreyColor}>
@@ -194,6 +205,9 @@ function RequestStatus({ request, modeTime }) {
             ]
           ),
         ]
+      )}
+      {errors.length > 0 && (
+        <Alert alert={{ error: true, message: errors[0] }} />
       )}
     </Box>
   );

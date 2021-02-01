@@ -118,14 +118,16 @@ exports.updateRequest = async (req, res, next) => {
             if (error) {
               return res.status(403).json({
                 error: true,
-                message: "You have not registered payment",
+                message:
+                  "You have not registered a payment card. Please add a card to your account before proceeding.",
               });
             }
             if (customer) {
               if (!customer.metadata.hasOwnProperty("accountId")) {
                 return res.status(403).json({
                   error: true,
-                  message: "You have no payment card added",
+                  message:
+                    "You have not added a payout card. Please add a payout card to your account before proceeding.",
                 });
               }
               if (accepted) {

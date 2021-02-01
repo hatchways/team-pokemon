@@ -28,7 +28,6 @@ export const payRequest = async (dispatch, payload) => {
     dispatch({ type: PAY_BOOKING_SUCCESS, payload: id });
   } catch (err) {
     const error = err.response.data.error;
-    console.log(error);
     if (error) {
       dispatch({
         type: PAY_BOOKING_FAILURE,
