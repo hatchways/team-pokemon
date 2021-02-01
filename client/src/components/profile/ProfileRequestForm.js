@@ -8,7 +8,10 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { AuthStateContext } from "../../context/AuthContext";
+import {
+  AuthDispatchContext,
+  AuthStateContext,
+} from "../../context/AuthContext";
 import { createRequest } from "../../actions/request";
 
 const useStyles = makeStyles(() => ({
@@ -31,7 +34,7 @@ function ProfileRequestForm() {
   const classes = useStyles();
 
   // Get dispatch method and state from auth context
-  // const dispatch = useContext(AuthDispatchContext);
+  const dispatch = useContext(AuthDispatchContext);
   const { user } = useContext(AuthStateContext);
 
   // Today's date to be passed as the minimum and default value to the 'drop off' date picker input.
@@ -153,7 +156,7 @@ function ProfileRequestForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createRequest(requestFormData);
+    createRequest(dispatch, requestFormData);
   };
 
   return (

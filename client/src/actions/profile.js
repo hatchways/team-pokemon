@@ -1,5 +1,10 @@
 import axios from "axios";
-import { PROFILE_UPDATE_SUCCESS, PHOTO_CATEGORY_UPDATED } from "./types";
+import {
+  PROFILE_UPDATE_SUCCESS,
+  PHOTO_CATEGORY_UPDATED,
+  SET_ALERT,
+} from "./types";
+import { setAlert } from "../actions/alert";
 
 // Update Profile
 export const updateProfile = async (dispatch, payload, profileId) => {
@@ -11,6 +16,7 @@ export const updateProfile = async (dispatch, payload, profileId) => {
     };
     const res = await axios.put(`/api/profile/${profileId}`, payload, config);
     dispatch({ type: PROFILE_UPDATE_SUCCESS, payload: res.data });
+    setAlert(dispatch, "Profile Updated!");
   } catch (err) {
     console.log(err.message);
   }

@@ -10,6 +10,8 @@ import {
   GET_REQUEST_SUCCESS,
   REQUEST_UPDATED,
   PHOTO_CATEGORY_UPDATED,
+  SET_ALERT,
+  REMOVE_ALERT,
 } from "../actions/types";
 
 export const initialState = {
@@ -19,7 +21,8 @@ export const initialState = {
   loading: true,
   becomeSitter: false,
   requests: null,
-  errors: [], // to store validation errors from the back end - STILL TO IMPLEMENT
+  errors: [],
+  alerts: [],
 };
 
 export const AuthReducer = (state = initialState, action) => {
@@ -86,6 +89,16 @@ export const AuthReducer = (state = initialState, action) => {
             return request;
           }
         }),
+      };
+    case SET_ALERT:
+      return {
+        ...state,
+        alerts: [...state.alerts, payload],
+      };
+    case REMOVE_ALERT:
+      return {
+        ...state,
+        alerts: state.alerts.filter((alert) => alert.id !== payload),
       };
     default:
       return state;
