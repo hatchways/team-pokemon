@@ -86,7 +86,7 @@ function Navbar() {
               ) : null}
 
               <Link
-                to="*"
+                to="/chat"
                 style={{ textDecoration: "none", marginRight: "30px" }}
               >
                 <Button size="large">Messages</Button>
@@ -94,7 +94,7 @@ function Navbar() {
             </Hidden>
             <Hidden mdUp>
               <Link
-                to="*"
+                to="/chat"
                 style={{ textDecoration: "none", marginRight: "30px" }}
               >
                 <MailIcon color="primary" fontSize="large" />

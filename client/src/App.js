@@ -17,6 +17,7 @@ import Availability from "./pages/Availability";
 import Payment from "./pages/Payment";
 import Security from "./pages/Security";
 import Settings from "./pages/Settings";
+import Chat from "./pages/Chat";
 import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
 
@@ -56,6 +57,7 @@ function App() {
               <PrivateRoute path="/dashboard/payment" component={Payment} />
               <PrivateRoute path="/dashboard/security" component={Security} />
               <PrivateRoute path="/dashboard/settings" component={Settings} />
+              <PrivateRoute path="/chat" component={Chat} />
               <PrivateRoute path="*" component={PageNotFound} />
             </Switch>
           </AuthDispatchContext.Provider>
