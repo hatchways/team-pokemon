@@ -8,7 +8,7 @@ import SearchAndFilter from "../components/profileListings/SearchAndFilter";
 
 import { AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(3),
   },
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 function ProfileListings() {
   const classes = useStyles();
-  
+
   const { profile } = useContext(AuthStateContext); //get profile from context
   const url = `/api/profile/list/${profile._id}`;
 
@@ -37,14 +37,14 @@ function ProfileListings() {
     });
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         setSitters({
           loading: false,
           data: response.data,
           error: undefined,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         setSitters({
           loading: false,
           data: null,
@@ -66,34 +66,35 @@ function ProfileListings() {
   }
   if (sitters.data) {
     // set profile data to display
-    content = sitters.data.map(sitter => (
+    content = sitters.data.map((sitter) => (
       <ProfileCard
-        key={sitter._id}
-        firstName={sitter.firstName}
-        lastName={sitter.lastName}
-        profilePicture={sitter.profilePicture}
+        key={sitter.profile._id}
+        firstName={sitter.profile.firstName}
+        lastName={sitter.profile.lastName}
+        profilePicture={sitter.profile.profilePicture}
+        address={sitter.profile.address}
         rating={4}
-        description={sitter.description}
-        price={sitter.price}
+        price={sitter.profile.price}
+        description={sitter.profile.description}
+        userId={sitter._id}
       />
     ));
   }
-
   return (
     <React.Fragment>
       <CssBaseline />
-      <Grid container direction="column" justify="center" alignItems="center">
+      <Grid container direction='column' justify='center' alignItems='center'>
         <Grid item>
           <SearchAndFilter />
         </Grid>
         <Grid item>
           <Grid
             container
-            direction="row"
+            direction='row'
             spacing={3}
-            align="center"
-            justify="center"
-            alignItems="center"
+            align='center'
+            justify='center'
+            alignItems='center'
             className={classes.gridContainer}
           >
             {content}

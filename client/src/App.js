@@ -40,7 +40,7 @@ function App() {
               <PrivateRoute path="/" exact component={Profile} />
               <PrivateRoute path="/bookings" exact component={Bookings} />
               <PrivateRoute
-                path="/dashboard/profile"
+                path="/profile/:user_id"
                 exact
                 component={Profile}
               />

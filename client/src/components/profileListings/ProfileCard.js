@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Avatar,
@@ -32,8 +32,10 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     width: 300,
   },
+  linkStyle: {
+    textDecoration: "none",
+  },
 }));
-
 function ProfileCard(props) {
   const classes = useStyles();
   //check for long descriptions and truncate it
@@ -43,75 +45,86 @@ function ProfileCard(props) {
   }
   return (
     <Grid item align='center' className={classes.cardContainer}>
-      <Card align='center' elevation={3}>
-        <Avatar
-          alt='Avatar'
-          src={props.profilePicture}
-          className={classes.large}
-        />
-        <CardContent>
-          <Typography variant='h5' component='h5' className={classes.textField}>
-            {props.firstName} {props.lastName}
-          </Typography>
-          <Typography
-            gutterBottom
-            variant='body2'
-            color='textSecondary'
-            component='p'
-            className={classes.textField}
-            style={{ height: "2vh" }}
-          >
-            Professional dog trainer.
-          </Typography>
-          <Rating
-            name='read-only'
-            value={props.rating}
-            readOnly
-            style={{ marginBottom: "2vh", height: "2vh" }}
+      <Link to={`/profile/${props.userId}`} className={classes.linkStyle}>
+        <Card align='center' elevation={3}>
+          <Avatar
+            alt='Avatar'
+            src={props.profilePicture}
+            className={classes.large}
           />
-          <Typography
-            gutterBottom
-            variant='body1'
-            component='p'
-            style={{ height: "3.5vh" }}
-            className={classes.textField}
-          >
-            {description}
-          </Typography>
-        </CardContent>
-        <Grid
-          container
-          spacing={2}
-          direction='row'
-          justify='space-around'
-          style={{ borderTop: "1px solid lightgrey", marginTop: "5px" }}
-        >
-          <Grid item style={{ margin: "5px" }}>
-            <div className={classes.cardBottom}>
-              <LocationOnIcon style={{ color: "f04040" }} />
-              <Typography
-                gutterBottom
-                variant='body2'
-                color='textSecondary'
-                component='p'
-                className={classes.textField}
-              >
-                Toronto, Ontario
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item>
+          <CardContent>
+            <Typography
+              variant='h5'
+              component='h5'
+              className={classes.textField}
+            >
+              {props.firstName} {props.lastName}
+            </Typography>
+            <Typography
+              gutterBottom
+              variant='body2'
+              color='textSecondary'
+              component='p'
+              className={classes.textField}
+              style={{ height: "2vh" }}
+            >
+              Professional dog trainer.
+            </Typography>
+            <Rating
+              name='read-only'
+              value={props.rating}
+              readOnly
+              style={{ marginBottom: "2vh", height: "2vh" }}
+            />
             <Typography
               gutterBottom
               variant='body1'
               component='p'
+              style={{ height: "3.5vh" }}
               className={classes.textField}
             >
-              ${props.price}/hr
+              {description}
             </Typography>
+          </CardContent>
+          <Grid
+            container
+            spacing={2}
+            direction='row'
+            justify='space-around'
+            style={{ borderTop: "1px solid lightgrey", marginTop: "5px" }}
+          >
+            <Grid item style={{ margin: "5px" }}>
+              <div className={classes.cardBottom}>
+                {props.address && (
+                  <>
+                    {" "}
+                    <LocationOnIcon style={{ color: "f04040" }} />
+                    <Typography
+                      gutterBottom
+                      variant='body2'
+                      color='textSecondary'
+                      component='p'
+                      className={classes.textField}
+                    >
+                      {props.address}
+                    </Typography>
+                  </>
+                )}
+              </div>
+            </Grid>
+            <Grid item>
+              <Typography
+                gutterBottom
+                variant='body1'
+                component='p'
+                className={classes.textField}
+              >
+                ${props.price}/hr
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
-      </Card>
+        </Card>
+      </Link>
     </Grid>
   );
 }
