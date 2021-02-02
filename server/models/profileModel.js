@@ -63,7 +63,8 @@ const profileSchema = new mongoose.Schema({
   },
   photoAlbum: [{ type: String }],
   price: {
-    type: mongoose.Decimal128
+    type: Number,
+    default: 14.0
   }
 });
 

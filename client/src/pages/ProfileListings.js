@@ -74,6 +74,7 @@ function ProfileListings() {
         profilePicture={sitter.profilePicture}
         rating={4}
         description={sitter.description}
+        price={sitter.price}
       />
     ));
   }

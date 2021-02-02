@@ -107,7 +107,7 @@ function ProfileCard(props) {
               component='p'
               className={classes.textField}
             >
-              $14/hr
+              ${props.price}/hr
             </Typography>
           </Grid>
         </Grid>
