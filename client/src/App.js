@@ -19,6 +19,9 @@ import Security from "./pages/Security";
 import Settings from "./pages/Settings";
 import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3001");
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -34,29 +37,29 @@ function App() {
           <AuthDispatchContext.Provider value={dispatch}>
             <Navbar />
             <Switch>
-              <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
-              <PrivateRoute path="/profile/lists" component={ProfileListings} />
-              <PrivateRoute path="/" exact component={Profile} />
-              <PrivateRoute path="/bookings" exact component={Bookings} />
+              <Route path='/signup' component={Signup} />
+              <Route path='/login' component={Login} />
+              <PrivateRoute path='/profile/lists' component={ProfileListings} />
+              <PrivateRoute path='/' exact component={Profile} />
+              <PrivateRoute path='/bookings' exact component={Bookings} />
               <PrivateRoute
-                path="/profile/:user_id"
+                path='/profile/:user_id'
                 exact
                 component={Profile}
               />
               <PrivateRoute
-                path="/dashboard/editprofile"
+                path='/dashboard/editprofile'
                 component={EditProfile}
               />
-              <PrivateRoute path="/dashboard/photo" component={Photo} />
+              <PrivateRoute path='/dashboard/photo' component={Photo} />
               <PrivateRoute
-                path="/dashboard/availability"
+                path='/dashboard/availability'
                 component={Availability}
               />
-              <PrivateRoute path="/dashboard/payment" component={Payment} />
-              <PrivateRoute path="/dashboard/security" component={Security} />
-              <PrivateRoute path="/dashboard/settings" component={Settings} />
-              <PrivateRoute path="*" component={PageNotFound} />
+              <PrivateRoute path='/dashboard/payment' component={Payment} />
+              <PrivateRoute path='/dashboard/security' component={Security} />
+              <PrivateRoute path='/dashboard/settings' component={Settings} />
+              <PrivateRoute path='*' component={PageNotFound} />
             </Switch>
           </AuthDispatchContext.Provider>
         </AuthStateContext.Provider>
