@@ -21,7 +21,7 @@ import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
 import io from "socket.io-client";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io();
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
