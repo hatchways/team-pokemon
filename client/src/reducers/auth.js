@@ -10,6 +10,7 @@ import {
   GET_REQUEST_SUCCESS,
   REQUEST_UPDATED,
   PHOTO_CATEGORY_UPDATED,
+  AVAILABILITY_UPDATE_SUCCESS,
   PAY_BOOKING_SUCCESS,
   PAY_BOOKING_FAILURE,
   CLEAR_ERRORS,
@@ -122,6 +123,11 @@ export const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         errors: [],
+      };
+    case AVAILABILITY_UPDATE_SUCCESS:
+      return {
+        ...state,
+        profile: payload,
       };
     default:
       return state;

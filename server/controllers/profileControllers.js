@@ -59,6 +59,7 @@ exports.updateProfile = async (req, res, next) => {
       address,
       description,
       availability,
+      price,
     } = req.body;
 
     const profileFields = {};
@@ -72,6 +73,7 @@ exports.updateProfile = async (req, res, next) => {
     if (address) profileFields.address = address;
     if (description) profileFields.description = description;
     if (availability) profileFields.availability = availability;
+    if (price) profileFields.price = price;
 
     // retrieve user and update email field
     const user = await User.findById(req.user.id);
@@ -257,6 +259,31 @@ exports.deletePicture = async (req, res, next) => {
     res.status(200).send(updatedProfile);
   } catch (err) {
     console.log(err.message);
+    next(createError(500, err.message));
+  }
+};
+exports.addAvailability = async (req, res, next) => {
+  try{
+    //check request ID
+    if(!ObjectId.isValid(req.params.id)){
+      return next(createError(400, "Invalid Profile id!"));
+    }
+
+    const profile = await Profile.findOne({ _id: req.params.id });
+    if (!profile) {
+      // check if profile exists.
+      return next(createError(404, "Profile does not exist!"));
+    }
+    //extract start and end date from body if profile exist
+    const {start, end} = req.body;
+    //check for start and end date
+    if(!start || !end){
+      return next(createError(400, "Missing start & end date"));
+    }
+    profile.availability.push({start: start, end: end});
+    profile.save();
+    res.status(200).send(profile);
+  }catch (err){
     next(createError(500, err.message));
   }
 };

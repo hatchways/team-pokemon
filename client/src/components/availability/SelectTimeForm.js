@@ -7,8 +7,15 @@ import {
   Grid,
   TextField,
 } from "@material-ui/core";
-import { getMonth, getYear, getDate, isPast } from "date-fns";
-import { updateProfile } from "../../actions/profile";
+import {
+  getMonth,
+  getYear,
+  getDate,
+  isPast,
+  isSameDay,
+  isAfter,
+} from "date-fns";
+import { addAvailability } from "../../actions/profile";
 import {
   AuthDispatchContext,
   AuthStateContext,
@@ -29,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AddTimeForm(props) {
-  const { selectedDate } = props;
+  const { selectedDate, setOpenPopup } = props;
   const classes = useStyles();
   //start and end time
   const [start, setStart] = useState("08:00");
@@ -39,10 +46,8 @@ function AddTimeForm(props) {
   const [addText, setAddText] = useState("ADD");
   const [disabled, setDisabled] = useState(false);
   const dispatch = useContext(AuthDispatchContext);
-  const { user, profile } = useContext(AuthStateContext);
+  const { profile } = useContext(AuthStateContext);
   const [checked, setChecked] = useState(true);
-  const email = user.email;
-  const [availability, setAvailability] = useState(profile.availability);
 
   const handleFromChange = (event) => {
     setAddText("ADD");
@@ -65,17 +70,20 @@ function AddTimeForm(props) {
     }
   };
   const handleSubmit = (event) => {
-    event.preventDefault();
     setAddText("ADDING...");
+    event.preventDefault();
+    //Date checking
     if (!selectedDate) {
       setAlert({ error: true, message: "Please Select Date!" });
       return;
     }
-    if (isPast(selectedDate)) {
+    //check if date is in the past
+    if (isPast(selectedDate) && !isSameDay(selectedDate, new Date())) {
       setAlert({ error: true, message: "Can't add availability to past date" });
       setAddText("ADD");
       return;
     }
+
     const month = getMonth(selectedDate); // extract month, year and date
     const year = getYear(selectedDate);
     const date = getDate(selectedDate);
@@ -89,16 +97,17 @@ function AddTimeForm(props) {
       start: new Date(year, month, date, start_hour, start_minute),
       end: new Date(year, month, date, end_hour, end_minute),
     };
-    setAvailability(availability.push(newDate));
-    //set availability to updated data
-    const availabilityData = {
-      email: email,
-      availability: availability,
-    };
+    if (isAfter(newDate.start, newDate.end)) {
+      setAlert({
+        error: true,
+        message: "Invalid time interval. Start-time cannot be after end-time",
+      });
+      setAddText("ADD");
+      return;
+    }
     //send time data to back-end
-    updateProfile(dispatch, availabilityData, profile._id);
-    setAddText("ADDED");
-    setDisabled(true);
+    addAvailability(dispatch, newDate, profile._id);
+    setOpenPopup(false);
   };
 
   return (
@@ -109,17 +118,17 @@ function AddTimeForm(props) {
             <Checkbox
               checked={!checked}
               onChange={handleCheck}
-              name="checked"
-              color="primary"
+              name='checked'
+              color='primary'
             />
           }
-          label="All day"
+          label='All day'
         />
         <TextField
-          id="start"
-          label="From"
-          variant="outlined"
-          type="time"
+          id='start'
+          label='From'
+          variant='outlined'
+          type='time'
           value={start}
           onChange={handleFromChange}
           className={classes.textField}
@@ -131,10 +140,10 @@ function AddTimeForm(props) {
           }}
         />
         <TextField
-          id="end"
-          label="To"
-          variant="outlined"
-          type="time"
+          id='end'
+          label='To'
+          variant='outlined'
+          type='time'
           value={end}
           onChange={handleToChange}
           className={classes.textField}
@@ -148,8 +157,8 @@ function AddTimeForm(props) {
       </Grid>
       <div>
         <Button
-          color="primary"
-          variant="contained"
+          color='primary'
+          variant='contained'
           disabled={disabled}
           onClick={handleSubmit}
         >

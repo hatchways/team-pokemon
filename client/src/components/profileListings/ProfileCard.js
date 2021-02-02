@@ -65,18 +65,18 @@ function ProfileCard(props) {
     description = description.substring(0, 67) + "...";
   }
   return (
-    <Grid item align="center" className={classes.cardContainer}>
+    <Grid item align='center' className={classes.cardContainer}>
       <Link to={`/profile/${props.userId}`} className={classes.linkStyle}>
-        <Card align="center" elevation={3}>
+        <Card align='center' elevation={3}>
           <Avatar
-            alt="Avatar"
+            alt='Avatar'
             src={props.profilePicture}
             className={classes.large}
           />
           <CardContent>
             <Typography
-              variant="h5"
-              component="h5"
+              variant='h5'
+              component='h5'
               className={classes.textField}
             >
               {props.firstName} {props.lastName}
@@ -91,7 +91,7 @@ function ProfileCard(props) {
               Professional dog trainer.
             </Typography>
             <Rating
-              name="read-only"
+              name='read-only'
               value={props.rating}
               readOnly
               className={classes.ratingStyles}
@@ -114,26 +114,31 @@ function ProfileCard(props) {
           >
             <Grid item className={classes.locationContainer}>
               <div className={classes.cardBottom}>
-                <LocationOnIcon className={classes.locationIconColor} />
-                <Typography
-                  gutterBottom
-                  variant="body1"
-                  color="textSecondary"
-                  component="p"
-                  className={classes.textField}
-                >
-                  $14/hr
-                </Typography>
+                {props.address && (
+                  <>
+                    {" "}
+                    <LocationOnIcon className={classes.locationIconColor} />
+                    <Typography
+                      gutterBottom
+                      variant='body2'
+                      color='textSecondary'
+                      component='p'
+                      className={classes.textField}
+                    >
+                      {props.address}
+                    </Typography>
+                  </>
+                )}
               </div>
             </Grid>
             <Grid item>
               <Typography
                 gutterBottom
-                variant="body1"
-                component="p"
+                variant='body1'
+                component='p'
                 className={classes.textField}
               >
-                $14/hr
+                ${props.price}/hr
               </Typography>
             </Grid>
           </Grid>
