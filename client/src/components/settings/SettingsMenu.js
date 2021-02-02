@@ -95,7 +95,7 @@ function SettingsMenu() {
             to="/settings/account"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <MenuItem className={classes.menuItem}>Settings</MenuItem>
+            <MenuItem className={classes.menuItem}>Account</MenuItem>
           </Link>
           {profile && !profile.isSitter ? (
             <Link
