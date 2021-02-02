@@ -1,8 +1,9 @@
 import axios from "axios";
+import { setAlert } from "../actions/alert";
 import { PAY_BOOKING_SUCCESS, PAY_BOOKING_FAILURE } from "./types";
 
 // Create Request
-export const createRequest = async (payload) => {
+export const createRequest = async (dispatch, payload) => {
   try {
     const config = {
       headers: {
@@ -10,6 +11,7 @@ export const createRequest = async (payload) => {
       },
     };
     await axios.post("/api/request/", payload, config);
+    setAlert(dispatch, "Request Sent!");
   } catch (err) {
     console.log(err.message);
   }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
+  CircularProgress,
   Typography,
   Grid,
   TextField,
@@ -40,11 +41,11 @@ function EditProfileForm() {
 
   // Component's local state
   const [alert, setAlert] = useState({ error: false, message: "" });
-  const [saveButtonText, setSaveButtonText] = useState("SAVE");
+  const [updatingProfileSpinner, setUpdatingProfileSpinner] = useState(false);
 
   // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
-  const { user, profile } = useContext(AuthStateContext);
+  const { user, profile, alerts } = useContext(AuthStateContext);
 
   // Edit profile form's state
   const [profileData, setProfileData] = useState({
@@ -100,6 +101,11 @@ function EditProfileForm() {
     profile.description,
   ]);
 
+  // Change 'Save' button from spinner back to normal when alert pops up
+  useEffect(() => {
+    setUpdatingProfileSpinner(false);
+  }, [alerts]);
+
   // Birth date state (year, month, and day are obtained separately and then need to be formatted before sending request)
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
@@ -132,7 +138,6 @@ function EditProfileForm() {
 
   // Function that handles changes to birth date (year, month, and date <Select> input).
   const handleBirthDateChange = (e) => {
-    setSaveButtonText("SAVE");
     let fullDate;
     if (birthDay > dayArray[dayArray.length - 1]) {
       setBirthDay(dayArray[dayArray.length - 1]);
@@ -163,7 +168,6 @@ function EditProfileForm() {
   // Function that updates the state when changes are made
 
   const onChange = (e) => {
-    setSaveButtonText("SAVE");
     setProfileData({
       ...profileData,
       [e.target.name]: e.target.value,
@@ -174,17 +178,15 @@ function EditProfileForm() {
   // Handle form submission
 
   const handleSubmit = (e) => {
-    setSaveButtonText("SAVING...");
+    setUpdatingProfileSpinner(true);
     e.preventDefault();
     if (!firstName) {
       setAlert({ error: true, message: "First Name is Required!" });
-      setSaveButtonText("SAVE");
       return;
     }
 
     if (!lastName) {
       setAlert({ error: true, message: "Last Name is Required!" });
-      setSaveButtonText("SAVE");
       return;
     }
 
@@ -197,13 +199,11 @@ function EditProfileForm() {
       (!birthYear && birthMonth)
     ) {
       setAlert({ error: true, message: "Invalid Birth Date!" });
-      setSaveButtonText("SAVE");
       return;
     }
 
     // Validation passed
     updateProfile(dispatch, profileData, profile._id);
-    setSaveButtonText("SAVED");
   };
   return (
     <Grid container spacing={3} className={classes.formContainer}>
@@ -226,7 +226,6 @@ function EditProfileForm() {
           name="isSitter"
           checked={isSitter}
           onChange={(e) => {
-            setSaveButtonText("SAVE");
             setProfileData({
               ...profileData,
               [e.target.name]: e.target.checked,
@@ -425,7 +424,11 @@ function EditProfileForm() {
           color="primary"
           onClick={(e) => handleSubmit(e)}
         >
-          {saveButtonText}
+          {updatingProfileSpinner ? (
+            <CircularProgress color="white" size={20} />
+          ) : (
+            `SAVE`
+          )}
         </Button>
         <AlertMessage alert={alert} />
       </Grid>
