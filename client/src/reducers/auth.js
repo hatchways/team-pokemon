@@ -11,6 +11,10 @@ import {
   REQUEST_UPDATED,
   PHOTO_CATEGORY_UPDATED,
   AVAILABILITY_UPDATE_SUCCESS,
+  PAY_BOOKING_SUCCESS,
+  PAY_BOOKING_FAILURE,
+  CLEAR_ERRORS,
+  REQUEST_ACCEPT_ERROR,
 } from "../actions/types";
 
 export const initialState = {
@@ -33,6 +37,7 @@ export const AuthReducer = (state = initialState, action) => {
         user: payload,
         profile: payload.profile,
         loading: false,
+        errors: [],
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
@@ -42,12 +47,14 @@ export const AuthReducer = (state = initialState, action) => {
         user: payload.user,
         profile: payload.user.profile,
         loading: false,
+        errors: [],
       };
     case PROFILE_UPDATE_SUCCESS:
       return {
         ...state,
         user: payload.user,
         profile: payload.profile,
+        errors: [],
       };
     case LOGOUT_SUCCESS:
     case NOT_LOGGED_IN:
@@ -56,26 +63,31 @@ export const AuthReducer = (state = initialState, action) => {
         isAuthenticated: false,
         user: null,
         loading: false,
+        errors: [],
       };
     case BECOME_SITTER:
       return {
         ...state,
         becomeSitter: true,
+        errors: [],
       };
     case NOT_BECOME_SITTER:
       return {
         ...state,
         becomeSitter: false,
+        errors: [],
       };
     case GET_REQUEST_SUCCESS:
       return {
         ...state,
         requests: payload,
+        errors: [],
       };
     case PHOTO_CATEGORY_UPDATED:
       return {
         ...state,
         profile: payload,
+        errors: [],
       };
     case REQUEST_UPDATED:
       return {
@@ -87,12 +99,36 @@ export const AuthReducer = (state = initialState, action) => {
             return request;
           }
         }),
+        errors: [],
+      };
+    case PAY_BOOKING_SUCCESS:
+      return {
+        ...state,
+        requests: state.requests.map((request) => {
+          if (request._id === payload) {
+            return { ...request, paid: true };
+          } else {
+            return request;
+          }
+        }),
+        errors: [],
+      };
+    case PAY_BOOKING_FAILURE:
+    case REQUEST_ACCEPT_ERROR:
+      return {
+        ...state,
+        errors: [...state.errors, payload],
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        errors: [],
       };
     case AVAILABILITY_UPDATE_SUCCESS:
       return {
         ...state,
-        profile: payload
-      }
+        profile: payload,
+      };
     default:
       return state;
   }

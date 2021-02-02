@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { updateRequest } from "../../actions/requests";
 import {
   Box,
@@ -8,7 +8,12 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { AuthDispatchContext } from "../../context/AuthContext";
+import {
+  AuthDispatchContext,
+  AuthStateContext,
+} from "../../context/AuthContext";
+import Alert from "../Alert";
+import PaymentModal from "./PaymentModal";
 
 const useStyles = makeStyles((theme) => ({
   requestSpacing: {
@@ -35,35 +40,56 @@ function RequestStatus({ request, modeTime }) {
   const classes = useStyles();
   const [acceptButtonSubmitting, setAcceptButtonSubmitting] = useState(false);
   const [declineButtonSubmitting, setDeclineButtonSubmitting] = useState(false);
+  const [cards, setCards] = useState(null);
+  const [paymentModal, togglePaymentModal] = useState(false);
 
   // Get dispatch method from context
   const dispatch = useContext(AuthDispatchContext);
+  const { errors } = useContext(AuthStateContext);
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      setAcceptButtonSubmitting(false);
+    }
+  }, [errors.length]);
+
+  // Conditional variables to be used to determine which status to show on the request
+
+  const showAcceptDeclineButtons =
+    modeTime === "sitterCurrent" && !request.accepted && !request.declined;
+
+  const showPayButton =
+    modeTime === "ownerPast" && request.accepted && !request.paid;
+
+  const showAwaitingPayment =
+    modeTime === "sitterPast" && request.accepted && !request.paid;
+
+  const showPaid =
+    (modeTime === "ownerPast" || modeTime === "sitterPast") &&
+    request.accepted &&
+    request.paid;
+
+  const showPending =
+    modeTime === "ownerCurrent" && !request.accepted && !request.declined;
+
+  const showExpired =
+    (modeTime === "ownerPast" || modeTime === "sitterPast") &&
+    !request.accepted &&
+    !request.declined;
+
+  const showAccepted = request.accepted;
 
   return (
     <Box className={classes.lightGreyColor}>
-      {/* Show Accept/Decline Buttons if:
-      - User is in sitter mode,
-      - the request is current,
-      - the request hasn't been accepted or declined yet  
-      
-        Show 'Pending' Text if:
-      - User is in owner mode,
-      - the request is current,
-      - the request hasn't been accepted or declined yet
-
-        Show 'Expired' Text if:
-      - it is a past request,
-      - the request wasn't accepted or declined.
-
-        Show 'Accepted' Text if:
-      - The request was accepted
-
-        Show 'Declined' Text if:
-      - The request was declined
-      */}
-      {modeTime === "sitterCurrent" &&
-      !request.accepted &&
-      !request.declined ? (
+      {paymentModal && (
+        <PaymentModal
+          togglePaymentModal={togglePaymentModal}
+          request={request}
+          cards={cards}
+          setCards={setCards}
+        />
+      )}
+      {showAcceptDeclineButtons ? (
         <ButtonGroup>
           <Button
             variant="contained"
@@ -97,32 +123,68 @@ function RequestStatus({ request, modeTime }) {
         </ButtonGroup>
       ) : (
         [
-          modeTime === "ownerCurrent" &&
-          !request.accepted &&
-          !request.declined ? (
-            <Typography className={classes.lightGreyColor}>PENDING</Typography>
+          showPayButton ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.buttonWidth}
+              onClick={() => togglePaymentModal(true)}
+            >
+              {acceptButtonSubmitting ? (
+                <CircularProgress color="white" size={20} />
+              ) : (
+                `PAY`
+              )}
+            </Button>
           ) : (
             [
-              modeTime === "past" && !request.accepted && !request.declined ? (
+              showAwaitingPayment ? (
                 <Typography className={classes.lightGreyColor}>
-                  EXPIRED
+                  AWAITING PAYMENT
                 </Typography>
               ) : (
                 [
-                  request.accepted ? (
+                  showPaid ? (
                     <Typography className={classes.lightGreyColor}>
-                      ACCEPTED
+                      PAID
                     </Typography>
                   ) : (
-                    <Typography className={classes.lightGreyColor}>
-                      DECLINED
-                    </Typography>
+                    [
+                      showPending ? (
+                        <Typography className={classes.lightGreyColor}>
+                          PENDING
+                        </Typography>
+                      ) : (
+                        [
+                          showExpired ? (
+                            <Typography className={classes.lightGreyColor}>
+                              EXPIRED
+                            </Typography>
+                          ) : (
+                            [
+                              showAccepted ? (
+                                <Typography className={classes.lightGreyColor}>
+                                  ACCEPTED
+                                </Typography>
+                              ) : (
+                                <Typography className={classes.lightGreyColor}>
+                                  DECLINED
+                                </Typography>
+                              ),
+                            ]
+                          ),
+                        ]
+                      ),
+                    ]
                   ),
                 ]
               ),
             ]
           ),
         ]
+      )}
+      {errors.length > 0 && (
+        <Alert alert={{ error: true, message: errors[0] }} />
       )}
     </Box>
   );

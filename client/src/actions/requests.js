@@ -1,5 +1,9 @@
 import axios from "axios";
-import { GET_REQUEST_SUCCESS, REQUEST_UPDATED } from "./types";
+import {
+  GET_REQUEST_SUCCESS,
+  REQUEST_UPDATED,
+  REQUEST_ACCEPT_ERROR,
+} from "./types";
 
 // Get Requests
 export const getRequests = async (dispatch) => {
@@ -22,6 +26,10 @@ export const updateRequest = async (dispatch, payload, requestId) => {
     await axios.put(`/api/request/${requestId}`, payload, config);
     dispatch({ type: REQUEST_UPDATED, payload: { requestId, payload } });
   } catch (err) {
+    dispatch({
+      type: REQUEST_ACCEPT_ERROR,
+      payload: err.response.data.message,
+    });
     console.log(err.message);
   }
 };
