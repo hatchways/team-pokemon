@@ -32,10 +32,31 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     width: 300,
   },
+  blurbHeight: {
+    height: "2vh",
+  },
+  ratingStyles: {
+    marginBottom: "2vh",
+    height: "2vh",
+  },
+  descriptionStyles: {
+    height: "3.5vh",
+  },
+  cardFooterContainer: {
+    borderTop: "1px solid lightgrey",
+    marginTop: "5px",
+  },
+  locationContainer: {
+    margin: "5px",
+  },
+  locationIconColor: {
+    color: "#f04040",
+  },
   linkStyle: {
     textDecoration: "none",
   },
 }));
+
 function ProfileCard(props) {
   const classes = useStyles();
   //check for long descriptions and truncate it
@@ -62,11 +83,10 @@ function ProfileCard(props) {
             </Typography>
             <Typography
               gutterBottom
-              variant='body2'
-              color='textSecondary'
-              component='p'
-              className={classes.textField}
-              style={{ height: "2vh" }}
+              variant="body2"
+              color="textSecondary"
+              component="p"
+              className={classes.textField + " " + classes.blurbHeight}
             >
               Professional dog trainer.
             </Typography>
@@ -74,14 +94,13 @@ function ProfileCard(props) {
               name='read-only'
               value={props.rating}
               readOnly
-              style={{ marginBottom: "2vh", height: "2vh" }}
+              className={classes.ratingStyles}
             />
             <Typography
               gutterBottom
-              variant='body1'
-              component='p'
-              style={{ height: "3.5vh" }}
-              className={classes.textField}
+              variant="body1"
+              component="p"
+              className={classes.textField + " " + classes.descriptionStyles}
             >
               {description}
             </Typography>
@@ -89,16 +108,16 @@ function ProfileCard(props) {
           <Grid
             container
             spacing={2}
-            direction='row'
-            justify='space-around'
-            style={{ borderTop: "1px solid lightgrey", marginTop: "5px" }}
+            direction="row"
+            justify="space-around"
+            className={classes.cardFooterContainer}
           >
-            <Grid item style={{ margin: "5px" }}>
+            <Grid item className={classes.locationContainer}>
               <div className={classes.cardBottom}>
                 {props.address && (
                   <>
                     {" "}
-                    <LocationOnIcon style={{ color: "f04040" }} />
+                    <LocationOnIcon className={classes.locationIconColor} />
                     <Typography
                       gutterBottom
                       variant='body2'

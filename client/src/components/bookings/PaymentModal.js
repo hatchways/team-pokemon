@@ -142,7 +142,7 @@ function PaymentModal({ request, togglePaymentModal, cards, setCards }) {
 
   // Redirects user to payments page.
   const handlePaymentPageRedirect = () => {
-    history.push("/dashboard/payment");
+    history.push("/settings/payment");
   };
 
   // Handle payments

@@ -61,17 +61,17 @@ function DisplayWeekNames() {
       container
       item
       spacing={0}
-      direction='row'
-      alignItems='center'
-      wrap='nowrap'
-      justify='center'
+      direction="row"
+      alignItems="center"
+      wrap="nowrap"
+      justify="center"
     >
       {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName, key) => (
         <Grid
           key={key}
           item
           xs={2}
-          align='center'
+          align="center"
           className={classes.weekNames}
         >
           {dayName}
@@ -114,18 +114,18 @@ function Calendar() {
         <Grid
           container
           item
-          justify='space-between'
-          alignItems='center'
+          justify="space-between"
+          alignItems="center"
           className={classes.header}
         >
-          <Typography variant='h4' align='center'>
+          <Typography variant="h4" align="center">
             {format(currentDate, "MMM yyyy")}
           </Typography>
           <ButtonGroup
-            size='small'
-            color='primary'
-            align='center'
-            aria-label='small outlined button group'
+            size="small"
+            color="primary"
+            align="center"
+            aria-label="small outlined button group"
           >
             <Button onClick={prevMonth}>
               <ArrowLeftIcon />
@@ -133,10 +133,10 @@ function Calendar() {
             <Button onClick={nextMonth}>
               <ArrowRightIcon />
             </Button>
-            <Tooltip title='Add Availability' aria-label='add'>
+            <Tooltip title="Add Availability" aria-label="add">
               <Button
-                variant='contained'
-                color='primary'
+                variant="contained"
+                color="primary"
                 onClick={() => setOpenPopup(true)}
               >
                 <AddIcon />
@@ -144,7 +144,7 @@ function Calendar() {
             </Tooltip>
           </ButtonGroup>
         </Grid>
-        <Grid container item justify='center'>
+        <Grid container item justify="center">
           <DisplayWeekNames />
           {data.map((week, key) => (
             <Grid
@@ -152,9 +152,9 @@ function Calendar() {
               container
               item
               spacing={0}
-              direction='row'
-              wrap='nowrap'
-              justify='center'
+              direction="row"
+              wrap="nowrap"
+              justify="center"
             >
               {week.map((day, key) => (
                 <Grid
@@ -162,7 +162,7 @@ function Calendar() {
                   onClick={() => handleClick(day)}
                   item
                   xs={2}
-                  align='right'
+                  align="right"
                   className={`${screenSize()} ${dayColor(day)}`}
                 >
                   <Typography>{format(day, "d")}</Typography>

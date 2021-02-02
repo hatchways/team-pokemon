@@ -22,7 +22,7 @@ import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
 import defaultPicture from "../../img/profile-default.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuButton: { marginRight: "auto", color: "red" },
   toolbar: {
@@ -38,6 +38,19 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     marginRight: "auto",
     maxWidth: "150px",
+  },
+  avatarLink: {
+    marginRight: "auto",
+  },
+  authLinkStyling: {
+    textDecoration: "none",
+    marginRight: "30px",
+  },
+  signupLinkStyling: {
+    textDecorationColor: "black",
+  },
+  removeTextDecoration: {
+    textDecoration: "none",
   },
 }));
 
@@ -68,7 +81,7 @@ function Navbar() {
           </IconButton>
           <MobileNavbar />
         </Hidden>
-        <Link to="/profile/lists" style={{ marginRight: "auto" }}>
+        <Link to="/listings" className={classes.avatarLink}>
           <img src={logo} alt="logo" className={classes.logo} />
         </Link>
         {isAuthenticated ? (
@@ -76,8 +89,8 @@ function Navbar() {
             <Hidden smDown>
               {!profile.isSitter ? (
                 <Link
-                  to="/dashboard/editprofile"
-                  style={{ textDecoration: "none", marginRight: "30px" }}
+                  to="/settings/editprofile"
+                  className={classes.authLinkStyling}
                 >
                   <Button size="large" onClick={handleBecomeSitter}>
                     Become a Sitter
@@ -85,24 +98,18 @@ function Navbar() {
                 </Link>
               ) : null}
 
-              <Link
-                to="*"
-                style={{ textDecoration: "none", marginRight: "30px" }}
-              >
+              <Link to="*" className={classes.authLinkStyling}>
                 <Button size="large">Messages</Button>
               </Link>
             </Hidden>
             <Hidden mdUp>
-              <Link
-                to="*"
-                style={{ textDecoration: "none", marginRight: "30px" }}
-              >
+              <Link to="*" className={classes.authLinkStyling}>
                 <MailIcon color="primary" fontSize="large" />
               </Link>
             </Hidden>
             <Link
-              to="/dashboard/editprofile"
-              style={{ textDecoration: "none" }}
+              to="/settings/editprofile"
+              className={classes.removeTextDecoration}
             >
               <Avatar
                 alt="user"
@@ -117,7 +124,7 @@ function Navbar() {
         ) : (
           <Hidden smDown>
             <Box mr={4} ml={4}>
-              <Link to="/signup" style={{ textDecorationColor: "black" }}>
+              <Link to="/signup" className={classes.signupLinkStyling}>
                 <Button
                   size="large"
                   className={classes.sitterLink}
@@ -126,13 +133,13 @@ function Navbar() {
                   Become a Sitter
                 </Button>
               </Link>
-              <Link to="/login" style={{ textDecoration: "none" }}>
+              <Link to="/login" className={classes.removeTextDecoration}>
                 <Button color="primary" variant="outlined" size="large">
                   Login
                 </Button>
               </Link>
             </Box>
-            <Link to="/signup" style={{ textDecoration: "none" }}>
+            <Link to="/signup" className={classes.removeTextDecoration}>
               <Button color="primary" variant="contained" size="large">
                 Sign Up
               </Button>

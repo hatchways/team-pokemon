@@ -7,16 +7,24 @@ import AlertMessage from "./Alert";
 import { register } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   elements: {
     marginBottom: theme.spacing(2),
   },
+  gridContainer: { paddingTop: "25px" },
   text: {
     width: "300px",
     maxWidth: "100%",
+  },
+  heading: {
+    marginTop: "20px",
+    marginBottom: "5px",
+  },
+  linkColor: {
+    color: "#f04040",
   },
 }));
 
@@ -31,7 +39,7 @@ function SignupForm() {
   //state for alert message to pass into Alert.js component if form validation fails
   const [alert, setAlert] = useState({ error: false, message: "" });
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
@@ -43,7 +51,7 @@ function SignupForm() {
   const { isAuthenticated, becomeSitter } = useContext(AuthStateContext);
 
   //submitting user's credentials
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {
@@ -97,9 +105,7 @@ function SignupForm() {
   // Redirect if logged in
   if (isAuthenticated) {
     return (
-      <Redirect
-        to={becomeSitter ? "/dashboard/editprofile" : "/dashboard/profile"}
-      />
+      <Redirect to={becomeSitter ? "/settings/editprofile" : "/profile"} />
     );
   }
 
@@ -110,13 +116,10 @@ function SignupForm() {
       alignItems="center"
       direction="column"
       spacing={0}
-      style={{ paddingTop: "25px" }}
+      className={classes.gridContainer}
     >
       <Grid item className={classes.elements}>
-        <Typography
-          variant="h4"
-          style={{ marginTop: "20px", marginBottom: "5px" }}
-        >
+        <Typography variant="h4" className={classes.heading}>
           Sign Up
         </Typography>
       </Grid>
@@ -183,7 +186,7 @@ function SignupForm() {
       <Grid item className={classes.elements}>
         <Typography variant="subtitle1">
           Already a member?{" "}
-          <Link to="/login" style={{ color: "red" }}>
+          <Link to="/login" className={classes.linkColor}>
             Login
           </Link>
         </Typography>
