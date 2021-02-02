@@ -37,7 +37,11 @@ function App() {
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <PrivateRoute path="/listings" component={ProfileListings} />
-              <PrivateRoute path="/profile" exact component={Profile} />
+              <PrivateRoute
+                path="/profile/:user_id"
+                exact
+                component={Profile}
+              />
               <PrivateRoute path="/bookings" exact component={Bookings} />
               <PrivateRoute
                 path="/settings/editprofile"
