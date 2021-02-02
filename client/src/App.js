@@ -19,6 +19,7 @@ import Security from "./pages/Security";
 import Settings from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
+import SuccessAlert from "./components/SuccessAlert";
 import io from "socket.io-client";
 
 const socket = io();
@@ -36,6 +37,7 @@ function App() {
         <AuthStateContext.Provider value={state}>
           <AuthDispatchContext.Provider value={dispatch}>
             <Navbar />
+            <SuccessAlert />
             <Switch>
               <Route path='/signup' component={Signup} />
               <Route path='/login' component={Login} />

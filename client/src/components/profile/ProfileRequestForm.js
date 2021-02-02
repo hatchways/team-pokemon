@@ -1,14 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import Rating from "@material-ui/lab/Rating";
 import {
   Box,
   Button,
+  CircularProgress,
   TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { AuthStateContext } from "../../context/AuthContext";
+import {
+  AuthDispatchContext,
+  AuthStateContext,
+} from "../../context/AuthContext";
 import { createRequest } from "../../actions/request";
 
 const useStyles = makeStyles(() => ({
@@ -40,13 +44,14 @@ function ProfileRequestForm({ sitterId }) {
   const classes = useStyles();
 
   // Get dispatch method and state from auth context
-  // const dispatch = useContext(AuthDispatchContext);
-  const { user } = useContext(AuthStateContext);
+  const dispatch = useContext(AuthDispatchContext);
+  const { user, alerts } = useContext(AuthStateContext);
 
   // Today's date to be passed as the minimum and default value to the 'drop off' date picker input.
   const today = new Date();
   const todayFormatted = today.toISOString().split("T")[0];
 
+  const [requestSending, setRequestSending] = useState(false);
   const [startDate, setStartDate] = useState(todayFormatted);
   const [endDate, setEndDate] = useState(todayFormatted);
   const [startTime, setStartTime] = useState(
@@ -75,6 +80,13 @@ function ProfileRequestForm({ sitterId }) {
       .startOf("hour")
       .format(),
   });
+
+  // Changes 'Send Request' button from spinning to normal when alert pops ups
+  useEffect(() => {
+    if (alerts && alerts.length > 0) {
+      setRequestSending(false);
+    }
+  }, [alerts]);
 
   // Handle change in 'Drop Off' (start) date input
   const handleStartDateChange = (e) => {
@@ -161,8 +173,9 @@ function ProfileRequestForm({ sitterId }) {
   };
 
   const handleSubmit = (e) => {
+    setRequestSending(true);
     e.preventDefault();
-    createRequest(requestFormData);
+    createRequest(dispatch, requestFormData);
   };
 
   return (
@@ -240,7 +253,11 @@ function ProfileRequestForm({ sitterId }) {
         className={classes.buttonStyles}
         onClick={(e) => handleSubmit(e)}
       >
-        SEND REQUEST
+        {requestSending ? (
+          <CircularProgress color="white" size={20} />
+        ) : (
+          `SEND REQUEST`
+        )}
       </Button>
     </>
   );
