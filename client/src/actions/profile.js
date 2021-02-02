@@ -1,5 +1,9 @@
 import axios from "axios";
-import { PROFILE_UPDATE_SUCCESS, PHOTO_CATEGORY_UPDATED, AVAILABILITY_UPDATE_SUCCESS } from "./types";
+import {
+  PROFILE_UPDATE_SUCCESS,
+  PHOTO_CATEGORY_UPDATED,
+  AVAILABILITY_UPDATE_SUCCESS,
+} from "./types";
 import { setAlert } from "../actions/alert";
 
 // Update Profile
@@ -12,7 +16,12 @@ export const updateProfile = async (dispatch, payload, profileId) => {
     };
     const res = await axios.put(`/api/profile/${profileId}`, payload, config);
     dispatch({ type: PROFILE_UPDATE_SUCCESS, payload: res.data });
-    setAlert(dispatch, "Profile Updated!");
+
+    if (payload.availability) {
+      setAlert(dispatch, "Availability Removed");
+    } else {
+      setAlert(dispatch, "Profile Updated!");
+    }
   } catch (err) {
     console.log(err.message);
   }
@@ -38,15 +47,20 @@ export const setPhotoCategory = async (dispatch, payload, profileId) => {
 };
 //add availability
 export const addAvailability = async (dispatch, payload, profileId) => {
-  try{
+  try {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-    const res = await axios.put(`/api/profile/availability/${profileId}`, payload, config);
+    const res = await axios.put(
+      `/api/profile/availability/${profileId}`,
+      payload,
+      config
+    );
     dispatch({ type: AVAILABILITY_UPDATE_SUCCESS, payload: res.data });
-  }catch(err){
+    setAlert(dispatch, "Availability Added!");
+  } catch (err) {
     console.log(err.message);
   }
-} 
+};
