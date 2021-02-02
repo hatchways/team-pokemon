@@ -17,6 +17,7 @@ import { addMonths, format, isSameMonth, isSameDay, subMonths } from "date-fns";
 import Popup from "../availability/Popup";
 import SelectTimeForm from "../availability/SelectTimeForm";
 import DisplayAvailability from "../availability/DisplayAvailability";
+import Pricing from "../availability/Pricing";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ffffff",
     height: theme.spacing(4),
     paddingBottom: theme.spacing(2),
-    minWidth: 35,
+    minWidth: 20,
     background: theme.palette.primary.main,
   },
   daysLgScreen: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   daysSmScreen: {
     height: theme.spacing(5),
     border: "1px solid #cfd7e3",
-    minWidth: 35,
+    minWidth: 20,
   },
   notSameMonth: {
     color: "grey",
@@ -172,8 +173,12 @@ function Calendar() {
         </Grid>
       </Container>
       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
-        <SelectTimeForm selectedDate={currentDate} />
+        <SelectTimeForm
+          selectedDate={currentDate}
+          setOpenPopup={setOpenPopup}
+        />
       </Popup>
+      <Pricing />
       <DisplayAvailability />
     </React.Fragment>
   );
