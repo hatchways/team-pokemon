@@ -8,9 +8,9 @@ const Profile = require("../models/profileModel");
 //retrieve a customer by searching their email
 exports.getCustomer = async (req, res, next) => {
   try {
-    const { id, name, email } = req.body;
+    const { name, email } = req.body;
     const customerInfo = {
-      id: id,
+      id: req.user.id,
       name: name,
       email: email,
       description: "Dog sitter service customer",
@@ -22,12 +22,12 @@ exports.getCustomer = async (req, res, next) => {
 
     if (existingCustomer.data.length > 0) {
       //customer exists -> retrieve their cards
-      const cards = await stripe.customers.listSources(id, {
+      const cards = await stripe.customers.listSources(req.user.id, {
         object: "card",
         limit: 5,
       });
       //map cards to send in response
-      let customerCards = await cards.data.map(card => {
+      let customerCards = await cards.data.map((card) => {
         return {
           id: card.id,
           brand: card.brand,
@@ -79,6 +79,7 @@ exports.getCustomer = async (req, res, next) => {
       });
     }
   } catch (err) {
+    console.log(err.message);
     next(createError(500, err.message));
   }
 };
