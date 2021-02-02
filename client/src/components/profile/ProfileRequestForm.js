@@ -21,9 +21,18 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  hourlyRateHeading: {
+    fontWeight: "bold",
+    marginTop: "25px",
+    marginBottom: "15px",
+  },
+  ratingsAlignment: { paddingBottom: "25px" },
   labelStyles: {
     fontWeight: "bold",
   },
+  inputGap: { marginBottom: "20px" },
+  timeInputWidth: { width: "120px" },
+  endDateAlign: { marginBottom: "30px" },
   buttonStyles: {
     marginBottom: "25px",
     height: "50px",
@@ -31,7 +40,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function ProfileRequestForm() {
+function ProfileRequestForm({ sitterId }) {
   const classes = useStyles();
 
   // Get dispatch method and state from auth context
@@ -58,7 +67,7 @@ function ProfileRequestForm() {
       .format("HH:mm")
   );
   const [requestFormData, setRequestFormData] = useState({
-    sitterId: "600b0187e8129077501534bc",
+    sitterId: sitterId,
     ownerId: user._id,
     // Default start date is 30 minutes from now rounded up to the nearest hour
     start: moment()
@@ -171,27 +180,20 @@ function ProfileRequestForm() {
 
   return (
     <>
-      <Typography
-        variant="h4"
-        style={{
-          fontWeight: "bold",
-          marginTop: "25px",
-          marginBottom: "15px",
-        }}
-      >
+      <Typography variant="h4" className={classes.hourlyRateHeading}>
         $14/hr
       </Typography>
       <Rating
         name="simple-controlled"
         value={3}
         readOnly
-        style={{ paddingBottom: "25px" }}
+        className={classes.ratingsAlignment}
       />
       <Box>
         <Box>
           <Typography className={classes.labelStyles}>DROP OFF</Typography>
         </Box>
-        <Box style={{ marginBottom: "20px" }}>
+        <Box className={classes.inputGap}>
           <TextField
             InputProps={{
               inputProps: { min: todayFormatted },
@@ -207,9 +209,8 @@ function ProfileRequestForm() {
             }}
             type="time"
             value={startTime}
-            className={classes.textField}
             variant="outlined"
-            style={{ width: "120px" }}
+            className={classes.textField + " " + classes.timeInputWidth}
             onChange={(e) => {
               handleStartTimeChange(e);
             }}
@@ -220,7 +221,7 @@ function ProfileRequestForm() {
         <Box>
           <Typography className={classes.labelStyles}>PICK UP</Typography>
         </Box>
-        <Box style={{ marginBottom: "30px" }}>
+        <Box className={classes.endDateAlign}>
           <TextField
             InputProps={{
               inputProps: { min: startDate },
@@ -236,9 +237,8 @@ function ProfileRequestForm() {
             }}
             type="time"
             value={endTime}
-            className={classes.textField}
+            className={classes.textField + " " + classes.timeInputWidth}
             variant="outlined"
-            style={{ width: "120px" }}
             onChange={(e) => {
               handleEndTimeChange(e);
             }}

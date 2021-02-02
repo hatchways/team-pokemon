@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import axios from "axios";
 import { withRouter } from "react-router-dom";
-import { Box, Paper, makeStyles } from "@material-ui/core";
+import { Box, CircularProgress, Paper, makeStyles } from "@material-ui/core";
 import ProfileDetailCard from "../components/profile/ProfileDetailCard";
 import ProfileRequestForm from "../components/profile/ProfileRequestForm";
+import { AuthStateContext } from "../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   // General
@@ -55,23 +57,55 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: "20px",
     },
   },
+  // Loading
+  loadingSpinner: {
+    marginTop: "100px",
+  },
 }));
 
-function Profile() {
+function Profile({ match }) {
   const classes = useStyles();
+
+  // Get auth state
+  const { user, profile } = useContext(AuthStateContext);
+
+  const [profileDetails, setProfileDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user && user._id === match.params.user_id) {
+        setProfileDetails(profile);
+      } else {
+        const result = await axios.get(`/api/profile/${match.params.user_id}`);
+        setProfileDetails(result.data);
+      }
+    };
+
+    fetchProfile();
+  }, [match.params.user_id, user, profile]);
 
   return (
     <Box className={classes.container + " " + classes.responsiveAlignment}>
-      <Paper className={classes.profileBreakpoints}>
-        <ProfileDetailCard />
-      </Paper>
-
-      {/* Add check to only display the request card if the user whose profile you are visiting is a sitter */}
-      <Paper
-        className={classes.requestBreakpoints + " " + classes.centerContent}
-      >
-        <ProfileRequestForm />
-      </Paper>
+      {profileDetails ? (
+        <>
+          <Paper className={classes.profileBreakpoints}>
+            <ProfileDetailCard profileDetails={profileDetails} />
+          </Paper>
+          {profileDetails.isSitter && user._id !== match.params.user_id && (
+            <Paper
+              className={
+                classes.requestBreakpoints + " " + classes.centerContent
+              }
+            >
+              <ProfileRequestForm sitterId={match.params.user_id} />
+            </Paper>
+          )}
+        </>
+      ) : (
+        <Box>
+          <CircularProgress className={classes.loadingSpinner} />
+        </Box>
+      )}
     </Box>
   );
 }

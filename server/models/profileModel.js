@@ -62,6 +62,10 @@ const profileSchema = new mongoose.Schema({
     type: String,
   },
   photoAlbum: [{ type: String }],
+  price: {
+    type: Number,
+    default: 14.0
+  }
 });
 
 const Profile = mongoose.model("Profile", profileSchema);

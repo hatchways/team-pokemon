@@ -20,9 +20,17 @@ const useStyles = makeStyles((theme) => ({
   elements: {
     marginBottom: theme.spacing(2),
   },
+  gridContainer: { paddingTop: "25px" },
   text: {
     width: "300px",
     maxWidth: "100%",
+  },
+  heading: {
+    marginTop: "20px",
+    marginBottom: "5px",
+  },
+  linkColor: {
+    color: "#f04040",
   },
 }));
 
@@ -114,9 +122,7 @@ function SignupForm() {
   // Redirect if logged in
   if (isAuthenticated) {
     return (
-      <Redirect
-        to={becomeSitter ? "/dashboard/editprofile" : "/dashboard/profile"}
-      />
+      <Redirect to={becomeSitter ? "/settings/editprofile" : "/profile"} />
     );
   }
 
@@ -127,13 +133,10 @@ function SignupForm() {
       alignItems="center"
       direction="column"
       spacing={0}
-      style={{ paddingTop: "25px" }}
+      className={classes.gridContainer}
     >
       <Grid item className={classes.elements}>
-        <Typography
-          variant="h4"
-          style={{ marginTop: "20px", marginBottom: "5px" }}
-        >
+        <Typography variant="h4" className={classes.heading}>
           Sign Up
         </Typography>
       </Grid>
@@ -204,7 +207,7 @@ function SignupForm() {
       <Grid item className={classes.elements}>
         <Typography variant="subtitle1">
           Already a member?{" "}
-          <Link to="/login" style={{ color: "red" }}>
+          <Link to="/login" className={classes.linkColor}>
             Login
           </Link>
         </Typography>

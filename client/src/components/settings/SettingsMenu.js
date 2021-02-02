@@ -57,50 +57,50 @@ function SettingsMenu() {
         <MenuList className={classes.menuBox}>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/editprofile"
+            to="/settings/editprofile"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Edit Profile</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/photo"
+            to="/settings/photo"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Photos</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/availability"
+            to="/settings/availability"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Availability</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/payment"
+            to="/settings/payment"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Payment</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/security"
+            to="/settings/security"
             onClick={() => setMobileMenuOpen(false)}
           >
             <MenuItem className={classes.menuItem}>Security</MenuItem>
           </Link>
           <Link
             className={classes.linkStyle}
-            to="/dashboard/settings"
+            to="/settings/account"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <MenuItem className={classes.menuItem}>Settings</MenuItem>
+            <MenuItem className={classes.menuItem}>Account</MenuItem>
           </Link>
           {profile && !profile.isSitter ? (
             <Link
               className={classes.linkStyle}
-              to="/dashboard/editprofile"
+              to="/settings/editprofile"
               onClick={handleBecomeSitter}
             >
               <MenuItem className={classes.menuItem}>Become a Sitter</MenuItem>

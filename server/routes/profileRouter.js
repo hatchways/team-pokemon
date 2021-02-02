@@ -13,4 +13,5 @@ router.post("/upload/:id", profileController.upload); // upload images
 router.put("/upload/:id", profileController.setPhotoCategory); // set profile/header picture
 router.delete("/delete/:id/:photoUrl", profileController.deletePicture); // delete profile picture
 router.get("/list/:id", profileController.getProfileList); // get /profile -- returns a list of profiles
+router.put("/availability/:id", profileController.addAvailability)
 module.exports = router;
