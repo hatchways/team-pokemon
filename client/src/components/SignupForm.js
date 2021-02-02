@@ -1,13 +1,19 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { Typography, Grid, TextField, Button } from "@material-ui/core";
+import {
+  CircularProgress,
+  Typography,
+  Grid,
+  TextField,
+  Button,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AlertMessage from "./Alert";
 import { register } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -31,7 +37,10 @@ function SignupForm() {
   //state for alert message to pass into Alert.js component if form validation fails
   const [alert, setAlert] = useState({ error: false, message: "" });
 
-  const handleInputChange = e => {
+  // state for showing spinner on register button when user clicks on it
+  const [registering, setRegistering] = useState(false);
+
+  const handleInputChange = (e) => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
@@ -43,19 +52,24 @@ function SignupForm() {
   const { isAuthenticated, becomeSitter } = useContext(AuthStateContext);
 
   //submitting user's credentials
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
+    setRegistering(true);
     e.preventDefault();
     //validating user input fields before submit
     if (credentials.email.length < 1 || !credentials.email) {
+      setRegistering(false);
       setAlert({ error: true, message: "Please fill up email field" });
       return;
     } else if (credentials.email.match(/\S+@\S+\.\S+/) == null) {
+      setRegistering(false);
       setAlert({ error: true, message: "Invalid email address" });
       return;
     } else if (credentials.firstName.length < 1 || !credentials.firstName) {
+      setRegistering(false);
       setAlert({ error: true, message: "Please fill up First Name field" });
       return;
     } else if (credentials.lastName.length < 1 || !credentials.lastName) {
+      setRegistering(false);
       setAlert({ error: true, message: "Please fill up Last Name field" });
       return;
     } else if (
@@ -63,6 +77,7 @@ function SignupForm() {
         null ||
       credentials.lastName.match(/^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/) == null
     ) {
+      setRegistering(false);
       setAlert({
         error: true,
         message:
@@ -70,6 +85,7 @@ function SignupForm() {
       });
       return;
     } else if (credentials.password.length < 6) {
+      setRegistering(false);
       setAlert({
         error: true,
         message: "Password has to be at least 6 characters",
@@ -82,6 +98,7 @@ function SignupForm() {
     const res = async () => {
       let resp = await register(dispatch, credentials);
       if (resp !== undefined && resp.response) {
+        setRegistering(false);
         setAlert({
           error: true,
           message: resp.response.data.error.message,
@@ -176,7 +193,11 @@ function SignupForm() {
           color="primary"
           onClick={handleSubmit}
         >
-          Sign Up
+          {registering ? (
+            <CircularProgress color="white" size={20} />
+          ) : (
+            `REGISTER`
+          )}
         </Button>
         <AlertMessage alert={alert} />
       </Grid>
