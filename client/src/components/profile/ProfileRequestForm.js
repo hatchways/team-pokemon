@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function ProfileRequestForm() {
+function ProfileRequestForm({ sitterId }) {
   const classes = useStyles();
 
   // Get dispatch method and state from auth context
@@ -62,7 +62,7 @@ function ProfileRequestForm() {
       .format("HH:mm")
   );
   const [requestFormData, setRequestFormData] = useState({
-    sitterId: "600b0187e8129077501534bc",
+    sitterId: sitterId,
     ownerId: user._id,
     // Default start date is 30 minutes from now rounded up to the nearest hour
     start: moment()
@@ -196,8 +196,8 @@ function ProfileRequestForm() {
             }}
             type="time"
             value={startTime}
-            className={classes.textField + " " + classes.timeInputWidth}
             variant="outlined"
+            className={classes.textField + " " + classes.timeInputWidth}
             onChange={(e) => {
               handleStartTimeChange(e);
             }}

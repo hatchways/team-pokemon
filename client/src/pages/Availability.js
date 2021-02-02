@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
 import SettingsMenu from "../components/settings/SettingsMenu";
+import Calendar from "../components/settings/Calendar";
 
 const useStyles = makeStyles((theme) => ({
   boxContainer: { paddingTop: "90px", minHeight: "100vh" },
@@ -41,6 +42,7 @@ function Availability() {
           className={classes.centerPaper + " " + classes.breakpoints}
         >
           {/* Your Component Goes Here */}
+          <Calendar />
         </Paper>
       </Box>
     </Box>

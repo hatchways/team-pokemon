@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Avatar,
@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
   locationIconColor: {
     color: "#f04040",
   },
+  linkStyle: {
+    textDecoration: "none",
+  },
 }));
 
 function ProfileCard(props) {
@@ -63,73 +66,79 @@ function ProfileCard(props) {
   }
   return (
     <Grid item align="center" className={classes.cardContainer}>
-      <Card align="center" elevation={3}>
-        <Avatar
-          alt="Avatar"
-          src={props.profilePicture}
-          className={classes.large}
-        />
-        <CardContent>
-          <Typography variant="h5" component="h5" className={classes.textField}>
-            {props.firstName} {props.lastName}
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            className={classes.textField + " " + classes.blurbHeight}
-          >
-            Professional dog trainer.
-          </Typography>
-          <Rating
-            name="read-only"
-            value={props.rating}
-            readOnly
-            className={classes.ratingStyles}
+      <Link to={`/profile/${props.userId}`} className={classes.linkStyle}>
+        <Card align="center" elevation={3}>
+          <Avatar
+            alt="Avatar"
+            src={props.profilePicture}
+            className={classes.large}
           />
-          <Typography
-            gutterBottom
-            variant="body1"
-            component="p"
-            className={classes.textField + " " + classes.descriptionStyles}
-          >
-            {description}
-          </Typography>
-        </CardContent>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
-          justify="space-around"
-          className={classes.cardFooterContainer}
-        >
-          <Grid item className={classes.locationContainer}>
-            <div className={classes.cardBottom}>
-              <LocationOnIcon className={classes.locationIconColor} />
-              <Typography
-                gutterBottom
-                variant="body2"
-                color="textSecondary"
-                component="p"
-                className={classes.textField}
-              >
-                Toronto, Ontario
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item>
+          <CardContent>
+            <Typography
+              variant="h5"
+              component="h5"
+              className={classes.textField}
+            >
+              {props.firstName} {props.lastName}
+            </Typography>
+            <Typography
+              gutterBottom
+              variant="body2"
+              color="textSecondary"
+              component="p"
+              className={classes.textField + " " + classes.blurbHeight}
+            >
+              Professional dog trainer.
+            </Typography>
+            <Rating
+              name="read-only"
+              value={props.rating}
+              readOnly
+              className={classes.ratingStyles}
+            />
             <Typography
               gutterBottom
               variant="body1"
               component="p"
-              className={classes.textField}
+              className={classes.textField + " " + classes.descriptionStyles}
             >
-              $14/hr
+              {description}
             </Typography>
+          </CardContent>
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justify="space-around"
+            className={classes.cardFooterContainer}
+          >
+            <Grid item className={classes.locationContainer}>
+              <div className={classes.cardBottom}>
+                <LocationOnIcon className={classes.locationIconColor} />
+                <Typography
+                  gutterBottom
+                  variant="body1"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.textField}
+                >
+                  $14/hr
+                </Typography>
+              </div>
+            </Grid>
+            <Grid item>
+              <Typography
+                gutterBottom
+                variant="body1"
+                component="p"
+                className={classes.textField}
+              >
+                $14/hr
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
-      </Card>
+        </Card>
+      </Link>
     </Grid>
   );
 }

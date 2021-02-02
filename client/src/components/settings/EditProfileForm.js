@@ -15,7 +15,6 @@ import {
   AuthDispatchContext,
   AuthStateContext,
 } from "../../context/AuthContext";
-import { NOT_BECOME_SITTER } from "../../actions/types";
 import { updateProfile } from "../../actions/profile";
 
 const useStyles = makeStyles(() => ({
@@ -45,13 +44,7 @@ function EditProfileForm() {
 
   // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
-  const { user, profile, becomeSitter } = useContext(AuthStateContext);
-
-  useEffect(() => {
-    return () => {
-      dispatch({ type: NOT_BECOME_SITTER });
-    };
-  }, [becomeSitter]);
+  const { user, profile } = useContext(AuthStateContext);
 
   // Edit profile form's state
   const [profileData, setProfileData] = useState({
@@ -85,11 +78,7 @@ function EditProfileForm() {
       setBirthMonth(parseInt(profile.birthDate.slice(5, 7)) - 1);
     profile.birthDate && setBirthDay(parseInt(profile.birthDate.slice(8)));
     setProfileData({
-      isSitter: profile.isSitter
-        ? profile.isSitter
-        : becomeSitter
-        ? true
-        : false,
+      isSitter: profile.isSitter ? profile.isSitter : false,
       firstName: profile.firstName ? profile.firstName : "",
       lastName: profile.lastName ? profile.lastName : "",
       gender: profile.gender ? profile.gender : "",
@@ -215,21 +204,7 @@ function EditProfileForm() {
     // Validation passed
     updateProfile(dispatch, profileData, profile._id);
     setSaveButtonText("SAVED");
-    dispatch({ type: NOT_BECOME_SITTER });
   };
-
-  const handleSwitch = (e) => {
-    if (!e.target.checked) {
-      dispatch({ type: NOT_BECOME_SITTER });
-    }
-    setSaveButtonText("SAVE");
-    setProfileData({
-      ...profileData,
-      [e.target.name]: e.target.checked,
-    });
-    setAlert({ error: false, message: "" });
-  };
-
   return (
     <Grid container spacing={3} className={classes.formContainer}>
       <Grid item xs={12}>
@@ -250,7 +225,14 @@ function EditProfileForm() {
           color="primary"
           name="isSitter"
           checked={isSitter}
-          onChange={(e) => handleSwitch(e)}
+          onChange={(e) => {
+            setSaveButtonText("SAVE");
+            setProfileData({
+              ...profileData,
+              [e.target.name]: e.target.checked,
+            });
+            setAlert({ error: false, message: "" });
+          }}
         />
       </Grid>
       <Grid item xs={12} sm={3} className={classes.vertAlign}>
