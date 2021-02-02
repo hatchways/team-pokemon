@@ -74,6 +74,7 @@ function ProfileListings() {
         profilePicture={sitter.profile.profilePicture}
         address={sitter.profile.address}
         rating={4}
+        price={sitter.profile.price}
         description={sitter.profile.description}
         userId={sitter._id}
       />
@@ -82,18 +83,18 @@ function ProfileListings() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Grid container direction="column" justify="center" alignItems="center">
+      <Grid container direction='column' justify='center' alignItems='center'>
         <Grid item>
           <SearchAndFilter />
         </Grid>
         <Grid item>
           <Grid
             container
-            direction="row"
+            direction='row'
             spacing={3}
-            align="center"
-            justify="center"
-            alignItems="center"
+            align='center'
+            justify='center'
+            alignItems='center'
             className={classes.gridContainer}
           >
             {content}

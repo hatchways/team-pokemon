@@ -44,42 +44,42 @@ function ProfileCard(props) {
     description = description.substring(0, 67) + "...";
   }
   return (
-    <Grid item align="center" className={classes.cardContainer}>
+    <Grid item align='center' className={classes.cardContainer}>
       <Link to={`/profile/${props.userId}`} className={classes.linkStyle}>
-        <Card align="center" elevation={3}>
+        <Card align='center' elevation={3}>
           <Avatar
-            alt="Avatar"
+            alt='Avatar'
             src={props.profilePicture}
             className={classes.large}
           />
           <CardContent>
             <Typography
-              variant="h5"
-              component="h5"
+              variant='h5'
+              component='h5'
               className={classes.textField}
             >
               {props.firstName} {props.lastName}
             </Typography>
             <Typography
               gutterBottom
-              variant="body2"
-              color="textSecondary"
-              component="p"
+              variant='body2'
+              color='textSecondary'
+              component='p'
               className={classes.textField}
               style={{ height: "2vh" }}
             >
               Professional dog trainer.
             </Typography>
             <Rating
-              name="read-only"
+              name='read-only'
               value={props.rating}
               readOnly
               style={{ marginBottom: "2vh", height: "2vh" }}
             />
             <Typography
               gutterBottom
-              variant="body1"
-              component="p"
+              variant='body1'
+              component='p'
               style={{ height: "3.5vh" }}
               className={classes.textField}
             >
@@ -89,8 +89,8 @@ function ProfileCard(props) {
           <Grid
             container
             spacing={2}
-            direction="row"
-            justify="space-around"
+            direction='row'
+            justify='space-around'
             style={{ borderTop: "1px solid lightgrey", marginTop: "5px" }}
           >
             <Grid item style={{ margin: "5px" }}>
@@ -101,9 +101,9 @@ function ProfileCard(props) {
                     <LocationOnIcon style={{ color: "f04040" }} />
                     <Typography
                       gutterBottom
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
+                      variant='body2'
+                      color='textSecondary'
+                      component='p'
                       className={classes.textField}
                     >
                       {props.address}
@@ -115,11 +115,11 @@ function ProfileCard(props) {
             <Grid item>
               <Typography
                 gutterBottom
-                variant="body1"
-                component="p"
+                variant='body1'
+                component='p'
                 className={classes.textField}
               >
-                $14/hr
+                ${props.price}/hr
               </Typography>
             </Grid>
           </Grid>
