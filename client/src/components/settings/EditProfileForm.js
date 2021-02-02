@@ -23,9 +23,15 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     justifyContent: "center",
   },
+  formContainer: { width: "80%", paddingTop: "30px" },
+  heading: { fontWeight: "bold", marginBottom: "20px" },
   labelStyles: {
     fontWeight: "bold",
   },
+  genderInput: { width: "50%" },
+  birthDateContainer: { display: "flex", justifyContent: "space-between" },
+  birthDateInput: { width: "30%" },
+  saveButton: { height: "60px", width: "30%", margin: "25px 0" },
 }));
 
 function EditProfileForm() {
@@ -200,13 +206,9 @@ function EditProfileForm() {
     setSaveButtonText("SAVED");
   };
   return (
-    <Grid container spacing={3} style={{ width: "80%", paddingTop: "30px" }}>
+    <Grid container spacing={3} className={classes.formContainer}>
       <Grid item xs={12}>
-        <Typography
-          variant="h4"
-          align="center"
-          style={{ fontWeight: "bold", marginBottom: "20px" }}
-        >
+        <Typography variant="h4" align="center" className={classes.heading}>
           Edit Profile
         </Typography>
       </Grid>
@@ -286,7 +288,7 @@ function EditProfileForm() {
           name="gender"
           value={gender ? gender : ""}
           onChange={(e) => onChange(e)}
-          style={{ width: "50%" }}
+          className={classes.genderInput}
         >
           <MenuItem value="Male">Male</MenuItem>
           <MenuItem value="Female">Female</MenuItem>
@@ -300,12 +302,7 @@ function EditProfileForm() {
           BIRTH DATE
         </Typography>
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={9}
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
+      <Grid item xs={12} sm={9} className={classes.birthDateContainer}>
         <TextField
           select
           variant="outlined"
@@ -315,7 +312,7 @@ function EditProfileForm() {
             handleBirthDateChange(e);
           }}
           value={birthMonth}
-          style={{ width: "30%" }}
+          className={classes.birthDateInput}
         >
           {monthMenuItem}
         </TextField>
@@ -326,7 +323,7 @@ function EditProfileForm() {
           label="Day"
           onChange={(e) => handleBirthDateChange(e)}
           value={birthDay}
-          style={{ width: "30%" }}
+          className={classes.birthDateInput}
         >
           {dayMenuItem}
         </TextField>
@@ -337,7 +334,7 @@ function EditProfileForm() {
           label="Year"
           onChange={(e) => handleBirthDateChange(e)}
           value={birthYear}
-          style={{ width: "30%" }}
+          className={classes.birthDateInput}
         >
           {yearMenuItem}
         </TextField>
@@ -421,11 +418,7 @@ function EditProfileForm() {
       <Grid item xs={12} sm={12} align="center">
         <Button
           disabled={!firstName || !lastName || !email}
-          style={{
-            height: "60px",
-            width: "30%",
-            margin: "25px 0",
-          }}
+          className={classes.saveButton}
           type="submit"
           variant="contained"
           size="large"

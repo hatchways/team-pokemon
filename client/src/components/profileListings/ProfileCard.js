@@ -32,10 +32,31 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     width: 300,
   },
+  blurbHeight: {
+    height: "2vh",
+  },
+  ratingStyles: {
+    marginBottom: "2vh",
+    height: "2vh",
+  },
+  descriptionStyles: {
+    height: "3.5vh",
+  },
+  cardFooterContainer: {
+    borderTop: "1px solid lightgrey",
+    marginTop: "5px",
+  },
+  locationContainer: {
+    margin: "5px",
+  },
+  locationIconColor: {
+    color: "#f04040",
+  },
   linkStyle: {
     textDecoration: "none",
   },
 }));
+
 function ProfileCard(props) {
   const classes = useStyles();
   //check for long descriptions and truncate it
@@ -44,18 +65,18 @@ function ProfileCard(props) {
     description = description.substring(0, 67) + "...";
   }
   return (
-    <Grid item align="center" className={classes.cardContainer}>
+    <Grid item align='center' className={classes.cardContainer}>
       <Link to={`/profile/${props.userId}`} className={classes.linkStyle}>
-        <Card align="center" elevation={3}>
+        <Card align='center' elevation={3}>
           <Avatar
-            alt="Avatar"
+            alt='Avatar'
             src={props.profilePicture}
             className={classes.large}
           />
           <CardContent>
             <Typography
-              variant="h5"
-              component="h5"
+              variant='h5'
+              component='h5'
               className={classes.textField}
             >
               {props.firstName} {props.lastName}
@@ -65,23 +86,21 @@ function ProfileCard(props) {
               variant="body2"
               color="textSecondary"
               component="p"
-              className={classes.textField}
-              style={{ height: "2vh" }}
+              className={classes.textField + " " + classes.blurbHeight}
             >
               Professional dog trainer.
             </Typography>
             <Rating
-              name="read-only"
+              name='read-only'
               value={props.rating}
               readOnly
-              style={{ marginBottom: "2vh", height: "2vh" }}
+              className={classes.ratingStyles}
             />
             <Typography
               gutterBottom
               variant="body1"
               component="p"
-              style={{ height: "3.5vh" }}
-              className={classes.textField}
+              className={classes.textField + " " + classes.descriptionStyles}
             >
               {description}
             </Typography>
@@ -91,19 +110,19 @@ function ProfileCard(props) {
             spacing={2}
             direction="row"
             justify="space-around"
-            style={{ borderTop: "1px solid lightgrey", marginTop: "5px" }}
+            className={classes.cardFooterContainer}
           >
-            <Grid item style={{ margin: "5px" }}>
+            <Grid item className={classes.locationContainer}>
               <div className={classes.cardBottom}>
                 {props.address && (
                   <>
                     {" "}
-                    <LocationOnIcon style={{ color: "f04040" }} />
+                    <LocationOnIcon className={classes.locationIconColor} />
                     <Typography
                       gutterBottom
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
+                      variant='body2'
+                      color='textSecondary'
+                      component='p'
                       className={classes.textField}
                     >
                       {props.address}
@@ -115,11 +134,11 @@ function ProfileCard(props) {
             <Grid item>
               <Typography
                 gutterBottom
-                variant="body1"
-                component="p"
+                variant='body1'
+                component='p'
                 className={classes.textField}
               >
-                $14/hr
+                ${props.price}/hr
               </Typography>
             </Grid>
           </Grid>

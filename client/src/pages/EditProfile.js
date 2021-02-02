@@ -1,9 +1,13 @@
 import React from "react";
 import { Box, Paper, makeStyles } from "@material-ui/core";
-import EditProfileForm from "../components/dashboard/EditProfileForm";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
+import EditProfileForm from "../components/settings/EditProfileForm";
+import SettingsMenu from "../components/settings/SettingsMenu";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
+  boxContainer: {
+    paddingTop: "90px",
+    minHeight: "100vh",
+  },
   centerPaper: {
     display: "flex",
     flexDirection: "column",
@@ -41,12 +45,7 @@ function EditProfile() {
   const classes = useStyles();
 
   return (
-    <Box
-      display="flex"
-      flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "100vh" }}
-      bgcolor="grey"
-    >
+    <Box className={classes.boxContainer} display="flex" flexWrap="nowrap" bgcolor="grey">
       <Box className={classes.hideMenu}>
         <SettingsMenu />
       </Box>

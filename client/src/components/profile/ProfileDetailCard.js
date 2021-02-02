@@ -10,11 +10,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center",
   },
-  headerImage: {
-    width: "100%",
-    height: "300px",
-    objectFit: "cover",
-  },
+  headerImage: { width: "100%", height: "300px", objectFit: "cover" },
   avatar: {
     height: "150px",
     width: "150px",
@@ -35,22 +31,10 @@ const useStyles = makeStyles(() => ({
     color: "grey",
     marginBottom: "50px",
   },
-  locationIcon: {
-    marginRight: "10px",
-  },
-  aboutMeContainer: {
-    width: "90%",
-    marginBottom: "30px",
-  },
-  aboutMeHeading: {
-    marginBottom: "20px",
-    fontWeight: "bold",
-  },
-  userImagesContainer: {
-    flexWrap: "wrap",
-    width: "90%",
-    marginBottom: "40px",
-  },
+  locationIcon: { marginRight: "10px" },
+  aboutMeContainer: { width: "90%", marginBottom: "30px" },
+  aboutMeHeading: { marginBottom: "20px", fontWeight: "bold" },
+  userImagesContainer: { flexWrap: "wrap", width: "90%", marginBottom: "40px" },
   userImages: {
     marginTop: "10px",
     marginRight: "10px",

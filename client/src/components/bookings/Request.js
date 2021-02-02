@@ -50,21 +50,26 @@ const useStyles = makeStyles((theme) => ({
   requestBodyContainerBreakpoint: {
     [theme.breakpoints.down("xs")]: {
       display: "flex",
+      flexDirection: "column",
       justifyContent: "space-around",
     },
   },
   requestBodyGap: {
     marginRight: "15px",
   },
+  requestBodyGapBreakpoint: {
+    [theme.breakpoints.down("xs")]: {
+      marginRight: "0",
+    },
+  },
   alignVert: {
     display: "flex",
     alignItems: "center",
   },
-  avatarNameBreakpoint: {
+  alignVertBreakpoint: {
     [theme.breakpoints.down("xs")]: {
       display: "flex",
       flexDirection: "column",
-      alignItems: "flex-start",
     },
   },
   nameStyle: {
@@ -154,11 +159,17 @@ function Request({ request, modeTime, sitterMode }) {
             {sitterMode ? (
               <Box
                 className={
-                  classes.alignVert + " " + classes.avatarNameBreakpoint
+                  classes.alignVert + " " + classes.alignVertBreakpoint
                 }
               >
                 <Avatar
-                  className={classes.avatarSize + " " + classes.requestBodyGap}
+                  className={
+                    classes.avatarSize +
+                    " " +
+                    classes.requestBodyGap +
+                    " " +
+                    classes.requestBodyGapBreakpoint
+                  }
                   alt="user"
                   src={
                     request.ownerId.profile.profilePicture
@@ -174,9 +185,19 @@ function Request({ request, modeTime, sitterMode }) {
                 >{`${request.ownerId.profile.firstName} ${request.ownerId.profile.lastName}`}</Typography>
               </Box>
             ) : (
-              <Box className={classes.alignVert}>
+              <Box
+                className={
+                  classes.alignVert + " " + classes.alignVertBreakpoint
+                }
+              >
                 <Avatar
-                  className={classes.avatarSize + " " + classes.requestBodyGap}
+                  className={
+                    classes.avatarSize +
+                    " " +
+                    classes.requestBodyGap +
+                    " " +
+                    classes.requestBodyGapBreakpoint
+                  }
                   alt="user"
                   src={
                     request.sitterId.profile.profilePicture
