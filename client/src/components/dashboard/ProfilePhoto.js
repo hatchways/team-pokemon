@@ -190,7 +190,7 @@ function ProfilePhoto() {
       </Grid>
       <Grid item className={classes.mainPicturePositioning}>
         <CardMedia
-          image={profile && profile.headerPicture ? profile.headerPicture : ""}
+          image={profile && profile.headerPicture && profile.headerPicture}
           className={classes.headerPicture}
         />
         <Avatar

@@ -54,6 +54,10 @@ const profileSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
+  availability: [{
+    start: Date,
+    end: Date
+  }],
   headerPicture: {
     type: String,
   },
