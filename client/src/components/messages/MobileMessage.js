@@ -142,7 +142,10 @@ function MobileMessage() {
       open={mobileMessageView}
       fullScreen
       TransitionComponent={Transition}
-      onEnter={getMessageHistory}
+      onEnter={() => {
+        setMessageHistory();
+        getMessageHistory();
+      }}
     >
       {chatUserData ? (
         <Grid container direction="column" className={classes.messagesBox}>

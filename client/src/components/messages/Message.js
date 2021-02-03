@@ -78,8 +78,10 @@ const useStyles = makeStyles(theme => ({
   sendButton: {
     margin: "auto",
   },
+  chooseHintBox: {
+    height: "100%",
+  },
   chooseHint: {
-    marginTop: "48%",
     color: "gray",
   },
   loading: {
@@ -193,7 +195,12 @@ function Message() {
           </Grid>
         </Grid>
       ) : (
-        <Grid container justify="center">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          className={classes.chooseHintBox}
+        >
           <Typography variant="h6" className={classes.chooseHint}>
             Choose dialogue from the list...
           </Typography>
