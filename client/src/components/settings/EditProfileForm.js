@@ -72,9 +72,6 @@ function EditProfileForm() {
     description,
   } = profileData;
 
-  console.log("Birthday from backend: ", profile.birthDate);
-  console.log("Birthday from formData: ", profileData.birthDate);
-
   // Populate form fields with data from back end
   useEffect(() => {
     profile.birthDate && setBirthYear(parseInt(profile.birthDate.slice(0, 4)));

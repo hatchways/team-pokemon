@@ -27,6 +27,7 @@ import defaultPicture from "../../img/profile-default.png";
 import { getUser } from "../../actions/auth";
 import { setPhotoCategory } from "../../actions/profile";
 
+
 const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   dropzone: {
@@ -130,6 +131,7 @@ function ProfilePhoto() {
   const aboveSm = useMediaQuery("(min-width:600px)");
 
   // picture chosen
+
   const onDrop = useCallback(async (acceptedFiles) => {
     setLoading(true);
     const url = `/api/profile/upload/${profile._id}`;
@@ -163,6 +165,7 @@ function ProfilePhoto() {
   };
 
   // Set profile/header photo
+
   const handleSetAsProfilePhoto = (category) => {
     const payload = {
       photoUrl: selectedPhoto,
