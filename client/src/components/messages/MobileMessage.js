@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   Grid,
   makeStyles,
@@ -111,6 +111,7 @@ function MobileMessage() {
   );
   const [messageHistory, setMessageHistory] = useState();
   const [messageContent, setMessageContent] = useState("");
+  const lastMessageRef = useRef(null);
   const classes = useStyles();
 
   useEffect(() => {
@@ -125,15 +126,15 @@ function MobileMessage() {
       chatId: chatUserData.chatId,
     });
     setMessageHistory(resp.data.messages);
+    lastMessageRef.current?.scrollIntoView();
   };
 
   const sendMessage = async e => {
     e.preventDefault();
-    let resp = await axios.post("/api/chat/message", {
+    await axios.post("/api/chat/message", {
       content: messageContent,
       chatId: chatUserData.chatId,
     });
-    console.log(resp);
   };
 
   return (
@@ -141,6 +142,7 @@ function MobileMessage() {
       open={mobileMessageView}
       fullScreen
       TransitionComponent={Transition}
+      onEnter={getMessageHistory}
     >
       {chatUserData ? (
         <Grid container direction="column" className={classes.messagesBox}>
@@ -168,7 +170,15 @@ function MobileMessage() {
             {messageHistory ? (
               messageHistory.map((message, index) => {
                 return (
-                  <Box className={classes.theirMessageWrapper} key={index}>
+                  <Box
+                    className={classes.theirMessageWrapper}
+                    key={index}
+                    ref={
+                      index === messageHistory.length - 1
+                        ? lastMessageRef
+                        : null
+                    }
+                  >
                     {chatUserData.userId === message.sender ? (
                       <Avatar
                         src={chatUserData.picture || defaultPicture}

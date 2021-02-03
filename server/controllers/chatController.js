@@ -6,115 +6,39 @@ const Message = require("../models/messageModel");
 const Profile = require("../models/profileModel");
 const User = require("../models/userModel");
 
-// exports.createChat = async (req, res) => {
-//   //Checking if chat exists
-//   Chat.findOne(
-//     {
-//       //CHANGE SITTER AND OWNER
-//       participants: { sitter: "60130ed95608d677a482c9d5", owner: req.user.id }, //!order has to match model (sitter first, owner second)
-//     },
-//     async (err, chat) => {
-//       if (err) console.log(err);
-//       if (chat) {
-//         return console.log("CHAT EXISTS");
-//       }
-//       if (!chat) {
-//         console.log("CREATE A CHAT");
-//         const newMessage = new Message({
-//           time_created: new Date(),
-//         });
-//         await newMessage.save();
-
-//         let newChat = new Chat({
-//           participants: {
-//             sitter: "60130ed95608d677a482c9d5", //CHANGE SITTER HERE
-//             owner: req.user.id, //CHANGE OWNER HERE
-//           },
-//           messages: newMessage,
-//         });
-//         newChat.save();
-//         console.log(newChat);
-//       }
-//     }
-//   );
-// };
-
-// //THIS IS RATHER A SEND MESSAGE (THAN openChat)
-// exports.openChat = async (req, res) => {
-//   console.log(req.body);
-//   console.log(req.user.id);
-//   let chat = await Chat.findOne({
-//     //CHANGE SITTER AND OWNER
-//     participants: { sitter: "60130ed95608d677a482c9d5", owner: req.user.id },
-//   });
-//   //console.log(chat.messages);
-//   Message.findById(chat.messages, async (err, msg) => {
-//     if (err) console.log(err);
-//     msg.messages.push({
-//       content: req.body.content,
-//       sender: req.body.sender,
-//       wasRead: false,
-//       time_created: new Date(),
-//       chatId: chat._id,
-//     });
-//     await msg.save();
-//     console.log(msg);
-//   });
-// };
-// //Based on SocketIO events - change state of message from unread to read
-// exports.messageRead = async (req, res) => {
-//   let chat = await Chat.findOne({
-//     //CHANGE SITTER AND OWNER
-//     participants: { sitter: "60130ed95608d677a482c9d5", owner: req.user.id },
-//   });
-//   Message.findById(chat.messages, async (err, msg) => {
-//     if (err) console.log(err);
-//     //msg is an array of messages
-
-//     //msg.map (sender!=req.user.id  and  wasRead==false  and  whatever we are reflecting, lets say only 20 messages )
-//     //on scroll up - another 20 messages should download
-
-//     // msg.messages.push({
-//     //   content: req.body.content,
-//     //   sender: req.body.sender,
-//     //   wasRead: false,
-//     //   time_created: new Date(),
-//     //   chatId: chat._id,
-//     // });
-//     // await msg.save();
-//     // console.log(msg);
-//   });
-// };
-
 exports.createChat = async (req, res, next) => {
-  Chat.findOne(
-    {
-      participants: ["601851731532dd4f585fced2", req.user.id], //1st PARTICIPANT - should come form body.req!!
-    },
-    async (err, chat) => {
-      if (err) console.log(err);
-      if (chat) {
-        return;
-      }
-      if (!chat) {
-        const newMessage = new Message({
-          timeCreated: moment(),
-        });
-        await newMessage.save();
+  try {
+    await Chat.findOne(
+      {
+        participants: ["601851731532dd4f585fced2", req.user.id], //1st PARTICIPANT - should come form body.req!!
+      },
+      async (err, chat) => {
+        if (err) console.log(err);
+        if (chat) {
+          return;
+        }
+        if (!chat) {
+          const newMessage = new Message({
+            timeCreated: moment(),
+          });
+          await newMessage.save();
 
-        let newChat = new Chat({
-          participants: ["601851731532dd4f585fced2", req.user.id], //1st PARTICIPANT - should come form body.req!!
-          messages: newMessage,
-        });
-        newChat.save();
+          let newChat = new Chat({
+            participants: ["601851731532dd4f585fced2", req.user.id], //1st PARTICIPANT - should come form body.req!!
+            messages: newMessage,
+          });
+          newChat.save();
+        }
       }
-    }
-  );
+    );
+  } catch (err) {
+    next(createError(500, err.message));
+  }
 };
-//router.get /chat
+
 exports.getChats = async (req, res, next) => {
-  //We first look for all chats where req.user.id is listed; We then find other party's profile info (name, picture)
-  //Next, we check their conversation's last message and finally combine all the pieces of data together
+  //Look for all chats with req.user.id; Find other party's profile; Check conversation's last message; Combine all together;
+
   //Retrieve all chats were user is listed as participant
   try {
     await Chat.find(
@@ -205,7 +129,6 @@ exports.getChats = async (req, res, next) => {
         //Bring all the data together and create array of objects
         let conversations = profilesData.map(item => {
           return {
-            // chatId: ,
             firstName: item._id.firstName,
             lastName: item._id.lastName,
             picture: item._id.picture,
@@ -257,28 +180,29 @@ exports.getChats = async (req, res, next) => {
   }
 };
 
-//Send a message
 exports.sendMessage = async (req, res, next) => {
-  const { content, chatId } = req.body;
-  const sender = req.user.id;
-  await Chat.findById(chatId, async (err, chat) => {
-    if (err) console.log(err);
-    console.log(chat);
-    messageId = chat.messages;
-    Message.findById(messageId, (err, messages) => {
+  try {
+    const { content, chatId } = req.body;
+    const sender = req.user.id;
+    await Chat.findById(chatId, async (err, chat) => {
       if (err) console.log(err);
-      messages.messages.push({
-        sender: sender,
-        content: content,
-        timeCreated: moment().format(),
-        wasRead: false,
-        chatId: chat._id,
+      messageId = chat.messages;
+      Message.findById(messageId, (err, messages) => {
+        if (err) console.log(err);
+        messages.messages.push({
+          sender: sender,
+          content: content,
+          timeCreated: moment().format(),
+          wasRead: false,
+          chatId: chat._id,
+        });
+        messages.save();
+        res.json({ error: false, message: "Message was delivered" });
       });
-      messages.save();
-      console.log(messages);
-      res.json({ error: false, message: "Message was delivered" });
     });
-  });
+  } catch (err) {
+    next(createError(500, err.message));
+  }
 };
 
 exports.historyOfMessages = async (req, res, next) => {

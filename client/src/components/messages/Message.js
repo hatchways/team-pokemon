@@ -96,34 +96,29 @@ function Message() {
   const [messageHistory, setMessageHistory] = useState();
   const [messageContent, setMessageContent] = useState("");
   const classes = useStyles();
-  // const boxRef = useRef(1);
+  const lastMessageRef = useRef(null);
 
   useEffect(() => {
     chatUserData && getMessageHistory();
-    //chatUserData && scrollToBottom();
     return () => {
       setMessageHistory();
     };
   }, [chatUserData]);
-
-  // const scrollToBottom = () => {
-  //   boxRef.current.scrollIntoView({ behavior: "smooth" });
-  // };
 
   const getMessageHistory = async () => {
     let resp = await axios.post("/api/chat/history", {
       chatId: chatUserData.chatId,
     });
     setMessageHistory(resp.data.messages);
+    lastMessageRef.current?.scrollIntoView();
   };
 
   const sendMessage = async e => {
     e.preventDefault();
-    let resp = await axios.post("/api/chat/message", {
+    await axios.post("/api/chat/message", {
       content: messageContent,
       chatId: chatUserData.chatId,
     });
-    console.log(resp);
   };
 
   return (
@@ -143,7 +138,15 @@ function Message() {
             {messageHistory ? (
               messageHistory.map((message, index) => {
                 return (
-                  <Box className={classes.theirMessageWrapper} key={index}>
+                  <Box
+                    className={classes.theirMessageWrapper}
+                    key={index}
+                    ref={
+                      index === messageHistory.length - 1
+                        ? lastMessageRef
+                        : null
+                    }
+                  >
                     {chatUserData.userId === message.sender ? (
                       <Avatar
                         src={chatUserData.picture || defaultPicture}

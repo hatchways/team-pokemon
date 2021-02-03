@@ -67,17 +67,10 @@ function Conversation(props) {
   const { setChatUserData, setMobileMessageView } = useContext(UserContext);
   const [conversations, setConversations] = useState([]);
   const classes = useStyles();
-  //setLoading
 
   useEffect(() => {
     setConversations(props.conversations);
-    // setChatUserData();
-    console.log("SHOULD DROP CHAT user data");
   }, [props]);
-
-  //API call to get all the conversations from backend +
-  //should also add their id so to add link (around avatar)
-  //can change "Yesterday, Sunday, etc as message time on backend +
 
   const showMessages = e => {
     setMobileMessageView(true);
