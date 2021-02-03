@@ -1,10 +1,14 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Box, Paper, makeStyles } from "@material-ui/core";
-import SettingsMenu from "../components/dashboard/SettingsMenu";
-import ProfilePhoto from "../components/dashboard/ProfilePhoto";
+import SettingsMenu from "../components/settings/SettingsMenu";
+import ProfilePhoto from "../components/settings/ProfilePhoto";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
+  boxContainer: {
+    paddingTop: "90px",
+    minHeight: "80vh",
+  },
   centerPaper: {
     marginLeft: "auto",
     marginRight: "auto",
@@ -31,7 +35,7 @@ function Photo() {
     <Box
       display="flex"
       flexWrap="nowrap"
-      style={{ paddingTop: "90px", minHeight: "80vh" }}
+      className={classes.boxContainer}
       bgcolor="grey"
     >
       <Box className={classes.hideMenu}>

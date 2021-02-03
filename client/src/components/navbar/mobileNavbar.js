@@ -3,7 +3,7 @@ import { IconButton, Box, Dialog, DialogActions } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
-import SettingsMenu from "../dashboard/SettingsMenu";
+import SettingsMenu from "../settings/SettingsMenu";
 import { UserContext } from "../../context/Context";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -30,6 +30,15 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     fontSize: "30px",
   },
+  dialogStyling: {
+    padding: "0",
+  },
+  hamburgerIcon: {
+    zIndex: 100,
+  },
+  settingsMenuAlignment: {
+    marginTop: "50px",
+  },
 }));
 
 function MobileNavbar() {
@@ -39,22 +48,17 @@ function MobileNavbar() {
   return (
     <Dialog open={mobileMenuOpen} fullScreen TransitionComponent={Transition}>
       <Box>
-        <DialogActions
-          style={{
-            padding: "0",
-          }}
-        >
+        <DialogActions className={classes.dialogStyling}>
           <IconButton
             aria-label="close"
-            className={classes.closeButton}
-            style={{ zIndex: 100 }}
+            className={classes.closeButton + " " + classes.hamburgerIcon}
             onClick={() => setMobileMenuOpen(false)}
           >
             <CloseIcon />
           </IconButton>
         </DialogActions>
       </Box>
-      <Box style={{ marginTop: "50px" }}>
+      <Box className={classes.settingsMenuAlignment}>
         <SettingsMenu />
       </Box>
     </Dialog>

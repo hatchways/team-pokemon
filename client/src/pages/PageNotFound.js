@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import dog404 from "../img/dog-404.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -60,17 +60,13 @@ function PageNotFound() {
         <Typography variant="h4">
           Seems like such page doesn't exist
           <br />
-          <Link to="/dashboard/profile" className={classes.profileLink}>
+          <Link to="/profile" className={classes.profileLink}>
             Back to profile
           </Link>
         </Typography>
       </Grid>
       <Grid item>
-        <Paper
-          square
-          elevation={0}
-          className={classes.image}
-        ></Paper>
+        <Paper square elevation={0} className={classes.image}></Paper>
       </Grid>
     </Grid>
   );

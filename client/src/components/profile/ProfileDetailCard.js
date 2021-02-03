@@ -1,9 +1,8 @@
 import React from "react";
 import { Box, CardMedia, Typography, makeStyles } from "@material-ui/core";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import UserAvatar from "../../img/profilePhoto.jpg";
+import DefaultAvatar from "../../img/profile-default.png";
 import Background from "../../img/background.jpg";
-import Dogs from "../../img/dogs-main.jpg";
 
 const useStyles = makeStyles(() => ({
   centerContent: {
@@ -11,6 +10,31 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  headerImage: { width: "100%", height: "300px", objectFit: "cover" },
+  avatar: {
+    height: "150px",
+    width: "150px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    transform: "translateY(-50%)",
+    border: "5px solid white",
+  },
+  userName: {
+    marginTop: "-75px",
+    marginBottom: "15px",
+    fontWeight: "bold",
+  },
+  userLocation: {
+    display: "flex",
+    alignItems: "center",
+    fontSize: "15px",
+    color: "grey",
+    marginBottom: "50px",
+  },
+  locationIcon: { marginRight: "10px" },
+  aboutMeContainer: { width: "90%", marginBottom: "30px" },
+  aboutMeHeading: { marginBottom: "20px", fontWeight: "bold" },
+  userImagesContainer: { flexWrap: "wrap", width: "90%", marginBottom: "40px" },
   userImages: {
     marginTop: "10px",
     marginRight: "10px",
@@ -20,82 +44,70 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function ProfileDetailCard() {
+function ProfileDetailCard({ profileDetails }) {
   const classes = useStyles();
-
   return (
     <Box className={classes.centerContent}>
       {/* Header Background Image */}
       <CardMedia
-        image={Background}
+        image={
+          profileDetails.headerPicture
+            ? profileDetails.headerPicture
+            : Background
+        }
         alt="bg"
-        style={{ width: "100%", height: "300px", objectFit: "cover" }}
+        className={classes.headerImage}
       />
       {/* User's Profile Image */}
       <CardMedia
-        image={UserAvatar}
-        alt="header"
-        style={{
-          height: "150px",
-          width: "150px",
-          borderRadius: "50%",
-          objectFit: "cover",
-          transform: "translateY(-50%)",
-          border: "5px solid white",
-        }}
+        image={
+          profileDetails.profilePicture
+            ? profileDetails.profilePicture
+            : DefaultAvatar
+        }
+        alt="avatar"
+        className={classes.avatar}
       />
       {/* User's Name */}
-      <Typography
-        variant="h3"
-        style={{
-          marginTop: "-75px",
-          marginBottom: "15px",
-          fontWeight: "bold",
-        }}
-      >
-        Jane Doe
+      <Typography variant="h3" className={classes.userName}>
+        {`${profileDetails.firstName} ${profileDetails.lastName}`}
       </Typography>
 
       {/* User's Location */}
-      <Typography
-        style={{
-          display: "flex",
-          alignItems: "center",
-          fontSize: "15px",
-          color: "grey",
-          marginBottom: "50px",
-        }}
-      >
-        <LocationOnIcon color="primary" style={{ marginRight: "10px" }} />
-        Toronto, Ontario
-      </Typography>
-      <Box style={{ width: "90%", marginBottom: "30px" }}>
-        {/* About Me Section  */}
-        <Typography
-          variant="h5"
-          style={{ marginBottom: "20px", fontWeight: "bold" }}
-        >
-          About me
+      {profileDetails.address && (
+        <Typography className={classes.userLocation}>
+          <LocationOnIcon color="primary" className={classes.locationIcon} />
+          {`${profileDetails.address}`}
         </Typography>
-        <Typography>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et saepe
-          porro voluptatibus maxime, quisquam natus expedita cupiditate! Amet
-          consectetur nobis corrupti reprehenderit laudantium? Repellat animi
-          rerum voluptatem doloribus, laudantium quis. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Hic aspernatur, quia tempore sint
-          ex cum explicabo, possimus saepe odit sed placeat porro atque
-          consectetur quis quam voluptatum? Blanditiis, animi nulla.
-        </Typography>
-      </Box>
+      )}
+      {profileDetails.description && (
+        <Box className={classes.aboutMeContainer}>
+          {/* About Me Section  */}
+
+          <Typography variant="h5" className={classes.aboutMeHeading}>
+            About me
+          </Typography>
+          <Typography>{profileDetails.description}</Typography>
+        </Box>
+      )}
       {/* User's Uploaded Images */}
-      <Box
-        display="flex"
-        justifyContent="flex-start"
-        style={{ flexWrap: "wrap", width: "90%", marginBottom: "40px" }}
-      >
-        <CardMedia image={Dogs} className={classes.userImages} />
-        <CardMedia image={UserAvatar} className={classes.userImages} />
-      </Box>
+      {profileDetails && (
+        <Box
+          display="flex"
+          justifyContent="flex-start"
+          className={classes.userImagesContainer}
+        >
+          {profileDetails.photoAlbum &&
+            profileDetails.photoAlbum.length > 0 &&
+            profileDetails.photoAlbum.map((photo) => (
+              <CardMedia
+                key={photo}
+                image={photo}
+                className={classes.userImages}
+              />
+            ))}
+        </Box>
+      )}
     </Box>
   );
 }

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Switch, Typography, makeStyles } from "@material-ui/core";
 import Request from "../../components/bookings/Request";
 import {
   getNextSitterBooking,
   getNextOwnerBooking,
 } from "../../utils/bookingsHelper";
+import { AuthDispatchContext } from "../../context/AuthContext";
+import { CLEAR_ERRORS } from "../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   requestListContainer: {
@@ -59,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
 function RequestList({ requests, user, sitterMode, setSitterMode }) {
   const classes = useStyles();
 
+  // Get dispatch method from context
+  const dispatch = useContext(AuthDispatchContext);
+
   // Today's date formatted to be used to determine if booking is current or past
   let today = new Date();
   const offset = today.getTimezoneOffset() / 60;
@@ -105,7 +110,7 @@ function RequestList({ requests, user, sitterMode, setSitterMode }) {
         key={request._id}
         request={request}
         sitterMode={sitterMode}
-        modeTime="past"
+        modeTime="sitterPast"
       />
     ));
 
@@ -119,7 +124,7 @@ function RequestList({ requests, user, sitterMode, setSitterMode }) {
         key={request._id}
         request={request}
         sitterMode={sitterMode}
-        modeTime="past"
+        modeTime="ownerPast"
       />
     ));
 
@@ -148,7 +153,10 @@ function RequestList({ requests, user, sitterMode, setSitterMode }) {
         <Switch
           color="primary"
           checked={sitterMode}
-          onChange={() => setSitterMode(!sitterMode)}
+          onChange={() => {
+            dispatch({ type: CLEAR_ERRORS });
+            setSitterMode(!sitterMode);
+          }}
         />
         <Typography className={classes.subheading}>DOG SITTER MODE</Typography>
       </Box>

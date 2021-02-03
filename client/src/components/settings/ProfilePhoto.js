@@ -131,7 +131,6 @@ function ProfilePhoto() {
   // picture chosen
   const onDrop = useCallback(async acceptedFiles => {
     setLoading(true);
-    console.log("uploading");
     const url = `/api/profile/upload/${profile._id}`;
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
@@ -190,7 +189,7 @@ function ProfilePhoto() {
       </Grid>
       <Grid item className={classes.mainPicturePositioning}>
         <CardMedia
-          image={profile && profile.headerPicture ? profile.headerPicture : ""}
+          image={profile && profile.headerPicture && profile.headerPicture}
           className={classes.headerPicture}
         />
         <Avatar

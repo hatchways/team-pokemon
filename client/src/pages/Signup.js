@@ -4,9 +4,12 @@ import { makeStyles } from "@material-ui/core";
 import SignupForm from "../components/SignupForm";
 import dogsPicture from "../img/dogs-main.jpg";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  gridContainer: {
+    height: "100vh",
   },
   sideImage: {
     height: "100vh",
@@ -16,6 +19,10 @@ const useStyles = makeStyles(theme => ({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
+    backgroundImage: `url(${dogsPicture})`,
+  },
+  signUpFormOverflow: {
+    overflowY: "auto",
   },
 }));
 
@@ -28,22 +35,16 @@ function Signup() {
       alignItems="center"
       spacing={0}
       justify="center"
-      style={{ height: "100vh" }}
+      className={classes.gridContainer}
     >
-      <Grid item lg={6} md={6} sm={12} style={{ overflowY: "auto" }}>
+      <Grid item lg={6} md={6} sm={12} className={classes.signUpFormOverflow}>
         <form>
           <SignupForm />
         </form>
       </Grid>
       <Hidden smDown>
-        <Grid item lg={6} md={6} style={{ height: "100vh" }}>
-          <Paper
-            className={classes.sideImage}
-            square
-            style={{
-              backgroundImage: `url(${dogsPicture})`,
-            }}
-          ></Paper>
+        <Grid item lg={6} md={6} className={classes.gridContainer}>
+          <Paper className={classes.sideImage} square></Paper>
         </Grid>
       </Hidden>
     </Grid>
