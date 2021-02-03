@@ -98,12 +98,13 @@ function Navbar() {
                 </Link>
               ) : null}
 
-              <Link to="*" className={classes.authLinkStyling}>
+
+              <Link to="/chat" className={classes.authLinkStyling}>
                 <Button size="large">Messages</Button>
               </Link>
             </Hidden>
             <Hidden mdUp>
-              <Link to="*" className={classes.authLinkStyling}>
+              <Link to="/chat" className={classes.authLinkStyling}>
                 <MailIcon color="primary" fontSize="large" />
               </Link>
             </Hidden>

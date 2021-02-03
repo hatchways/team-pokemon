@@ -16,6 +16,7 @@ import Photo from "./pages/Photo";
 import Availability from "./pages/Availability";
 import Payment from "./pages/Payment";
 import Security from "./pages/Security";
+import Chat from "./pages/Chat";
 import Settings from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
@@ -60,6 +61,7 @@ function App() {
               <PrivateRoute path='/settings/payment' component={Payment} />
               <PrivateRoute path='/settings/security' component={Security} />
               <PrivateRoute path='/settings/account' component={Settings} />
+              <PrivateRoute path='/chat' component={Chat} />
               <PrivateRoute path='*' component={PageNotFound} />
             </Switch>
           </AuthDispatchContext.Provider>
