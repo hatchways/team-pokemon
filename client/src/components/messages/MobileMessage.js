@@ -173,34 +173,37 @@ function MobileMessage() {
             {messageHistory ? (
               messageHistory.map((message, index) => {
                 return (
-                  <Box
-                    className={classes.theirMessageWrapper}
-                    key={index}
-                    ref={
-                      index === messageHistory.length - 1
-                        ? lastMessageRef
-                        : null
-                    }
-                  >
-                    {chatUserData.userId === message.sender ? (
-                      <Avatar
-                        src={chatUserData.picture || defaultPicture}
-                        className={classes.theirMessageAvatar}
-                      />
+                  <Box key={index}>
+                    {message.content ? (
+                      <Box
+                        className={classes.theirMessageWrapper}
+                        ref={
+                          index === messageHistory.length - 1
+                            ? lastMessageRef
+                            : null
+                        }
+                      >
+                        {chatUserData.userId === message.sender ? (
+                          <Avatar
+                            src={chatUserData.picture || defaultPicture}
+                            className={classes.theirMessageAvatar}
+                          />
+                        ) : null}
+                        <Box
+                          className={
+                            classes.message +
+                            " " +
+                            (chatUserData.userId === message.sender
+                              ? classes.theirMessage
+                              : classes.myMessage)
+                          }
+                        >
+                          <Typography className={classes.messageText}>
+                            {message.content}
+                          </Typography>
+                        </Box>
+                      </Box>
                     ) : null}
-                    <Box
-                      className={
-                        classes.message +
-                        " " +
-                        (chatUserData.userId === message.sender
-                          ? classes.theirMessage
-                          : classes.myMessage)
-                      }
-                    >
-                      <Typography className={classes.messageText}>
-                        {message.content}
-                      </Typography>
-                    </Box>
                   </Box>
                 );
               })

@@ -13,6 +13,9 @@ const useStyles = makeStyles(theme => ({
   dialogsList: {
     position: "relative",
   },
+  messagesBox: {
+    height: "100%",
+  },
   loading: {
     position: "absolute",
     top: "50%",
@@ -45,7 +48,7 @@ function Chat() {
         )}
       </Grid>
       <Hidden xsDown>
-        <Grid item lg={9} md={8} sm={7} style={{ height: "100%" }}>
+        <Grid item lg={9} md={8} sm={7} className={classes.messagesBox}>
           <Message />
         </Grid>
       </Hidden>

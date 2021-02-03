@@ -111,7 +111,7 @@ function Conversation(props) {
                     variant="subtitle1"
                     className={classes.messagePreview}
                   >
-                    {dialog.lastMessage
+                    {dialog.lastMessage.content
                       ? dialog.lastMessage.content.toString().length > 18
                         ? dialog.lastMessage.content.slice(0, 18) + "..."
                         : dialog.lastMessage.content
