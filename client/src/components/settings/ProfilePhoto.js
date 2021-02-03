@@ -12,6 +12,7 @@ import {
   Avatar,
   CircularProgress,
   useMediaQuery,
+  Card,
 } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 import base64url from "base64url";
@@ -26,7 +27,8 @@ import defaultPicture from "../../img/profile-default.png";
 import { getUser } from "../../actions/auth";
 import { setPhotoCategory } from "../../actions/profile";
 
-const useStyles = makeStyles(theme => ({
+
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   dropzone: {
     height: "70%",
@@ -129,7 +131,8 @@ function ProfilePhoto() {
   const aboveSm = useMediaQuery("(min-width:600px)");
 
   // picture chosen
-  const onDrop = useCallback(async acceptedFiles => {
+
+  const onDrop = useCallback(async (acceptedFiles) => {
     setLoading(true);
     const url = `/api/profile/upload/${profile._id}`;
     const formData = new FormData();
@@ -162,7 +165,8 @@ function ProfilePhoto() {
   };
 
   // Set profile/header photo
-  const handleSetAsProfilePhoto = category => {
+
+  const handleSetAsProfilePhoto = (category) => {
     const payload = {
       photoUrl: selectedPhoto,
       category,
@@ -274,7 +278,7 @@ function ProfilePhoto() {
         <Box display="flex" className={classes.photoAlbumStyles}>
           {profile &&
             profile.photoAlbum &&
-            profile.photoAlbum.map(photo => (
+            profile.photoAlbum.map((photo) => (
               <CardMedia
                 key={photo}
                 image={photo}

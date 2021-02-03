@@ -7,6 +7,7 @@ const UserProvider = ({ children }) => {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false); //state for mobile layout settings menu
   const [chatUserData, setChatUserData] = useState();
   const [mobileMessageView, setMobileMessageView] = useState(false);
+
   return (
     <UserContext.Provider
       value={{

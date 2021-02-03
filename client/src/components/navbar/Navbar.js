@@ -22,7 +22,7 @@ import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
 import defaultPicture from "../../img/profile-default.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { flexgrow: 1 },
   menuButton: { marginRight: "auto", color: "red" },
   toolbar: {
@@ -97,6 +97,7 @@ function Navbar() {
                   </Button>
                 </Link>
               ) : null}
+
 
               <Link to="/chat" className={classes.authLinkStyling}>
                 <Button size="large">Messages</Button>
