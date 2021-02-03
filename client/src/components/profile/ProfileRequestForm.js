@@ -55,30 +55,18 @@ function ProfileRequestForm({ sitterId }) {
   const [startDate, setStartDate] = useState(todayFormatted);
   const [endDate, setEndDate] = useState(todayFormatted);
   const [startTime, setStartTime] = useState(
-    moment()
-      .add(moment().utcOffset() + 30, "minutes")
-      .startOf("hour")
-      .format("HH:mm")
+    moment().add(30, "minutes").startOf("hour").format("HH:mm")
   );
   const [endTime, setEndTime] = useState(
-    moment()
-      .add(moment().utcOffset() + 150, "minutes")
-      .startOf("hour")
-      .format("HH:mm")
+    moment().add(150, "minutes").startOf("hour").format("HH:mm")
   );
   const [requestFormData, setRequestFormData] = useState({
     sitterId: sitterId,
     ownerId: user._id,
     // Default start date is 30 minutes from now rounded up to the nearest hour
-    start: moment()
-      .add(moment().utcOffset() + 30, "minutes")
-      .startOf("hour")
-      .format(),
+    start: moment().add(30, "minutes").startOf("hour").format(),
     // Default end date is 2.5 hours from now rounded up to the nearest hour
-    end: moment()
-      .add(moment().utcOffset() + 150, "minutes")
-      .startOf("hour")
-      .format(),
+    end: moment().add(150, "minutes").startOf("hour").format(),
   });
 
   // Changes 'Send Request' button from spinning to normal when alert pops ups

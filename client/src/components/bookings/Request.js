@@ -84,8 +84,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Request({ request, modeTime, sitterMode }) {
   const classes = useStyles();
-  const today = new Date();
-  const offset = today.getTimezoneOffset() / 60;
 
   return (
     <>
@@ -105,46 +103,20 @@ function Request({ request, modeTime, sitterMode }) {
                 classes.dateTimeHeadingBreakpoint
               }
             >
-              {`${moment(
-                new Date(request.start).setHours(
-                  new Date(request.start).getHours() + offset
-                )
-              ).format("DD MMM YYYY")}` ===
-              `${moment(
-                new Date(request.end).setHours(
-                  new Date(request.end).getHours() + offset
-                )
-              ).format("DD MMM YYYY")}`
-                ? `${moment(
-                    new Date(request.start).setHours(
-                      new Date(request.start).getHours() + offset
-                    )
-                  ).format("DD MMMM YYYY")}, ${moment(
-                    new Date(request.start).setHours(
-                      new Date(request.start).getHours() + offset
-                    )
-                  ).format("h:mm a")} - ${moment(
-                    new Date(request.end).setHours(
-                      new Date(request.end).getHours() + offset
-                    )
-                  ).format("h:mm a")}`
-                : `${moment(
-                    new Date(request.start).setHours(
-                      new Date(request.start).getHours() + offset
-                    )
-                  ).format("DD MMM YYYY")}, ${moment(
-                    new Date(request.start).setHours(
-                      new Date(request.start).getHours() + offset
-                    )
-                  ).format("h:mm a")} - ${moment(
-                    new Date(request.end).setHours(
-                      new Date(request.end).getHours() + offset
-                    )
-                  ).format("DD MMM YYYY")}, ${moment(
-                    new Date(request.end).setHours(
-                      new Date(request.end).getHours() + offset
-                    )
-                  ).format("h:mm a")}`}
+              {`${moment(new Date(request.start)).format("DD MMM YYYY")}` ===
+              `${moment(new Date(request.end)).format("DD MMM YYYY")}`
+                ? `${moment(new Date(request.start)).format(
+                    "DD MMMM YYYY"
+                  )}, ${moment(new Date(request.start)).format(
+                    "h:mm a"
+                  )} - ${moment(new Date(request.end)).format("h:mm a")}`
+                : `${moment(new Date(request.start)).format(
+                    "DD MMM YYYY"
+                  )}, ${moment(new Date(request.start)).format(
+                    "h:mm a"
+                  )} - ${moment(new Date(request.end)).format(
+                    "DD MMM YYYY"
+                  )}, ${moment(new Date(request.end)).format("h:mm a")}`}
             </Typography>
             <SettingsIcon className={classes.lightGreyColor} />
           </Box>
