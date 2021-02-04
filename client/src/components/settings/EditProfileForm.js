@@ -145,15 +145,15 @@ function EditProfileForm() {
     }
     if (e.target.name === "birthDay") {
       setBirthDay(e.target.value);
-      fullDate = new Date(birthYear, birthMonth, e.target.value + 1);
+      fullDate = new Date(birthYear, birthMonth, e.target.value);
     }
     if (e.target.name === "birthMonth") {
       setBirthMonth(e.target.value);
-      fullDate = new Date(birthYear, e.target.value, birthDay + 1);
+      fullDate = new Date(birthYear, e.target.value, birthDay);
     }
     if (e.target.name === "birthYear") {
       setBirthYear(e.target.value);
-      fullDate = new Date(e.target.value, birthMonth, birthDay + 1);
+      fullDate = new Date(e.target.value, birthMonth, birthDay);
     }
 
     setAlert({ error: false, message: "" });

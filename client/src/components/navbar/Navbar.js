@@ -107,15 +107,15 @@ function Navbar() {
               <Link to="/bookings" className={classes.authLinkStyling}>
                 <Button size="large">Bookings</Button>
               </Link>
-              <Link to="*" className={classes.authLinkStyling}>
-                <Button size="large">Messages</Button>
+              <Link to="/chat" className={classes.authLinkStyling}>
+
               </Link>
             </Hidden>
             <Hidden mdUp>
               <Link to="/bookings" className={classes.authLinkStyling}>
                 <Button size="large">Bookings</Button>
               </Link>
-              <Link to="*" className={classes.authLinkStyling}>
+              <Link to="/chat" className={classes.authLinkStyling}>
                 <MailIcon color="primary" fontSize="large" />
               </Link>
             </Hidden>
