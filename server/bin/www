@@ -10,6 +10,8 @@ require("dotenv").config();
 var app = require("../app");
 var http = require("http");
 
+const { sendNotification } = require("../utils/sendNotification");
+
 /**
  * Get port from environment and store in Express.
  */
@@ -26,8 +28,33 @@ var server = http.createServer(app);
  * socket io connection
  */
 const io = require("socket.io")(server);
+
 io.on("connection", (socket) => {
   console.log("user conected");
+
+  // Hash map that stores mongoDB user IDs as keys and user socket IDs as values.
+  const onlineUsers = new Map();
+
+  socket.on("online", (data) => {
+    onlineUsers.set(data.userId, socket.id);
+    console.log(onlineUsers);
+  });
+
+  socket.on("offline", (data) => {
+    onlineUsers.delete(data.userId);
+  });
+
+  socket.on("requestSent", (notification) => {
+    // Add into notifications list in database for sitter.
+    sendNotification(notification.ownerId, notification.sitterId);
+
+    // Broadcast message: "Owner Id has sent you a new request"
+    if (onlineUsers.get(notification.sitterId)) {
+      console.log("User is online");
+    } else {
+      console.log("User is offline");
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
