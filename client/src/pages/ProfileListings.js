@@ -133,9 +133,10 @@ function ProfileListings() {
               .toLowerCase()
               .includes(filter.location.toLowerCase().trim())
           ) {
-            return sitter;
-          }
+            return true;
+          } else return null;
         }
+        return null;
       })
       .filter(sitter => {
         if (!filter || !filter.dropOff) {
@@ -153,11 +154,12 @@ function ProfileListings() {
                 moment(filter.dropOff).format("YYMMDD") ===
                   moment(timeSlot.end).format("YYMMDD")
               ) {
-                return sitter;
-              }
+                return true;
+              } else return false;
             });
           }
         }
+        return null;
       })
       .filter(sitter => {
         if (!filter || !filter.pickUp) {
@@ -175,11 +177,12 @@ function ProfileListings() {
                 moment(filter.pickUp).format("YYMMDD") ===
                   moment(timeSlot.start).format("YYMMDD")
               ) {
-                return sitter;
-              }
+                return true;
+              } else return false;
             });
           }
         }
+        return null;
       })
       .map(sitter => (
         <ProfileCard
