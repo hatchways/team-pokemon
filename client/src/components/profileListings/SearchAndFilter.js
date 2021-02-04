@@ -1,10 +1,11 @@
-import React from "react";
-
+import React, { useState, useContext } from "react";
+import moment from "moment";
 import { Container, Grid, TextField, Typography } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
+import { UserContext } from "../../context/Context";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   search: {
     marginTop: theme.spacing(10),
   },
@@ -31,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function SearchAndFilter() {
+  const { filter, setFilter } = useContext(UserContext);
+
+  const handleInput = e => {
+    setFilter({ ...filter, [e.target.name]: e.target.value });
+  };
+
   const classes = useStyles();
   return (
     <Container maxWidth="lg" className={classes.search}>
@@ -53,6 +60,8 @@ function SearchAndFilter() {
               id="input-with-icon-grid"
               label="location"
               variant="standard"
+              name="location"
+              onChange={e => handleInput(e)}
               className={classes.textField}
             />
           </Grid>
@@ -62,7 +71,9 @@ function SearchAndFilter() {
                 id="date-picker-inline"
                 label="Drop off"
                 type="date"
-                defaultValue="today"
+                //defaultValue="today"
+                name="dropOff"
+                onChange={e => handleInput(e)}
                 className={classes.dateField}
                 InputLabelProps={{
                   shrink: true,
@@ -72,7 +83,9 @@ function SearchAndFilter() {
                 id="date"
                 label="Pickup"
                 type="date"
-                defaultValue="today"
+                //defaultValue="today"
+                name="pickUp"
+                onChange={e => handleInput(e)}
                 className={classes.dateField}
                 InputLabelProps={{
                   shrink: true,
