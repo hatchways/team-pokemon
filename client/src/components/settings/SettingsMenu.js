@@ -37,12 +37,12 @@ const useStyles = makeStyles((theme) => ({
 
 function SettingsMenu() {
   const dispatch = useContext(AuthDispatchContext);
-  const { isAuthenticated, profile } = useContext(AuthStateContext);
+  const { isAuthenticated, profile, user } = useContext(AuthStateContext);
   const { setMobileMenuOpen } = useContext(UserContext);
   const classes = useStyles();
 
   const handleLogout = () => {
-    logout(dispatch);
+    logout(dispatch, user._id);
     setMobileMenuOpen(false);
   };
   //
@@ -50,7 +50,6 @@ function SettingsMenu() {
     dispatch({ type: BECOME_SITTER });
     setMobileMenuOpen(false);
   };
-
   return (
     <>
       {isAuthenticated ? (
