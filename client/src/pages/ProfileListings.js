@@ -9,6 +9,43 @@ import SearchAndFilter from "../components/profileListings/SearchAndFilter";
 
 import { AuthStateContext } from "../context/AuthContext";
 import { UserContext } from "../context/Context";
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+function AlertMessage(props) {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (props.alert.error) {
+      setOpen(true);
+      setMessage(props.alert.message);
+    } else {
+      setOpen(false);
+      setMessage("");
+    }
+  }, [props]);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  return (
+    <Snackbar open={open} autoHideDuration={60000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity="error">
+        {message}
+      </Alert>
+    </Snackbar>
+  );
+}
 
 const useStyles = makeStyles(theme => ({
   gridContainer: {
@@ -22,10 +59,10 @@ const useStyles = makeStyles(theme => ({
 
 function ProfileListings() {
   const classes = useStyles();
-  const { filter } = useContext(UserContext);
+  const { filter, setFilter } = useContext(UserContext);
   const { profile } = useContext(AuthStateContext); //get profile from context
   const url = `/api/profile/list/${profile._id}`;
-  const [alert, setAlert] = useState(false);
+  const [alert, setAlert] = useState({ error: false, message: "" });
   const [sitters, setSitters] = useState({
     loading: false,
     data: null,
@@ -33,8 +70,18 @@ function ProfileListings() {
   });
 
   useEffect(() => {
-    //console.log(filter);
-    //SET ALERT FALSE INITIALLY
+    setFilter("");
+  }, []);
+
+  useEffect(() => {
+    if (filter.dropOff && filter.pickUp && filter.dropOff > filter.pickUp) {
+      setAlert({
+        error: true,
+        message: "Drop off date can not be past Pick up date",
+      });
+    } else {
+      setAlert({ error: false, message: "" });
+    }
   }, [filter]);
 
   useEffect(() => {
@@ -74,9 +121,6 @@ function ProfileListings() {
   }
   if (sitters.data) {
     // set profile data to display
-    if (filter.dropOff > filter.pickUp) {
-      //SET ALERT HERE
-    }
     content = sitters.data
       .filter(sitter => {
         if (!filter || !filter.location) {
@@ -104,10 +148,11 @@ function ProfileListings() {
           ) {
             return sitter.profile.availability.find(timeSlot => {
               if (
-                moment(filter.dropOff).format("L") >=
-                moment(timeSlot.start).format("L")
+                moment(filter.dropOff).format("YYMMDD") ===
+                  moment(timeSlot.start).format("YYMMDD") ||
+                moment(filter.dropOff).format("YYMMDD") ===
+                  moment(timeSlot.end).format("YYMMDD")
               ) {
-                console.log(sitter.profile.availability);
                 return sitter;
               }
             });
@@ -125,10 +170,11 @@ function ProfileListings() {
           ) {
             return sitter.profile.availability.find(timeSlot => {
               if (
-                moment(filter.pickUp).format("L") <=
-                moment(timeSlot.end).format("L")
+                moment(filter.pickUp).format("YYMMDD") ===
+                  moment(timeSlot.end).format("YYMMDD") ||
+                moment(filter.pickUp).format("YYMMDD") ===
+                  moment(timeSlot.start).format("YYMMDD")
               ) {
-                console.log(sitter.profile.availability);
                 return sitter;
               }
             });
@@ -169,6 +215,7 @@ function ProfileListings() {
             {content}
           </Grid>
         </Grid>
+        <AlertMessage alert={alert} />
       </Grid>
     </React.Fragment>
   );
