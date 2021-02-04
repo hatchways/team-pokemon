@@ -9,8 +9,9 @@ const notificationSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  createdAt: {
+  timestamp: {
     type: Date,
+    default: Date.now(),
   },
 });
 
