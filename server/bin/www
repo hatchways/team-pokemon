@@ -29,11 +29,11 @@ var server = http.createServer(app);
  */
 const io = require("socket.io")(server);
 
+// Hash map that stores mongoDB user IDs as keys and user socket IDs as values.
+const onlineUsers = new Map();
+
 io.on("connection", (socket) => {
   console.log("user conected");
-
-  // Hash map that stores mongoDB user IDs as keys and user socket IDs as values.
-  const onlineUsers = new Map();
 
   socket.on("online", (data) => {
     onlineUsers.set(data.userId, socket.id);
@@ -48,9 +48,18 @@ io.on("connection", (socket) => {
     // Add into notifications list in database for sitter.
     sendNotification(notification.ownerId, notification.sitterId);
 
-    // Broadcast message: "Owner Id has sent you a new request"
-    if (onlineUsers.get(notification.sitterId)) {
-      console.log("User is online");
+    // Update current user's socket id
+    onlineUsers.set(notification.ownerId, socket.id);
+
+    // Emit notification to sitter"
+    const receiver = onlineUsers.get(notification.sitterId);
+
+    if (receiver) {
+      console.log(`Sending to ${receiver}...`);
+      io.to(receiver).emit("notification", {
+        type: "request",
+        message: "You have received a new request!",
+      });
     } else {
       console.log("User is offline");
     }
