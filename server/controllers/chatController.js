@@ -26,7 +26,7 @@ exports.createChat = async (req, res, next) => {
           newMessage.chatId = newChat._id;
           newMessage.save();
         }
-        res.json({ error: false, chatId: chat._id });
+        res.json({ error: false });
       }
     );
   } catch (err) {
