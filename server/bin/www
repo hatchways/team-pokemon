@@ -54,8 +54,11 @@ io.on("connection", (socket) => {
     // Emit notification to sitter"
     const receiver = onlineUsers.get(notification.sitterId);
 
+    // console.log(io.sockets.sockets.get(receiver).client);
+
     if (receiver) {
       console.log(`Sending to ${receiver}...`);
+
       io.to(receiver).emit("notification", {
         type: "request",
         message: "You have received a new request!",

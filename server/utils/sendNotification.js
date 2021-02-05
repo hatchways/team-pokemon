@@ -17,11 +17,11 @@ exports.sendNotification = async (sender, receiver) => {
 
     // Find receiver's profile and update notifications array
     const receiverUser = await User.findById(receiver).select("profile");
-    const receiverProfile = await Profile.findOneAndUpdate(
-      { _id: receiverUser.profile },
-      { $push: { notifications: savedNotification._id } },
-      { new: true }
-    );
+    const receiverProfile = await Profile.findById(receiverUser.profile);
+
+    receiverProfile.notifications.unshift(savedNotification._id);
+
+    await receiverProfile.save();
 
     // Emit the notification
     // socket.emit("newNotification", savedNotification);
