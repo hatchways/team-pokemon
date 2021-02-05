@@ -1,7 +1,11 @@
 import axios from "axios";
 import io from "socket.io-client";
 import { setAlert } from "../actions/alert";
-import { PAY_BOOKING_SUCCESS, PAY_BOOKING_FAILURE } from "./types";
+import {
+  PAY_BOOKING_SUCCESS,
+  PAY_BOOKING_FAILURE,
+  CREATE_BOOKING_FAILURE,
+} from "./types";
 
 const socket = io();
 
@@ -20,6 +24,13 @@ export const createRequest = async (dispatch, payload, OwnerName) => {
       message: `${OwnerName} has sent you a request!`,
     });
   } catch (err) {
+    const error = err.response.data.error.message;
+    if (error) {
+      dispatch({
+        type: CREATE_BOOKING_FAILURE,
+        payload: error,
+      });
+    }
     console.log(err.message);
   }
 };

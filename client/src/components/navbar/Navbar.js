@@ -7,6 +7,7 @@ import {
   Box,
   Hidden,
   Avatar,
+  useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -21,6 +22,7 @@ import {
 import { BECOME_SITTER } from "../../actions/types";
 import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
+import logoMobile from "../../img/logo_mobile.png";
 import defaultPicture from "../../img/profile-default.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Navbar() {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const { setMobileMenuOpen } = useContext(UserContext);
 
   const { isAuthenticated, profile } = useContext(AuthStateContext);
@@ -91,7 +94,11 @@ function Navbar() {
             <MobileNavbar />
           </Hidden>
           <Link to="/listings" className={classes.avatarLink}>
+                      {isMobile ? (
+           Mobile} alt="logo" className={classes.logo} />
+          ) : (
             <img src={logo} alt="logo" className={classes.logo} />
+          )}
           </Link>
           {isAuthenticated ? (
             <>
@@ -106,52 +113,51 @@ function Navbar() {
                     </Button>
                   </Link>
                 ) : null}
-                <Notifications />
-                <Link to="*" className={classes.authLinkStyling}>
-                  <Button size="large">Messages</Button>
-                </Link>
-              </Hidden>
-              <Hidden mdUp>
-                <Notifications />
-                <Link to="*" className={classes.authLinkStyling}>
-                  <MailIcon color="primary" fontSize="large" />
-                </Link>
-              </Hidden>
-              <Link
-                to="/settings/editprofile"
-                className={classes.removeTextDecoration}
-              >
-                <Avatar
-                  alt="user"
-                  src={
-                    profile && profile.profilePicture
-                      ? profile.profilePicture
-                      : defaultPicture
-                  }
-                />
+              <Link to="/bookings" className={classes.authLinkStyling}>
+                <Button size="large">Bookings</Button>
               </Link>
-            </>
-          ) : (
-            <Hidden smDown>
-              <Box mr={4} ml={4}>
-                <Link to="/signup" className={classes.signupLinkStyling}>
-                  <Button
-                    size="large"
-                    className={classes.sitterLink}
-                    onClick={handleBecomeSitter}
-                  >
-                    Become a Sitter
-                  </Button>
-                </Link>
-                <Link to="/login" className={classes.removeTextDecoration}>
-                  <Button color="primary" variant="outlined" size="large">
-                    Login
-                  </Button>
-                </Link>
-              </Box>
-              <Link to="/signup" className={classes.removeTextDecoration}>
-                <Button color="primary" variant="contained" size="large">
-                  Sign Up
+              <Notifications />
+              <Link to="/chat" className={classes.authLinkStyling}>
+
+              </Link>
+            </Hidden>
+            <Hidden mdUp>
+              <Link to="/bookings" className={classes.authLinkStyling}>
+                <Button size="large">Bookings</Button>
+              </Link>
+              <Link to="/chat" className={classes.authLinkStyling}>
+                <MailIcon color="primary" fontSize="large" />
+              </Link>
+            </Hidden>
+            <Link
+              to="/settings/editprofile"
+              className={classes.removeTextDecoration}
+            >
+              <Avatar
+                alt="user"
+                src={
+                  profile && profile.profilePicture
+                    ? profile.profilePicture
+                    : defaultPicture
+                }
+              />
+            </Link>
+          </>
+        ) : (
+          <Hidden smDown>
+            <Box mr={4} ml={4}>
+              <Link to="/signup" className={classes.signupLinkStyling}>
+                <Button
+                  size="large"
+                  className={classes.sitterLink}
+                  onClick={handleBecomeSitter}
+                >
+                  Become a Sitter
+                </Button>
+              </Link>
+              <Link to="/login" className={classes.removeTextDecoration}>
+                <Button color="primary" variant="outlined" size="large">
+                  Login
                 </Button>
               </Link>
             </Hidden>

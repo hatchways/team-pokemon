@@ -14,6 +14,8 @@ import {
   AuthStateContext,
 } from "../../context/AuthContext";
 import { createRequest } from "../../actions/request";
+import Alert from "../Alert";
+import { CLEAR_ERRORS } from "../../actions/types";
 
 const useStyles = makeStyles(() => ({
   centerContent: {
@@ -45,7 +47,7 @@ function ProfileRequestForm({ sitterId }) {
 
   // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
-  const { user, profile, alerts } = useContext(AuthStateContext);
+  const { user, alerts, errors, profile } = useContext(AuthStateContext);
 
   // Today's date to be passed as the minimum and default value to the 'drop off' date picker input.
   const today = new Date();
@@ -55,30 +57,18 @@ function ProfileRequestForm({ sitterId }) {
   const [startDate, setStartDate] = useState(todayFormatted);
   const [endDate, setEndDate] = useState(todayFormatted);
   const [startTime, setStartTime] = useState(
-    moment()
-      .add(moment().utcOffset() + 30, "minutes")
-      .startOf("hour")
-      .format("HH:mm")
+    moment().add(30, "minutes").startOf("hour").format("HH:mm")
   );
   const [endTime, setEndTime] = useState(
-    moment()
-      .add(moment().utcOffset() + 150, "minutes")
-      .startOf("hour")
-      .format("HH:mm")
+    moment().add(150, "minutes").startOf("hour").format("HH:mm")
   );
   const [requestFormData, setRequestFormData] = useState({
     sitterId: sitterId,
     ownerId: user._id,
     // Default start date is 30 minutes from now rounded up to the nearest hour
-    start: moment()
-      .add(moment().utcOffset() + 30, "minutes")
-      .startOf("hour")
-      .format(),
+    start: moment().add(30, "minutes").startOf("hour").format(),
     // Default end date is 2.5 hours from now rounded up to the nearest hour
-    end: moment()
-      .add(moment().utcOffset() + 150, "minutes")
-      .startOf("hour")
-      .format(),
+    end: moment().add(150, "minutes").startOf("hour").format(),
   });
 
   // Changes 'Send Request' button from spinning to normal when alert pops ups
@@ -88,8 +78,19 @@ function ProfileRequestForm({ sitterId }) {
     }
   }, [alerts]);
 
+  //clear any errors initially
+  useEffect(() => {
+    dispatch({ type: CLEAR_ERRORS });
+  }, []);
+  //if error occured - remove loading circle
+  useEffect(() => {
+    if (errors.length > 0) {
+      setRequestSending(false);
+    }
+  }, [errors]);
+
   // Handle change in 'Drop Off' (start) date input
-  const handleStartDateChange = (e) => {
+  const handleStartDateChange = e => {
     const formattedStartDate = moment(
       new Date(`${e.target.value}T${startTime}`)
     ).format();
@@ -116,7 +117,7 @@ function ProfileRequestForm({ sitterId }) {
   };
 
   // Handle change in 'Pick Up' (end) date input
-  const handleEndDateChange = (e) => {
+  const handleEndDateChange = e => {
     const formattedEndDate = moment(
       new Date(`${e.target.value}T${endTime}`)
     ).format();
@@ -145,7 +146,7 @@ function ProfileRequestForm({ sitterId }) {
   };
 
   // Handle change in 'Drop off' (start) time input
-  const handleStartTimeChange = (e) => {
+  const handleStartTimeChange = e => {
     const formattedStartDate = moment(
       new Date(`${startDate}T${e.target.value}`)
     ).format();
@@ -159,7 +160,7 @@ function ProfileRequestForm({ sitterId }) {
   };
 
   // Handle change in 'Pick Up' (start) time input.
-  const handleEndTimeChange = (e) => {
+  const handleEndTimeChange = e => {
     const formattedEndDate = moment(
       new Date(`${endDate}T${e.target.value}`)
     ).format();
@@ -172,7 +173,7 @@ function ProfileRequestForm({ sitterId }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     setRequestSending(true);
     e.preventDefault();
     createRequest(
@@ -204,7 +205,7 @@ function ProfileRequestForm({ sitterId }) {
             }}
             type="date"
             value={startDate}
-            onChange={(e) => handleStartDateChange(e)}
+            onChange={e => handleStartDateChange(e)}
             variant="outlined"
           ></TextField>
           <TextField
@@ -215,7 +216,7 @@ function ProfileRequestForm({ sitterId }) {
             value={startTime}
             variant="outlined"
             className={classes.textField + " " + classes.timeInputWidth}
-            onChange={(e) => {
+            onChange={e => {
               handleStartTimeChange(e);
             }}
           />
@@ -233,7 +234,7 @@ function ProfileRequestForm({ sitterId }) {
             type="date"
             variant="outlined"
             value={endDate}
-            onChange={(e) => handleEndDateChange(e)}
+            onChange={e => handleEndDateChange(e)}
           ></TextField>
           <TextField
             inputProps={{
@@ -243,7 +244,7 @@ function ProfileRequestForm({ sitterId }) {
             value={endTime}
             className={classes.textField + " " + classes.timeInputWidth}
             variant="outlined"
-            onChange={(e) => {
+            onChange={e => {
               handleEndTimeChange(e);
             }}
           />
@@ -255,7 +256,7 @@ function ProfileRequestForm({ sitterId }) {
         type="submit"
         size="large"
         className={classes.buttonStyles}
-        onClick={(e) => handleSubmit(e)}
+        onClick={e => handleSubmit(e)}
       >
         {requestSending ? (
           <CircularProgress color="white" size={20} />
@@ -263,6 +264,9 @@ function ProfileRequestForm({ sitterId }) {
           `SEND REQUEST`
         )}
       </Button>
+      {errors.length > 0 && (
+        <Alert alert={{ error: true, message: errors[0] }} />
+      )}
     </>
   );
 }

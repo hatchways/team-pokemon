@@ -12,6 +12,7 @@ const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");
 const paymentRouter = require("./routes/paymentRouter");
 const notificationRouter = require("./routes/notificationRouter");
+const chatRouter = require("./routes/chatRouter");
 
 const connectDB = require("./database");
 
@@ -39,6 +40,7 @@ app.use("/api/profile", profileRouter);
 app.use("/api/request", requestRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/notifications", notificationRouter);
+app.use("/api/chat", chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
