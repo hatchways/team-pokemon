@@ -14,7 +14,7 @@ import AlertMessage from "./Alert";
 import { login } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   text: {
     width: "300px",
     maxWidth: "100%",
+  },
+  loadingCircle: {
+    color: "white",
   },
 }));
 
@@ -51,12 +54,12 @@ function LoginForm() {
   //redirect to where user comes from after authentication
   const { state } = useLocation();
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
   //submitting user's credentials
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     setLoggingIn(true);
     e.preventDefault();
     //validating user input fields before submit
@@ -147,7 +150,11 @@ function LoginForm() {
           color="primary"
           onClick={handleSubmit}
         >
-          {loggingIn ? <CircularProgress color="white" size={20} /> : `LOGIN`}
+          {loggingIn ? (
+            <CircularProgress className={classes.loadingCircle} size={20} />
+          ) : (
+            `LOGIN`
+          )}
         </Button>
         <AlertMessage alert={alert} />
       </Grid>

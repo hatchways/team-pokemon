@@ -13,7 +13,7 @@ import AlertMessage from "./Alert";
 import { register } from "../actions/auth";
 import { AuthDispatchContext, AuthStateContext } from "../context/AuthContext";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   linkColor: {
     color: "#f04040",
   },
+  loadingCircle: {
+    color: "white",
+  },
 }));
 
 function SignupForm() {
@@ -48,7 +51,7 @@ function SignupForm() {
   // state for showing spinner on register button when user clicks on it
   const [registering, setRegistering] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
     setAlert({ error: false, message: "" });
   };
@@ -60,7 +63,7 @@ function SignupForm() {
   const { isAuthenticated, becomeSitter } = useContext(AuthStateContext);
 
   //submitting user's credentials
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     setRegistering(true);
     e.preventDefault();
     //validating user input fields before submit
@@ -197,7 +200,7 @@ function SignupForm() {
           onClick={handleSubmit}
         >
           {registering ? (
-            <CircularProgress color="white" size={20} />
+            <CircularProgress className={classes.loadingCircle} size={20} />
           ) : (
             `REGISTER`
           )}

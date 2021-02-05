@@ -34,6 +34,23 @@ const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   console.log("user conected");
+  
+  socket.on("join", ({ data }) => {
+    const room = data.userId;
+    socket.join(room);
+  });
+
+  socket.on("message", (messageData, callback) => {
+    const room = messageData.room;
+    const data = {
+      content: messageData.content,
+      chatId: messageData.chatId,
+      sender: messageData.sender,
+      timeCreated: messageData.timeCreated,
+      wasRead: false,
+    };
+    io.to(room).emit("newMessage", data);
+  })
 
   socket.on("online", (data) => {
     onlineUsers.set(data.userId, socket.id);

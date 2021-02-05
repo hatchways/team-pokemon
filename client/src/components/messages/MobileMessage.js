@@ -14,7 +14,9 @@ import {
 import Slide from "@material-ui/core/Slide";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import axios from "axios";
+import moment from "moment";
 import { UserContext } from "../../context/Context";
+import { AuthStateContext } from "../../context/AuthContext";
 import defaultPicture from "../../img/profile-default.png";
 import { Link } from "react-router-dom";
 
@@ -106,11 +108,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function MobileMessage() {
-  const { chatUserData, mobileMessageView, setMobileMessageView } = useContext(
-    UserContext
-  );
+  const { user } = useContext(AuthStateContext);
+  const {
+    chatUserData,
+    mobileMessageView,
+    setMobileMessageView,
+    socket,
+  } = useContext(UserContext);
   const [messageHistory, setMessageHistory] = useState();
   const [messageContent, setMessageContent] = useState("");
+  const [message, setMessage] = useState();
   const lastMessageRef = useRef(null);
   const classes = useStyles();
 
@@ -121,6 +128,37 @@ function MobileMessage() {
     };
   }, [chatUserData]);
 
+  useEffect(() => {
+    socket &&
+      socket.on("newMessage", data => {
+        const newMessage = {
+          sender: data.sender,
+          content: data.content,
+          timeCreated: data.timeCreated,
+          chatId: data.chatId,
+          wasRead: data.wasRead,
+        };
+        setMessage(newMessage);
+      });
+  }, [socket]);
+
+  useEffect(() => {
+    if (
+      messageHistory &&
+      message &&
+      messageHistory[0].chatId === message.chatId
+    ) {
+      setMessageContent("");
+      let updatedHistory = messageHistory && [...messageHistory, message];
+      setMessageHistory(updatedHistory);
+    }
+    return;
+  }, [message]);
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView();
+  }, [messageHistory]);
+
   const getMessageHistory = async () => {
     let resp = await axios.post("/api/chat/history", {
       chatId: chatUserData.chatId,
@@ -130,11 +168,22 @@ function MobileMessage() {
   };
 
   const sendMessage = async e => {
+    socket.emit("message", {
+      sender: user._id,
+      content: messageContent,
+      timeCreated: moment().format(),
+      chatId: chatUserData.chatId,
+      wasRead: false,
+      room: chatUserData.userId,
+    });
+
     e.preventDefault();
     await axios.post("/api/chat/message", {
       content: messageContent,
       chatId: chatUserData.chatId,
     });
+    setMessageContent("");
+    getMessageHistory();
   };
 
   return (
@@ -169,20 +218,13 @@ function MobileMessage() {
               {chatUserData.firstName + " " + chatUserData.lastName}
             </Typography>
           </Grid>
-          <Grid item className={classes.messageList}>
+          <Grid item className={classes.messageList} id="messageList">
             {messageHistory ? (
               messageHistory.map((message, index) => {
                 return (
                   <Box key={index}>
                     {message.content ? (
-                      <Box
-                        className={classes.theirMessageWrapper}
-                        ref={
-                          index === messageHistory.length - 1
-                            ? lastMessageRef
-                            : null
-                        }
-                      >
+                      <Box className={classes.theirMessageWrapper}>
                         {chatUserData.userId === message.sender ? (
                           <Avatar
                             src={chatUserData.picture || defaultPicture}
@@ -210,6 +252,7 @@ function MobileMessage() {
             ) : (
               <CircularProgress size={60} className={classes.loading} />
             )}
+            <Box ref={lastMessageRef}></Box>
           </Grid>
           <Grid item className={classes.inputBox}>
             <TextField
@@ -218,6 +261,7 @@ function MobileMessage() {
               InputProps={{ disableUnderline: true }}
               className={classes.textInput}
               onChange={e => setMessageContent(e.target.value)}
+              value={messageContent || ""}
               placeholder={"Reply to " + chatUserData.firstName}
             />
             <Button

@@ -21,9 +21,6 @@ import Settings from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ProfileListings from "./pages/ProfileListings";
 import SuccessAlert from "./components/SuccessAlert";
-import io from "socket.io-client";
-
-const socket = io();
 
 function App() {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -60,11 +57,11 @@ function App() {
                 path="/settings/availability"
                 component={Availability}
               />
-              <PrivateRoute path='/settings/payment' component={Payment} />
-              <PrivateRoute path='/settings/security' component={Security} />
-              <PrivateRoute path='/settings/account' component={Settings} />
-              <PrivateRoute path='/chat' component={Chat} />
-              <PrivateRoute path='*' component={PageNotFound} />
+              <PrivateRoute path="/settings/payment" component={Payment} />
+              <PrivateRoute path="/settings/security" component={Security} />
+              <PrivateRoute path="/settings/account" component={Settings} />
+              <PrivateRoute path="/chat" component={Chat} />
+              <PrivateRoute path="*" component={PageNotFound} />
             </Switch>
           </AuthDispatchContext.Provider>
         </AuthStateContext.Provider>
