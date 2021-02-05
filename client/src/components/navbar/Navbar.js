@@ -14,6 +14,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import { Link } from "react-router-dom";
 import MobileNavbar from "./mobileNavbar";
+import Notifications from "../notifications/Notifications";
 import {
   AuthStateContext,
   AuthDispatchContext,
@@ -54,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
   removeTextDecoration: {
     textDecoration: "none",
   },
+  notificationDot: {
+    marginLeft: "0px",
+    marginBottom: "auto",
+  },
+  notificationsMenu: {
+    position: "relative",
+  },
 }));
 
 function Navbar() {
@@ -69,44 +77,46 @@ function Navbar() {
   };
 
   return (
-    <AppBar
-      position="fixed"
-      className={isAuthenticated ? classes.toolbarAuth : classes.toolbar}
-    >
-      <Toolbar variant="dense">
-        <Hidden mdUp>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <MobileNavbar />
-        </Hidden>
-        <Link to="/listings" className={classes.avatarLink}>
-          {isMobile ? (
-            <img src={logoMobile} alt="logo" className={classes.logo} />
+    <>
+      <AppBar
+        position="fixed"
+        className={isAuthenticated ? classes.toolbarAuth : classes.toolbar}
+      >
+        <Toolbar variant="dense">
+          <Hidden mdUp>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <MobileNavbar />
+          </Hidden>
+          <Link to="/listings" className={classes.avatarLink}>
+                      {isMobile ? (
+           Mobile} alt="logo" className={classes.logo} />
           ) : (
             <img src={logo} alt="logo" className={classes.logo} />
           )}
-        </Link>
-        {isAuthenticated ? (
-          <>
-            <Hidden smDown>
-              {!profile.isSitter ? (
-                <Link
-                  to="/settings/editprofile"
-                  className={classes.authLinkStyling}
-                >
-                  <Button size="large" onClick={handleBecomeSitter}>
-                    Become a Sitter
-                  </Button>
-                </Link>
-              ) : null}
+          </Link>
+          {isAuthenticated ? (
+            <>
+              <Hidden smDown>
+                {!profile.isSitter ? (
+                  <Link
+                    to="/settings/editprofile"
+                    className={classes.authLinkStyling}
+                  >
+                    <Button size="large" onClick={handleBecomeSitter}>
+                      Become a Sitter
+                    </Button>
+                  </Link>
+                ) : null}
               <Link to="/bookings" className={classes.authLinkStyling}>
                 <Button size="large">Bookings</Button>
               </Link>
+              <Notifications />
               <Link to="/chat" className={classes.authLinkStyling}>
 
               </Link>
@@ -150,16 +160,11 @@ function Navbar() {
                   Login
                 </Button>
               </Link>
-            </Box>
-            <Link to="/signup" className={classes.removeTextDecoration}>
-              <Button color="primary" variant="contained" size="large">
-                Sign Up
-              </Button>
-            </Link>
-          </Hidden>
-        )}
-      </Toolbar>
-    </AppBar>
+            </Hidden>
+          )}
+        </Toolbar>
+      </AppBar>
+    </>
   );
 }
 

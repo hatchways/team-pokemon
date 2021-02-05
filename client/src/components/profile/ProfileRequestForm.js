@@ -47,7 +47,7 @@ function ProfileRequestForm({ sitterId }) {
 
   // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
-  const { user, alerts, errors } = useContext(AuthStateContext);
+  const { user, alerts, errors, profile } = useContext(AuthStateContext);
 
   // Today's date to be passed as the minimum and default value to the 'drop off' date picker input.
   const today = new Date();
@@ -176,7 +176,11 @@ function ProfileRequestForm({ sitterId }) {
   const handleSubmit = async e => {
     setRequestSending(true);
     e.preventDefault();
-    createRequest(dispatch, requestFormData);
+    createRequest(
+      dispatch,
+      requestFormData,
+      `${profile.firstName} ${profile.lastName}`
+    );
   };
 
   return (

@@ -32,6 +32,8 @@ function App() {
     getUser(dispatch);
   }, []);
 
+  socket.on("notification", (data) => console.log(data));
+
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
@@ -40,22 +42,22 @@ function App() {
             <Navbar />
             <SuccessAlert />
             <Switch>
-              <Route path='/signup' component={Signup} />
-              <Route path='/login' component={Login} />
-              <PrivateRoute path='/listings' component={ProfileListings} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+              <PrivateRoute path="/listings" component={ProfileListings} />
               <PrivateRoute
-                path='/profile/:user_id'
+                path="/profile/:user_id"
                 exact
                 component={Profile}
               />
-              <PrivateRoute path='/bookings' exact component={Bookings} />
+              <PrivateRoute path="/bookings" exact component={Bookings} />
               <PrivateRoute
-                path='/settings/editprofile'
+                path="/settings/editprofile"
                 component={EditProfile}
               />
-              <PrivateRoute path='/settings/photo' component={Photo} />
+              <PrivateRoute path="/settings/photo" component={Photo} />
               <PrivateRoute
-                path='/settings/availability'
+                path="/settings/availability"
                 component={Availability}
               />
               <PrivateRoute path='/settings/payment' component={Payment} />

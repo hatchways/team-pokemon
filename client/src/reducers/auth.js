@@ -17,7 +17,9 @@ import {
   PAY_BOOKING_FAILURE,
   CLEAR_ERRORS,
   REQUEST_ACCEPT_ERROR,
+  UPDATE_NOTIFICATIONS,
   CREATE_BOOKING_FAILURE,
+  
 } from "../actions/types";
 
 export const initialState = {
@@ -87,6 +89,7 @@ export const AuthReducer = (state = initialState, action) => {
         requests: payload,
         errors: [],
       };
+    case UPDATE_NOTIFICATIONS:
     case PHOTO_CATEGORY_UPDATED:
       return {
         ...state,

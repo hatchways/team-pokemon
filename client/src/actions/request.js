@@ -1,4 +1,5 @@
 import axios from "axios";
+import io from "socket.io-client";
 import { setAlert } from "../actions/alert";
 import {
   PAY_BOOKING_SUCCESS,
@@ -6,8 +7,10 @@ import {
   CREATE_BOOKING_FAILURE,
 } from "./types";
 
+const socket = io();
+
 // Create Request
-export const createRequest = async (dispatch, payload) => {
+export const createRequest = async (dispatch, payload, OwnerName) => {
   try {
     const config = {
       headers: {
@@ -16,6 +19,10 @@ export const createRequest = async (dispatch, payload) => {
     };
     await axios.post("/api/request/", payload, config);
     setAlert(dispatch, "Request Sent!");
+    socket.emit("requestSent", {
+      sitterId: payload.sitterId,
+      message: `${OwnerName} has sent you a request!`,
+    });
   } catch (err) {
     const error = err.response.data.error.message;
     if (error) {

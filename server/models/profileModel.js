@@ -54,18 +54,23 @@ const profileSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
-  availability: [{
-    start: Date,
-    end: Date
-  }],
+  availability: [
+    {
+      start: Date,
+      end: Date,
+    },
+  ],
   headerPicture: {
     type: String,
   },
   photoAlbum: [{ type: String }],
   price: {
     type: Number,
-    default: 14.0
-  }
+    default: 14.0,
+  },
+  notifications: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Notification" },
+  ],
 });
 
 const Profile = mongoose.model("Profile", profileSchema);

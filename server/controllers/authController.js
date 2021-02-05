@@ -11,7 +11,7 @@ const {
 
 // HELPER FUNCTIONS
 
-const signToken = id => {
+const signToken = (id) => {
   return jwt.sign({ id }, process.env.TOKEN_SECRET, {
     expiresIn: "5h",
   });
@@ -102,7 +102,16 @@ exports.login = async (req, res, next) => {
     // Check if email exists, select password if it does.
     const user = await User.findOne({ email: email })
       .select(["email", "password", "profile"])
-      .populate("profile");
+      .populate([
+        {
+          path: "profile",
+          model: "Profile",
+          populate: {
+            path: "notifications",
+            model: "Notification",
+          },
+        },
+      ]);
 
     if (!user) {
       return next(createError(400, "No such email found"));
