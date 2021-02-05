@@ -3,6 +3,7 @@ import { Grid, makeStyles, Typography, Avatar, Box } from "@material-ui/core";
 import defaultPicture from "../../img/profile-default.png";
 import moment from "moment";
 import { UserContext } from "../../context/Context";
+import { AuthStateContext } from "../../context/AuthContext";
 
 moment.locale("en", {
   calendar: {
@@ -70,6 +71,7 @@ function Conversation(props) {
     setChatUserData,
     setMobileMessageView,
   } = useContext(UserContext);
+  const { user } = useContext(AuthStateContext);
   const [conversations, setConversations] = useState([]);
   const [lastMessage, setLastMessage] = useState();
   const classes = useStyles();
@@ -77,6 +79,19 @@ function Conversation(props) {
   useEffect(() => {
     setConversations(props.conversations);
   }, [props]);
+
+  useEffect(() => {
+    //join room for this user
+    const data = {
+      userId: user._id,
+    };
+    socket && socket.emit("join", { data }, () => {});
+
+    //clean socket before destroying component
+    return () => {
+      socket && socket.off();
+    };
+  }, [socket]);
 
   useEffect(() => {
     socket &&

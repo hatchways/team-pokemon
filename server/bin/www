@@ -21,11 +21,6 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-/**
- * user Functions
- */
-const { addUser, getUser } = require("../users.js");
-
 var server = http.createServer(app);
 /**
  * socket io connection
@@ -35,25 +30,20 @@ io.on("connection", socket => {
   console.log("user conected");
 
   socket.on("join", ({ data }) => {
-    const userId = data.userId;
-    const room = data.chatId;
-    addUser({ userId, room });
+    const room = data.userId;
     socket.join(room);
   });
 
   socket.on("message", (messageData, callback) => {
-    const chatId = messageData.chatId;
-    const userId = messageData.sender;
-    const user = getUser({ userId, chatId });
+    const room = messageData.room;
     const data = {
-      socketId: user.id,
       content: messageData.content,
       chatId: messageData.chatId,
       sender: messageData.sender,
       timeCreated: messageData.timeCreated,
       wasRead: false,
     };
-    io.to(user.room).emit("newMessage", data);
+    io.to(room).emit("newMessage", data);
   });
 
   socket.on("disconnect", () => {

@@ -129,21 +129,6 @@ function MobileMessage() {
   }, [chatUserData]);
 
   useEffect(() => {
-    //join room for this conversation
-    if (chatUserData) {
-      const data = {
-        userId: user._id,
-        chatId: chatUserData.chatId,
-      };
-      socket && socket.emit("join", { data }, () => {});
-    }
-    //clean socket before destroying component
-    return () => {
-      socket && socket.off();
-    };
-  }, [chatUserData, socket]);
-
-  useEffect(() => {
     socket &&
       socket.on("newMessage", data => {
         const newMessage = {
@@ -155,7 +140,7 @@ function MobileMessage() {
         };
         setMessage(newMessage);
       });
-  }, [chatUserData]);
+  }, [socket]);
 
   useEffect(() => {
     if (
@@ -189,6 +174,7 @@ function MobileMessage() {
       timeCreated: moment().format(),
       chatId: chatUserData.chatId,
       wasRead: false,
+      room: chatUserData.userId,
     });
 
     e.preventDefault();
@@ -196,6 +182,8 @@ function MobileMessage() {
       content: messageContent,
       chatId: chatUserData.chatId,
     });
+    setMessageContent("");
+    getMessageHistory();
   };
 
   return (
@@ -236,14 +224,7 @@ function MobileMessage() {
                 return (
                   <Box key={index}>
                     {message.content ? (
-                      <Box
-                        className={classes.theirMessageWrapper}
-                        // ref={
-                        //   index === messageHistory.length - 1
-                        //     ? lastMessageRef
-                        //     : null
-                        // }
-                      >
+                      <Box className={classes.theirMessageWrapper}>
                         {chatUserData.userId === message.sender ? (
                           <Avatar
                             src={chatUserData.picture || defaultPicture}
