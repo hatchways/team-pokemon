@@ -13,6 +13,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import { Link } from "react-router-dom";
 import MobileNavbar from "./mobileNavbar";
+import Notifications from "../notifications/Notifications";
 import {
   AuthStateContext,
   AuthDispatchContext,
@@ -52,6 +53,13 @@ const useStyles = makeStyles((theme) => ({
   removeTextDecoration: {
     textDecoration: "none",
   },
+  notificationDot: {
+    marginLeft: "0px",
+    marginBottom: "auto",
+  },
+  notificationsMenu: {
+    position: "relative",
+  },
 }));
 
 function Navbar() {
@@ -66,88 +74,91 @@ function Navbar() {
   };
 
   return (
-    <AppBar
-      position="fixed"
-      className={isAuthenticated ? classes.toolbarAuth : classes.toolbar}
-    >
-      <Toolbar variant="dense">
-        <Hidden mdUp>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <MobileNavbar />
-        </Hidden>
-        <Link to="/listings" className={classes.avatarLink}>
-          <img src={logo} alt="logo" className={classes.logo} />
-        </Link>
-        {isAuthenticated ? (
-          <>
+    <>
+      <AppBar
+        position="fixed"
+        className={isAuthenticated ? classes.toolbarAuth : classes.toolbar}
+      >
+        <Toolbar variant="dense">
+          <Hidden mdUp>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <MobileNavbar />
+          </Hidden>
+          <Link to="/listings" className={classes.avatarLink}>
+            <img src={logo} alt="logo" className={classes.logo} />
+          </Link>
+          {isAuthenticated ? (
+            <>
+              <Hidden smDown>
+                {!profile.isSitter ? (
+                  <Link
+                    to="/settings/editprofile"
+                    className={classes.authLinkStyling}
+                  >
+                    <Button size="large" onClick={handleBecomeSitter}>
+                      Become a Sitter
+                    </Button>
+                  </Link>
+                ) : null}
+                <Notifications />
+                <Link to="*" className={classes.authLinkStyling}>
+                  <Button size="large">Messages</Button>
+                </Link>
+              </Hidden>
+              <Hidden mdUp>
+                <Notifications />
+                <Link to="*" className={classes.authLinkStyling}>
+                  <MailIcon color="primary" fontSize="large" />
+                </Link>
+              </Hidden>
+              <Link
+                to="/settings/editprofile"
+                className={classes.removeTextDecoration}
+              >
+                <Avatar
+                  alt="user"
+                  src={
+                    profile && profile.profilePicture
+                      ? profile.profilePicture
+                      : defaultPicture
+                  }
+                />
+              </Link>
+            </>
+          ) : (
             <Hidden smDown>
-              {!profile.isSitter ? (
-                <Link
-                  to="/settings/editprofile"
-                  className={classes.authLinkStyling}
-                >
-                  <Button size="large" onClick={handleBecomeSitter}>
+              <Box mr={4} ml={4}>
+                <Link to="/signup" className={classes.signupLinkStyling}>
+                  <Button
+                    size="large"
+                    className={classes.sitterLink}
+                    onClick={handleBecomeSitter}
+                  >
                     Become a Sitter
                   </Button>
                 </Link>
-              ) : null}
-
-              <Link to="*" className={classes.authLinkStyling}>
-                <Button size="large">Messages</Button>
-              </Link>
-            </Hidden>
-            <Hidden mdUp>
-              <Link to="*" className={classes.authLinkStyling}>
-                <MailIcon color="primary" fontSize="large" />
-              </Link>
-            </Hidden>
-            <Link
-              to="/settings/editprofile"
-              className={classes.removeTextDecoration}
-            >
-              <Avatar
-                alt="user"
-                src={
-                  profile && profile.profilePicture
-                    ? profile.profilePicture
-                    : defaultPicture
-                }
-              />
-            </Link>
-          </>
-        ) : (
-          <Hidden smDown>
-            <Box mr={4} ml={4}>
-              <Link to="/signup" className={classes.signupLinkStyling}>
-                <Button
-                  size="large"
-                  className={classes.sitterLink}
-                  onClick={handleBecomeSitter}
-                >
-                  Become a Sitter
+                <Link to="/login" className={classes.removeTextDecoration}>
+                  <Button color="primary" variant="outlined" size="large">
+                    Login
+                  </Button>
+                </Link>
+              </Box>
+              <Link to="/signup" className={classes.removeTextDecoration}>
+                <Button color="primary" variant="contained" size="large">
+                  Sign Up
                 </Button>
               </Link>
-              <Link to="/login" className={classes.removeTextDecoration}>
-                <Button color="primary" variant="outlined" size="large">
-                  Login
-                </Button>
-              </Link>
-            </Box>
-            <Link to="/signup" className={classes.removeTextDecoration}>
-              <Button color="primary" variant="contained" size="large">
-                Sign Up
-              </Button>
-            </Link>
-          </Hidden>
-        )}
-      </Toolbar>
-    </AppBar>
+            </Hidden>
+          )}
+        </Toolbar>
+      </AppBar>
+    </>
   );
 }
 
