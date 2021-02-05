@@ -156,6 +156,11 @@ function Navbar() {
                   </Button>
                 </Link>
               </Box>
+              <Link to="/signup" className={classes.removeTextDecoration}>
+                <Button color="primary" variant="contained" size="large">
+                  Sign Up
+                </Button>
+              </Link>
             </Hidden>
           )}
         </Toolbar>
