@@ -10,6 +10,7 @@ const UserProvider = ({ children }) => {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false); //state for mobile layout settings menu
   const [chatUserData, setChatUserData] = useState();
   const [mobileMessageView, setMobileMessageView] = useState(false);
+  const [filter, setFilter] = useState("");
   const [socket, setSocket] = useState();
 
   useEffect(() => {
@@ -29,6 +30,8 @@ const UserProvider = ({ children }) => {
         setMobileMessageView,
         socket,
         setSocket,
+        filter,
+        setFilter,
       }}
     >
       {children}

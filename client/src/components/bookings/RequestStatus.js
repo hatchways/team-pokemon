@@ -49,7 +49,7 @@ function RequestStatus({ request, modeTime }) {
 
   // Get dispatch method from context
   const dispatch = useContext(AuthDispatchContext);
-  const { errors } = useContext(AuthStateContext);
+  const { profile, errors } = useContext(AuthStateContext);
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -113,7 +113,13 @@ function RequestStatus({ request, modeTime }) {
             className={classes.buttonWidth}
             onClick={() => {
               setAcceptButtonSubmitting(true);
-              updateRequest(dispatch, { accepted: true }, request._id);
+              updateRequest(
+                dispatch,
+                { accepted: true },
+                request._id,
+                request.ownerId,
+                `${profile.firstName} ${profile.lastName}`
+              );
             }}
           >
             {acceptButtonSubmitting ? (
@@ -127,7 +133,13 @@ function RequestStatus({ request, modeTime }) {
             className={classes.buttonWidth}
             onClick={() => {
               setDeclineButtonSubmitting(true);
-              updateRequest(dispatch, { declined: true }, request._id);
+              updateRequest(
+                dispatch,
+                { declined: true },
+                request._id,
+                request.ownerId,
+                `${profile.firstName} ${profile.lastName}`
+              );
             }}
           >
             {declineButtonSubmitting ? (

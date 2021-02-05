@@ -263,9 +263,9 @@ exports.deletePicture = async (req, res, next) => {
   }
 };
 exports.addAvailability = async (req, res, next) => {
-  try{
+  try {
     //check request ID
-    if(!ObjectId.isValid(req.params.id)){
+    if (!ObjectId.isValid(req.params.id)) {
       return next(createError(400, "Invalid Profile id!"));
     }
 
@@ -275,15 +275,15 @@ exports.addAvailability = async (req, res, next) => {
       return next(createError(404, "Profile does not exist!"));
     }
     //extract start and end date from body if profile exist
-    const {start, end} = req.body;
+    const { start, end } = req.body;
     //check for start and end date
-    if(!start || !end){
+    if (!start || !end) {
       return next(createError(400, "Missing start & end date"));
     }
-    profile.availability.push({start: start, end: end});
+    profile.availability.push({ start: start, end: end });
     profile.save();
     res.status(200).send(profile);
-  }catch (err){
+  } catch (err) {
     next(createError(500, err.message));
   }
 };

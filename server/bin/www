@@ -10,6 +10,8 @@ require("dotenv").config();
 var app = require("../app");
 var http = require("http");
 
+const { sendNotification } = require("../utils/sendNotification");
+
 /**
  * Get port from environment and store in Express.
  */
@@ -26,9 +28,13 @@ var server = http.createServer(app);
  * socket io connection
  */
 const io = require("socket.io")(server);
-io.on("connection", socket => {
-  console.log("user conected");
 
+// Hash map that stores mongoDB user IDs as keys and user socket IDs as values.
+const onlineUsers = new Map();
+
+io.on("connection", (socket) => {
+  console.log("user conected");
+  
   socket.on("join", ({ data }) => {
     const room = data.userId;
     socket.join(room);
@@ -44,6 +50,47 @@ io.on("connection", socket => {
       wasRead: false,
     };
     io.to(room).emit("newMessage", data);
+  })
+
+  socket.on("online", (data) => {
+    onlineUsers.set(data.userId, socket.id);
+    console.log(onlineUsers);
+  });
+
+  socket.on("offline", (data) => {
+    onlineUsers.delete(data.userId);
+  });
+
+  socket.on("requestAccepted", (notification) => {
+    sendNotification(notification.ownerId, notification.message);
+  });
+
+  socket.on("requestDeclined", (notification) => {
+    sendNotification(notification.ownerId, notification.message);
+  });
+
+  socket.on("requestSent", (notification) => {
+    // Add into notifications list in database for sitter.
+    sendNotification(notification.sitterId, notification.message);
+
+    // Update current user's socket id
+    onlineUsers.set(notification.ownerId, socket.id);
+
+    // Emit notification to sitter"
+    const receiver = onlineUsers.get(notification.sitterId);
+
+    // console.log(io.sockets.sockets.get(receiver).client);
+
+    if (receiver) {
+      console.log(`Sending to ${receiver}...`);
+
+      io.to(receiver).emit("notification", {
+        type: "request",
+        message: notification.message,
+      });
+    } else {
+      console.log("User is offline");
+    }
   });
 
   socket.on("disconnect", () => {

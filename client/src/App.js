@@ -29,6 +29,8 @@ function App() {
     getUser(dispatch);
   }, []);
 
+  socket.on("notification", (data) => console.log(data));
+
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>

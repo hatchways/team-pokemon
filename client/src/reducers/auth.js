@@ -17,6 +17,9 @@ import {
   PAY_BOOKING_FAILURE,
   CLEAR_ERRORS,
   REQUEST_ACCEPT_ERROR,
+  UPDATE_NOTIFICATIONS,
+  CREATE_BOOKING_FAILURE,
+  
 } from "../actions/types";
 
 export const initialState = {
@@ -86,6 +89,7 @@ export const AuthReducer = (state = initialState, action) => {
         requests: payload,
         errors: [],
       };
+    case UPDATE_NOTIFICATIONS:
     case PHOTO_CATEGORY_UPDATED:
       return {
         ...state,
@@ -95,7 +99,7 @@ export const AuthReducer = (state = initialState, action) => {
     case REQUEST_UPDATED:
       return {
         ...state,
-        requests: state.requests.map((request) => {
+        requests: state.requests.map(request => {
           if (request._id === payload.requestId) {
             return { ...request, ...payload.payload };
           } else {
@@ -107,7 +111,7 @@ export const AuthReducer = (state = initialState, action) => {
     case PAY_BOOKING_SUCCESS:
       return {
         ...state,
-        requests: state.requests.map((request) => {
+        requests: state.requests.map(request => {
           if (request._id === payload) {
             return { ...request, paid: true };
           } else {
@@ -118,6 +122,7 @@ export const AuthReducer = (state = initialState, action) => {
       };
     case PAY_BOOKING_FAILURE:
     case REQUEST_ACCEPT_ERROR:
+    case CREATE_BOOKING_FAILURE:
       return {
         ...state,
         errors: [...state.errors, payload],
@@ -140,7 +145,7 @@ export const AuthReducer = (state = initialState, action) => {
     case REMOVE_ALERT:
       return {
         ...state,
-        alerts: state.alerts.filter((alert) => alert.id !== payload),
+        alerts: state.alerts.filter(alert => alert.id !== payload),
       };
     default:
       return state;
