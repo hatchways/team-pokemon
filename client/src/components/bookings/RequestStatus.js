@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useHisto } from "react";
 import { updateRequest } from "../../actions/requests";
 import {
   Box,
@@ -12,10 +12,12 @@ import {
   AuthDispatchContext,
   AuthStateContext,
 } from "../../context/AuthContext";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 import Alert from "../Alert";
 import PaymentModal from "./PaymentModal";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   requestSpacing: {
     marginTop: "10px",
     marginBottom: "10px",
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#e6e6e6",
     fontWeight: "bold",
     letterSpacing: "1.5px",
+    marginBottom: "5px",
   },
   buttonWidth: {
     width: "70px",
@@ -42,6 +45,7 @@ function RequestStatus({ request, modeTime }) {
   const [declineButtonSubmitting, setDeclineButtonSubmitting] = useState(false);
   const [cards, setCards] = useState(null);
   const [paymentModal, togglePaymentModal] = useState(false);
+  let history = useHistory();
 
   // Get dispatch method from context
   const dispatch = useContext(AuthDispatchContext);
@@ -52,6 +56,18 @@ function RequestStatus({ request, modeTime }) {
       setAcceptButtonSubmitting(false);
     }
   }, [errors.length]);
+
+  const handleMessage = async () => {
+    let resp = await axios.post("/api/chat", [
+      request.ownerId._id,
+      request.sitterId._id,
+    ]);
+    if (!resp.data.error) {
+      history.push({
+        pathname: "/chat",
+      });
+    }
+  };
 
   // Conditional variables to be used to determine which status to show on the request
 
@@ -163,9 +179,20 @@ function RequestStatus({ request, modeTime }) {
                           ) : (
                             [
                               showAccepted ? (
-                                <Typography className={classes.lightGreyColor}>
-                                  ACCEPTED
-                                </Typography>
+                                <>
+                                  <Typography
+                                    className={classes.lightGreyColor}
+                                  >
+                                    ACCEPTED
+                                  </Typography>
+                                  <Button
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={handleMessage}
+                                  >
+                                    Message
+                                  </Button>
+                                </>
                               ) : (
                                 <Typography className={classes.lightGreyColor}>
                                   DECLINED

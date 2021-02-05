@@ -107,7 +107,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function MobileMessage(props) {
+function MobileMessage() {
   const { user } = useContext(AuthStateContext);
   const {
     chatUserData,

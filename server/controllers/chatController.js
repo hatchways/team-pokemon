@@ -10,26 +10,23 @@ exports.createChat = async (req, res, next) => {
   try {
     Chat.findOne(
       {
-        participants: ["6015f112ed9e414aa003c32a", req.user.id], //1st PARTICIPANT - should come form body.req!!
+        participants: { $all: [req.body[0], req.body[1]] },
       },
       async (err, chat) => {
         if (err) console.log(err);
-        if (chat) {
-          return;
-          //If user is going to message other user we check if they have chatted already and if so - send message history as response
-        }
         if (!chat) {
           const newMessage = new Message({
             timeCreated: moment(),
           });
           let newChat = new Chat({
-            participants: ["6015f112ed9e414aa003c32a", req.user.id], //1st PARTICIPANT - should come form body.req!!
+            participants: [req.body[0], req.body[1]],
             messages: [newMessage._id],
           });
           newChat.save();
           newMessage.chatId = newChat._id;
           newMessage.save();
         }
+        res.json({ error: false, chatId: chat._id });
       }
     );
   } catch (err) {

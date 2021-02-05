@@ -95,7 +95,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Message(props) {
+function Message() {
   const { user } = useContext(AuthStateContext);
   const { chatUserData, socket } = useContext(UserContext);
   const [messageHistory, setMessageHistory] = useState();

@@ -117,10 +117,11 @@ function Calendar({ sitterMode, currentSitterBookings, currentOwnerBookings }) {
         </Box>
       </Box>
       <Box className={classes.weekContainer}>
-        {calendar.map((week) => (
-          <Box className={classes.week}>
-            {week.map((day) => (
+        {calendar.map((week, index) => (
+          <Box className={classes.week} key={index}>
+            {week.map((day, index) => (
               <Box
+                key={index}
                 className={
                   sitterMode &&
                   currentSitterBookings.indexOf(
