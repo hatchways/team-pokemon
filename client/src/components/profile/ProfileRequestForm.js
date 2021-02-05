@@ -8,12 +8,17 @@ import {
   TextField,
   Typography,
   makeStyles,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
 } from "@material-ui/core";
 import {
   AuthDispatchContext,
   AuthStateContext,
 } from "../../context/AuthContext";
 import { createRequest } from "../../actions/request";
+import { format, isBefore, isSameDay, parseISO } from "date-fns";
 
 const useStyles = makeStyles(() => ({
   centerContent: {
@@ -40,7 +45,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function ProfileRequestForm({ sitterId }) {
+function ProfileRequestForm({ sitterId, sitterPrice, sitterAvailability }) {
   const classes = useStyles();
 
   // Get dispatch method and state from auth context
@@ -88,6 +93,9 @@ function ProfileRequestForm({ sitterId }) {
     }
   }, [alerts]);
 
+  const checkDate = (date) => {
+    return isSameDay(parseISO(date.start), parseISO(startDate));
+  };
   // Handle change in 'Drop Off' (start) date input
   const handleStartDateChange = (e) => {
     const formattedStartDate = moment(
@@ -95,7 +103,7 @@ function ProfileRequestForm({ sitterId }) {
     ).format();
 
     setStartDate(e.target.value);
-
+    const result = sitterAvailability.find(checkDate);
     // If start date is later than end date, change end date to same day as start date.
     if (e.target.value > endDate) {
       const formattedEndDate = moment(
@@ -175,13 +183,14 @@ function ProfileRequestForm({ sitterId }) {
   const handleSubmit = (e) => {
     setRequestSending(true);
     e.preventDefault();
+    console.log(requestFormData);
     createRequest(dispatch, requestFormData);
   };
 
   return (
     <>
       <Typography variant='h4' className={classes.hourlyRateHeading}>
-        $14/hr
+        ${sitterPrice}/hr
       </Typography>
       <Rating
         name='simple-controlled'
@@ -194,6 +203,28 @@ function ProfileRequestForm({ sitterId }) {
           <Typography className={classes.labelStyles}>DROP OFF</Typography>
         </Box>
         <Box className={classes.inputGap}>
+          <FormControl variant='outlined'>
+            <InputLabel htmlFor='start-date'>Date</InputLabel>
+            <Select
+              value={startDate}
+              onChange={(e) => handleStartDateChange(e)}
+              label='Date'
+            >
+              {sitterAvailability.map(
+                (date) =>
+                  !isBefore(parseISO(date.end), new Date()) && (
+                    <MenuItem
+                      key={date._id}
+                      value={format(parseISO(date.start), "yyyy-MM-dd")}
+                    >
+                      {" "}
+                      {format(parseISO(date.start), "MMMM dd, yyyy")}
+                    </MenuItem>
+                  )
+              )}
+            </Select>
+          </FormControl>
+          {/*
           <TextField
             InputProps={{
               inputProps: { min: todayFormatted },
@@ -202,7 +233,7 @@ function ProfileRequestForm({ sitterId }) {
             value={startDate}
             onChange={(e) => handleStartDateChange(e)}
             variant='outlined'
-          ></TextField>
+          ></TextField>*/}
           <TextField
             inputProps={{
               step: 300, // 5 min
@@ -222,6 +253,28 @@ function ProfileRequestForm({ sitterId }) {
           <Typography className={classes.labelStyles}>PICK UP</Typography>
         </Box>
         <Box className={classes.endDateAlign}>
+          <FormControl variant='outlined'>
+            <InputLabel htmlFor='end-date'>Date</InputLabel>
+            <Select
+              value={endDate}
+              onChange={(e) => handleEndDateChange(e)}
+              label='Date'
+            >
+              {sitterAvailability.map(
+                (date) =>
+                  !isBefore(parseISO(date.end), new Date()) && (
+                    <MenuItem
+                      key={date._id}
+                      value={format(parseISO(date.start), "yyyy-MM-dd")}
+                    >
+                      {" "}
+                      {format(parseISO(date.start), "MMMM dd, yyyy")}
+                    </MenuItem>
+                  )
+              )}
+            </Select>
+          </FormControl>
+          {/*
           <TextField
             InputProps={{
               inputProps: { min: startDate },
@@ -230,7 +283,7 @@ function ProfileRequestForm({ sitterId }) {
             variant='outlined'
             value={endDate}
             onChange={(e) => handleEndDateChange(e)}
-          ></TextField>
+          ></TextField>*/}
           <TextField
             inputProps={{
               step: 300, // 5 min
