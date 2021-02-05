@@ -29,6 +29,46 @@ const io = require("socket.io")(server);
 io.on("connection", (socket) => {
   console.log("user conected");
 
+  socket.on("online", (data) => {
+    onlineUsers.set(data.userId, socket.id);
+  });
+
+  socket.on("offline", (data) => {
+    onlineUsers.delete(data.userId);
+  });
+
+  socket.on("requestAccepted", (notification) => {
+    sendNotification(notification.ownerId, notification.message);
+  });
+
+  socket.on("requestDeclined", (notification) => {
+    sendNotification(notification.ownerId, notification.message);
+  });
+
+  socket.on("requestSent", (notification) => {
+    // Add into notifications list in database for sitter.
+    sendNotification(notification.sitterId, notification.message);
+
+    // Update current user's socket id
+    onlineUsers.set(notification.ownerId, socket.id);
+
+    // Emit notification to sitter"
+    const receiver = onlineUsers.get(notification.sitterId);
+
+    // console.log(io.sockets.sockets.get(receiver).client);
+
+    if (receiver) {
+      console.log(`Sending to ${receiver}...`);
+
+      io.to(receiver).emit("notification", {
+        type: "request",
+        message: notification.message,
+      });
+    } else {
+      console.log("User is offline");
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
