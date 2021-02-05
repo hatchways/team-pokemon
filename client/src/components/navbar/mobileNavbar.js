@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 function MobileNavbar() {
   const { mobileMenuOpen, setMobileMenuOpen } = useContext(UserContext);
   const classes = useStyles();
-
   return (
     <Dialog open={mobileMenuOpen} fullScreen TransitionComponent={Transition}>
       <Box>

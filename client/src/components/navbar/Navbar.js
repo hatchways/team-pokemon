@@ -7,6 +7,7 @@ import {
   Box,
   Hidden,
   Avatar,
+  useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -20,6 +21,7 @@ import {
 import { BECOME_SITTER } from "../../actions/types";
 import { UserContext } from "../../context/Context";
 import logo from "../../img/logo.png";
+import logoMobile from "../../img/logo_mobile.png";
 import defaultPicture from "../../img/profile-default.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Navbar() {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const { setMobileMenuOpen } = useContext(UserContext);
 
   const { isAuthenticated, profile } = useContext(AuthStateContext);
@@ -82,7 +85,11 @@ function Navbar() {
           <MobileNavbar />
         </Hidden>
         <Link to="/listings" className={classes.avatarLink}>
-          <img src={logo} alt="logo" className={classes.logo} />
+          {isMobile ? (
+            <img src={logoMobile} alt="logo" className={classes.logo} />
+          ) : (
+            <img src={logo} alt="logo" className={classes.logo} />
+          )}
         </Link>
         {isAuthenticated ? (
           <>
@@ -97,13 +104,18 @@ function Navbar() {
                   </Button>
                 </Link>
               ) : null}
+              <Link to="/bookings" className={classes.authLinkStyling}>
+                <Button size="large">Bookings</Button>
+              </Link>
+              <Link to="/chat" className={classes.authLinkStyling}>
 
-              <Link to="*" className={classes.authLinkStyling}>
-                <Button size="large">Messages</Button>
               </Link>
             </Hidden>
             <Hidden mdUp>
-              <Link to="*" className={classes.authLinkStyling}>
+              <Link to="/bookings" className={classes.authLinkStyling}>
+                <Button size="large">Bookings</Button>
+              </Link>
+              <Link to="/chat" className={classes.authLinkStyling}>
                 <MailIcon color="primary" fontSize="large" />
               </Link>
             </Hidden>
