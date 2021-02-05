@@ -22,13 +22,13 @@ exports.createChat = async (req, res, next) => {
           const newMessage = new Message({
             timeCreated: moment(),
           });
-          newMessage.save();
-
           let newChat = new Chat({
             participants: ["6015f112ed9e414aa003c32a", req.user.id], //1st PARTICIPANT - should come form body.req!!
             messages: [newMessage._id],
           });
           newChat.save();
+          newMessage.chatId = newChat._id;
+          newMessage.save();
         }
       }
     );
