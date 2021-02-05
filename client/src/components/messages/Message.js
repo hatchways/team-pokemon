@@ -10,7 +10,9 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import axios from "axios";
+import moment from "moment";
 import { UserContext } from "../../context/Context";
+import { AuthStateContext } from "../../context/AuthContext";
 import defaultPicture from "../../img/profile-default.png";
 
 const useStyles = makeStyles(theme => ({
@@ -93,12 +95,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Message() {
-  const { chatUserData } = useContext(UserContext);
+function Message(props) {
+  const { user } = useContext(AuthStateContext);
+  const { chatUserData, socket } = useContext(UserContext);
   const [messageHistory, setMessageHistory] = useState();
   const [messageContent, setMessageContent] = useState("");
-  const classes = useStyles();
+  const [message, setMessage] = useState();
   const lastMessageRef = useRef(null);
+  const classes = useStyles();
 
   useEffect(() => {
     chatUserData && getMessageHistory();
@@ -106,6 +110,53 @@ function Message() {
       setMessageHistory();
     };
   }, [chatUserData]);
+
+  useEffect(() => {
+    //join room for this conversation
+    if (chatUserData) {
+      const data = {
+        userId: user._id,
+        chatId: chatUserData.chatId,
+      };
+      socket && socket.emit("join", { data }, () => {});
+    }
+    //clean socket before destroying component
+    return () => {
+      socket && socket.off();
+    };
+  }, [chatUserData, socket]);
+
+  useEffect(() => {
+    socket &&
+      socket.on("newMessage", data => {
+        const newMessage = {
+          sender: data.sender,
+          content: data.content,
+          timeCreated: data.timeCreated,
+          chatId: data.chatId,
+          wasRead: data.wasRead,
+        };
+        lastMessageRef.current = null;
+        setMessage(newMessage);
+      });
+  }, [chatUserData, socket]);
+
+  useEffect(() => {
+    if (
+      messageHistory &&
+      message &&
+      messageHistory[0].chatId === message.chatId
+    ) {
+      setMessageContent("");
+      let updatedHistory = messageHistory && [...messageHistory, message];
+      setMessageHistory(updatedHistory);
+    }
+    return;
+  }, [message]);
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView();
+  }, [messageHistory]);
 
   const getMessageHistory = async () => {
     let resp = await axios.post("/api/chat/history", {
@@ -116,6 +167,14 @@ function Message() {
   };
 
   const sendMessage = async e => {
+    socket.emit("message", {
+      sender: user._id,
+      content: messageContent,
+      timeCreated: moment().format(),
+      chatId: chatUserData.chatId,
+      wasRead: false,
+    });
+
     e.preventDefault();
     await axios.post("/api/chat/message", {
       content: messageContent,
@@ -185,6 +244,7 @@ function Message() {
               InputProps={{ disableUnderline: true }}
               className={classes.textInput}
               onChange={e => setMessageContent(e.target.value)}
+              value={messageContent || ""}
               placeholder={"Reply to " + chatUserData.firstName}
             />
             <Button

@@ -1,4 +1,7 @@
-import { useState, createContext } from "react";
+import { useEffect, useState, createContext } from "react";
+import io from "socket.io-client";
+
+const socketIO = io();
 
 export const UserContext = createContext();
 
@@ -7,6 +10,11 @@ const UserProvider = ({ children }) => {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false); //state for mobile layout settings menu
   const [chatUserData, setChatUserData] = useState();
   const [mobileMessageView, setMobileMessageView] = useState(false);
+  const [socket, setSocket] = useState();
+
+  useEffect(() => {
+    setSocket(socketIO);
+  }, []);
 
   return (
     <UserContext.Provider
@@ -19,6 +27,8 @@ const UserProvider = ({ children }) => {
         setChatUserData,
         mobileMessageView,
         setMobileMessageView,
+        socket,
+        setSocket,
       }}
     >
       {children}
