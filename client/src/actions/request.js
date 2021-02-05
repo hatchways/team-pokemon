@@ -6,7 +6,7 @@ import { PAY_BOOKING_SUCCESS, PAY_BOOKING_FAILURE } from "./types";
 const socket = io();
 
 // Create Request
-export const createRequest = async (dispatch, payload) => {
+export const createRequest = async (dispatch, payload, OwnerName) => {
   try {
     const config = {
       headers: {
@@ -17,7 +17,7 @@ export const createRequest = async (dispatch, payload) => {
     setAlert(dispatch, "Request Sent!");
     socket.emit("requestSent", {
       sitterId: payload.sitterId,
-      ownerId: payload.ownerId,
+      message: `${OwnerName} has sent you a request!`,
     });
   } catch (err) {
     console.log(err.message);

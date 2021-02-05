@@ -4,10 +4,8 @@ const Notification = require("../models/notificationModel");
 const User = require("../models/userModel");
 
 // Create notification
-exports.sendNotification = async (sender, receiver) => {
+exports.sendNotification = async (receiver, message) => {
   try {
-    const message = "firstName lastName has sent you a request!";
-
     // Create a new notification and save to database
     const newNotification = new Notification({
       message,
@@ -22,9 +20,6 @@ exports.sendNotification = async (sender, receiver) => {
     receiverProfile.notifications.unshift(savedNotification._id);
 
     await receiverProfile.save();
-
-    // Emit the notification
-    // socket.emit("newNotification", savedNotification);
   } catch (err) {
     console.log(err.message);
   }

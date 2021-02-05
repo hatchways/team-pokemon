@@ -44,9 +44,17 @@ io.on("connection", (socket) => {
     onlineUsers.delete(data.userId);
   });
 
+  socket.on("requestAccepted", (notification) => {
+    sendNotification(notification.ownerId, notification.message);
+  });
+
+  socket.on("requestDeclined", (notification) => {
+    sendNotification(notification.ownerId, notification.message);
+  });
+
   socket.on("requestSent", (notification) => {
     // Add into notifications list in database for sitter.
-    sendNotification(notification.ownerId, notification.sitterId);
+    sendNotification(notification.sitterId, notification.message);
 
     // Update current user's socket id
     onlineUsers.set(notification.ownerId, socket.id);
@@ -61,7 +69,7 @@ io.on("connection", (socket) => {
 
       io.to(receiver).emit("notification", {
         type: "request",
-        message: "You have received a new request!",
+        message: notification.message,
       });
     } else {
       console.log("User is offline");
