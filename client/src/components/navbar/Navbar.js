@@ -12,6 +12,7 @@ import {
 import { makeStyles } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
+import EventNoteIcon from "@material-ui/icons/EventNote";
 import { Link } from "react-router-dom";
 import MobileNavbar from "./mobileNavbar";
 import Notifications from "../notifications/Notifications";
@@ -25,7 +26,7 @@ import logo from "../../img/logo.png";
 import logoMobile from "../../img/logo_mobile.png";
 import defaultPicture from "../../img/profile-default.png";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: { flexgrow: 1 },
   menuButton: { marginRight: "auto", color: "red" },
   toolbar: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   authLinkStyling: {
     textDecoration: "none",
-    marginRight: "30px",
+    marginRight: "20px",
     marginLeft: "20px",
   },
   signupLinkStyling: {
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
   },
   removeTextDecoration: {
     textDecoration: "none",
+    marginLeft: "15px",
+  },
+  icons: {
+    color: "black",
   },
 }));
 
@@ -117,11 +122,11 @@ function Navbar() {
               </Hidden>
               <Hidden mdUp>
                 <Link to="/bookings" className={classes.authLinkStyling}>
-                  <Button size="large">Bookings</Button>
+                  <EventNoteIcon fontSize="large" className={classes.icons} />
                 </Link>
                 <Notifications />
                 <Link to="/chat" className={classes.authLinkStyling}>
-                  <MailIcon color="primary" fontSize="large" />
+                  <MailIcon fontSize="large" className={classes.icons} />
                 </Link>
               </Hidden>
               <Link

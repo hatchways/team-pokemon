@@ -11,8 +11,10 @@ import {
   Paper,
   Popper,
   Typography,
+  Hidden,
   makeStyles,
 } from "@material-ui/core";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 import io from "socket.io-client";
 import {
   AuthDispatchContext,
@@ -58,6 +60,9 @@ const useStyles = makeStyles(() => ({
     textDecoration: "none",
     color: "#000",
   },
+  notificationIcon: {
+    color: "black",
+  },
 }));
 
 function Notifications() {
@@ -77,10 +82,10 @@ function Notifications() {
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+    setOpen(prevOpen => !prevOpen);
   };
 
-  const handleClose = (event) => {
+  const handleClose = event => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
@@ -122,7 +127,7 @@ function Notifications() {
     notificationEnd
   );
 
-  const notificationsStyles = notificationsPaginated.map((notification) => {
+  const notificationsStyles = notificationsPaginated.map(notification => {
     if (!notification.read) {
       if (!showBadge) {
         setShowBadge(true);
@@ -175,7 +180,15 @@ function Notifications() {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Typography className={classes.buttonText}>Notifications</Typography>
+        <Hidden mdUp>
+          <NotificationsIcon
+            fontSize="large"
+            className={classes.notificationIcon}
+          />
+        </Hidden>
+        <Hidden smDown>
+          <Typography className={classes.buttonText}>Notifications</Typography>
+        </Hidden>
         {showBadge && (
           <Badge
             color="primary"
