@@ -15,8 +15,10 @@ A website that makes it easier for dog owners to find a dog sitter-- especially 
 
 ## Run Locally
 
-- To run server, navigate into server folder and run ### `npm run dev`
-- To start client, navigate into client and run ### `npm start`
+- To run server, navigate into server folder and run
+  ### `npm run dev`
+- To start client, navigate into client and run
+  ### `npm start`
 
 **Login**
 <img width="1440" alt="Screen Shot 2021-02-08 at 3 01 17 PM" src="https://user-images.githubusercontent.com/24212950/107276521-24df2180-6a21-11eb-8caa-6ce758960faa.png">
