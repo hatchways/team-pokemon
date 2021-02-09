@@ -1,9 +1,22 @@
 # Loving Sitters
-### Stack
-- Front-End: React, Material UI, Stripe, Cloudinary
-- Back-End: Node.js, Express, MongoDB, Cloudinary, Socket.io, Stripe,  Mongoose, JWT
+
+## Contributors
+
+[Qudus Agbalaya](https://github.com/quddd) [Ruslan Akhmetshin](https://github.com/ruslan-akhm) [Thomas Sobor](https://github.com/Tomology)
+
 # About
-A website that makes it easier for dog owners to find a dog sitter-- especially in real-time. The goal is to create a beautiful, easy-to-use website that helps dog owners find dog sitters when they need it most. We want dog owners to feel secure, comfortable and at ease with their decision to book a dog sitter. We want dog sitters to feel excited to meet and care for a new dog. 
+
+A website that makes it easier for dog owners to find a dog sitter-- especially in real-time. The goal is to create a beautiful, easy-to-use website that helps dog owners find dog sitters when they need it most. We want dog owners to feel secure, comfortable and at ease with their decision to book a dog sitter. We want dog sitters to feel excited to meet and care for a new dog.
+
+### Stack
+
+- Front-End: React, Material UI, Stripe, Cloudinary
+- Back-End: Node.js, Express, MongoDB, Cloudinary, Socket.io, Stripe, Mongoose, JWT
+
+## Run Locally
+
+To run server, navigate into server folder and run `npm run dev`
+To start client, navigate into client and run `npm start`
 
 **Login**
 <img width="1440" alt="Screen Shot 2021-02-08 at 3 01 17 PM" src="https://user-images.githubusercontent.com/24212950/107276521-24df2180-6a21-11eb-8caa-6ce758960faa.png">
@@ -34,7 +47,3 @@ A website that makes it easier for dog owners to find a dog sitter-- especially 
 
 **Bookings**
 <img width="1439" alt="Screen Shot 2021-02-08 at 3 14 14 PM" src="https://user-images.githubusercontent.com/24212950/107277501-7cca5800-6a22-11eb-86af-46377cee3edd.png">
-
-
-
-
