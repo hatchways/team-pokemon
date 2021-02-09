@@ -115,7 +115,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: "10px",
   },
   addButton: {
-    marginTop: "50px",
+    marginTop: "65px",
     marginBottom: "10px",
     color: "orange",
     borderColor: "orange",
