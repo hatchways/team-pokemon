@@ -1,4 +1,4 @@
-# Loving Sitters
+# Loving Sitter
 
 ## Contributors
 
