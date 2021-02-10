@@ -48,8 +48,8 @@ const useStyles = makeStyles(theme => ({
   },
   authLinkStyling: {
     textDecoration: "none",
-    marginRight: "20px",
-    marginLeft: "20px",
+    marginRight: "10px",
+    marginLeft: "10px",
   },
   signupLinkStyling: {
     textDecorationColor: "black",
