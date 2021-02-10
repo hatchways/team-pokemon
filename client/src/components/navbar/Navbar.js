@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -8,6 +8,7 @@ import {
   Hidden,
   Avatar,
   useMediaQuery,
+  Badge,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -61,15 +62,46 @@ const useStyles = makeStyles(theme => ({
   icons: {
     color: "black",
   },
+  notificationDot: {
+    marginBottom: "15px",
+    marginLeft: "-5px",
+  },
+  notificationDotMobile: {
+    marginTop: "-50px",
+    marginLeft: "8px",
+  },
 }));
 
 function Navbar() {
   const isMobile = useMediaQuery("(max-width:600px)");
-  const { setMobileMenuOpen } = useContext(UserContext);
-
-  const { isAuthenticated, profile } = useContext(AuthStateContext);
+  const { setMobileMenuOpen, socket, isChatting, setIsChatting } = useContext(
+    UserContext
+  );
+  const [showBadge, setShowBadge] = useState(false);
+  const { isAuthenticated, profile, user } = useContext(AuthStateContext);
   const dispatch = useContext(AuthDispatchContext);
   const classes = useStyles();
+
+  useEffect(() => {
+    if (user) {
+      const data = {
+        userId: user._id,
+      };
+      if (socket) {
+        socket && socket.emit("join", { data }, () => {});
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    socket &&
+      socket.on("newMessage", () => {
+        if (!isChatting) {
+          setShowBadge(true);
+        }
+        return;
+      });
+  }, [socket]);
 
   const handleBecomeSitter = () => {
     dispatch({ type: BECOME_SITTER });
@@ -117,7 +149,22 @@ function Navbar() {
                 </Link>
                 <Notifications />
                 <Link to="/chat" className={classes.authLinkStyling}>
-                  <Button size="large">Messages</Button>
+                  <Button
+                    size="large"
+                    onClick={() => {
+                      setShowBadge(false);
+                      setIsChatting(true);
+                    }}
+                  >
+                    Messages
+                  </Button>
+                  {showBadge ? (
+                    <Badge
+                      color="primary"
+                      variant="dot"
+                      className={classes.notificationDot}
+                    ></Badge>
+                  ) : null}
                 </Link>
               </Hidden>
               <Hidden mdUp>
@@ -126,7 +173,21 @@ function Navbar() {
                 </Link>
                 <Notifications />
                 <Link to="/chat" className={classes.authLinkStyling}>
-                  <MailIcon fontSize="large" className={classes.icons} />
+                  <MailIcon
+                    fontSize="large"
+                    className={classes.icons}
+                    onClick={() => {
+                      setShowBadge(false);
+                      setIsChatting(true);
+                    }}
+                  />{" "}
+                  {showBadge ? (
+                    <Badge
+                      color="primary"
+                      variant="dot"
+                      className={classes.notificationDotMobile}
+                    ></Badge>
+                  ) : null}
                 </Link>
               </Hidden>
               <Link

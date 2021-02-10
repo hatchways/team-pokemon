@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Grid, makeStyles, Hidden, CircularProgress } from "@material-ui/core";
 import Conversation from "../components/messages/Conversation";
 import Message from "../components/messages/Message";
 import MobileMessage from "../components/messages/MobileMessage";
 import axios from "axios";
+import { UserContext } from "../context/Context";
 
 const useStyles = makeStyles(theme => ({
   chatBox: {
@@ -26,11 +27,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Chat() {
+  const { setIsChatting, setChatUserData } = useContext(UserContext);
   const [conversations, setConversations] = useState();
   const classes = useStyles();
 
   useEffect(() => {
     getChats();
+    return () => {
+      setIsChatting(false);
+      setChatUserData();
+    };
   }, []);
 
   const getChats = async () => {
