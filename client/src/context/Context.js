@@ -12,6 +12,7 @@ const UserProvider = ({ children }) => {
   const [mobileMessageView, setMobileMessageView] = useState(false);
   const [filter, setFilter] = useState("");
   const [socket, setSocket] = useState();
+  const [isChatting, setIsChatting] = useState(false);
 
   useEffect(() => {
     setSocket(socketIO);
@@ -32,6 +33,8 @@ const UserProvider = ({ children }) => {
         setSocket,
         filter,
         setFilter,
+        isChatting,
+        setIsChatting,
       }}
     >
       {children}

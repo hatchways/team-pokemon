@@ -71,7 +71,6 @@ function Conversation(props) {
     setChatUserData,
     setMobileMessageView,
   } = useContext(UserContext);
-  const { user } = useContext(AuthStateContext);
   const [conversations, setConversations] = useState([]);
   const [lastMessage, setLastMessage] = useState();
   const classes = useStyles();
@@ -79,19 +78,6 @@ function Conversation(props) {
   useEffect(() => {
     setConversations(props.conversations);
   }, [props]);
-
-  useEffect(() => {
-    //join room for this user
-    const data = {
-      userId: user._id,
-    };
-    socket && socket.emit("join", { data }, () => {});
-
-    //clean socket before destroying component
-    return () => {
-      socket && socket.off();
-    };
-  }, [socket]);
 
   useEffect(() => {
     socket &&
