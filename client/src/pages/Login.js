@@ -4,16 +4,16 @@ import { makeStyles } from "@material-ui/core";
 import LoginForm from "../components/LoginForm";
 import dogsPicture from "../img/dogs-main.jpg";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
   gridContainer: { height: "100vh" },
   sideImage: {
-    height: "100vh",
+    height: "100%",
+    margin: "0",
     position: "relative",
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",

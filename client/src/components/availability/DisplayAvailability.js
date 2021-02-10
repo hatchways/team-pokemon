@@ -9,7 +9,7 @@ import { Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { format } from "date-fns";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   heading: {
     borderBottom: "1px solid grey",
   },
@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   dateHeader: {
     borderBottom: `1px solid ${theme.palette.primary.main}`,
+  },
+  availabilityBox: {
+    width: "100%",
   },
 }));
 
@@ -66,35 +69,35 @@ function DisplayAvailability() {
         item
         xs={12}
         md={3}
-        justify='center'
+        justify="center"
         className={classes.timeCard}
       >
         <Grid item>
-          <Typography variant='h6' className={classes.dateHeader}>
+          <Typography variant="h6" className={classes.dateHeader}>
             {format(new Date(timeInterval.start), "dd MMMM, yyyy")}
           </Typography>
         </Grid>
         <Grid
           item
           container
-          direction='row'
-          justify='space-between'
-          alignItems='center'
+          direction="row"
+          justify="space-between"
+          alignItems="center"
         >
-          <Typography variant='h6'>
+          <Typography variant="h6">
             {format(new Date(timeInterval.start), "ha")} -{" "}
             {format(new Date(timeInterval.end), "ha")}
           </Typography>
           <Grid>
-            <Tooltip title='Delete'>
+            <Tooltip title="Delete">
               <IconButton
-                aria-label='delete'
-                color='primary'
-                onClick={(e) => {
+                aria-label="delete"
+                color="primary"
+                onClick={e => {
                   handleDelete(e, key);
                 }}
               >
-                <DeleteIcon fontSize='large' className={classes.icon} />
+                <DeleteIcon fontSize="large" className={classes.icon} />
               </IconButton>
             </Tooltip>
           </Grid>
@@ -104,9 +107,14 @@ function DisplayAvailability() {
   }
   return (
     <div>
-      <Grid container justify='center' spacing={3}>
-        <Grid item container className={classes.heading} justify='center'>
-          <Typography component='h6' variant='h6'>
+      <Grid
+        container
+        justify="center"
+        spacing={3}
+        className={classes.availabilityBox}
+      >
+        <Grid item container className={classes.heading} justify="center">
+          <Typography component="h6" variant="h6">
             {" "}
             Your current availability
           </Typography>

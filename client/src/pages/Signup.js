@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core";
 import SignupForm from "../components/SignupForm";
 import dogsPicture from "../img/dogs-main.jpg";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     position: "relative",
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
