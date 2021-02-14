@@ -20,6 +20,8 @@ const useStyles = makeStyles(theme => ({
   },
   elements: {
     marginBottom: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
   },
   gridContainer: {
     paddingTop: "25px",
@@ -94,6 +96,25 @@ function LoginForm() {
     res();
   };
 
+  const demoLogin = e => {
+    setLoggingIn(true);
+    e.preventDefault();
+    const res = async () => {
+      let resp = await login(dispatch, {
+        email: "dutest@test.com",
+        password: "123456",
+      });
+      if (resp !== undefined && resp.response.data.error.message) {
+        setLoggingIn(false);
+        setAlert({
+          error: true,
+          message: resp.response.data.error.message,
+        });
+      }
+    };
+    res();
+  };
+
   //call classes for Material-UI components
   const classes = useStyles();
 
@@ -125,7 +146,7 @@ function LoginForm() {
           id="email"
           placeholder="Your Email"
           label="Email"
-          required
+          //required
         />
       </Grid>
       <Grid item className={classes.elements}>
@@ -139,7 +160,7 @@ function LoginForm() {
           placeholder="Your Password"
           label="Password"
           autoComplete="on"
-          required
+          //required
         />
       </Grid>
       <Grid item className={classes.elements}>
@@ -155,6 +176,16 @@ function LoginForm() {
           ) : (
             `LOGIN`
           )}
+        </Button>
+      </Grid>
+      <Grid item className={classes.elements}>
+        <Button
+          variant="outlined"
+          size="large"
+          color="primary"
+          onClick={demoLogin}
+        >
+          Login Demo
         </Button>
         <AlertMessage alert={alert} />
       </Grid>
