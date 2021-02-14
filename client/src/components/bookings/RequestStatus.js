@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useHisto } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { updateRequest } from "../../actions/requests";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   AuthDispatchContext,
   AuthStateContext,
 } from "../../context/AuthContext";
+import { UserContext } from "../../context/Context";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Alert from "../Alert";
@@ -46,6 +47,7 @@ function RequestStatus({ request, modeTime }) {
   const [cards, setCards] = useState(null);
   const [paymentModal, togglePaymentModal] = useState(false);
   let history = useHistory();
+  const { setIsChatting } = useContext(UserContext);
 
   // Get dispatch method from context
   const dispatch = useContext(AuthDispatchContext);
@@ -63,6 +65,7 @@ function RequestStatus({ request, modeTime }) {
       request.sitterId._id,
     ]);
     if (!resp.data.error) {
+      setIsChatting(true);
       history.push({
         pathname: "/chat",
       });
