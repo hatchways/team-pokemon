@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
 function Bookings() {
   const classes = useStyles();
 
-  const [sitterMode, setSitterMode] = useState(true);
+  const [sitterMode, setSitterMode] = useState(false);
 
   // Get dispatch method and state from auth context
   const dispatch = useContext(AuthDispatchContext);
-  const { requests, user } = useContext(AuthStateContext);
+  const { profile, requests, user } = useContext(AuthStateContext);
 
   // Make API call to all of the user's requests
   useEffect(() => {
@@ -60,6 +60,7 @@ function Bookings() {
       ) : (
         <Box className={classes.container + " " + classes.containerBreakpoints}>
           <RequestList
+            profile={profile}
             requests={requests}
             user={user}
             sitterMode={sitterMode}

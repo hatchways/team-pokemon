@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RequestList({ requests, user, sitterMode, setSitterMode }) {
+function RequestList({ profile, requests, user, sitterMode, setSitterMode }) {
   const classes = useStyles();
 
   // Get dispatch method from context
@@ -149,17 +149,21 @@ function RequestList({ requests, user, sitterMode, setSitterMode }) {
       }
     >
       {/* Sitter Mode Switch - toggles between viewing bookings as a sitter and as an owner */}
-      <Box className={classes.sitterModeSwitch}>
-        <Switch
-          color="primary"
-          checked={sitterMode}
-          onChange={() => {
-            dispatch({ type: CLEAR_ERRORS });
-            setSitterMode(!sitterMode);
-          }}
-        />
-        <Typography className={classes.subheading}>DOG SITTER MODE</Typography>
-      </Box>
+      {profile.isSitter && (
+        <Box className={classes.sitterModeSwitch}>
+          <Switch
+            color="primary"
+            checked={sitterMode}
+            onChange={() => {
+              dispatch({ type: CLEAR_ERRORS });
+              setSitterMode(!sitterMode);
+            }}
+          />
+          <Typography className={classes.subheading}>
+            DOG SITTER MODE
+          </Typography>
+        </Box>
+      )}
       {/* Next Booking */}
       <Box className={classes.nextBookingContainer}>
         <Typography className={classes.subheading}>
