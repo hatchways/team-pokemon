@@ -128,7 +128,7 @@ function Notifications() {
   );
 
   const notificationsStyles = notificationsPaginated.map(notification => {
-    if (!notification.read) {
+    if (notification.read === false) {
       if (!showBadge) {
         setShowBadge(true);
       }

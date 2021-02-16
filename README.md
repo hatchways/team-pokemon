@@ -7,6 +7,7 @@
 # About
 
 A website that makes it easier for dog owners to find a dog sitter-- especially in real-time. The goal is to create a beautiful, easy-to-use website that helps dog owners find dog sitters when they need it most. We want dog owners to feel secure, comfortable and at ease with their decision to book a dog sitter. We want dog sitters to feel excited to meet and care for a new dog.
+App is available Live [on Heroku](https://loving-dogsitter.herokuapp.com/)
 
 ### Stack
 
