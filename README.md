@@ -1,5 +1,5 @@
 # Loving Sitter
-
+# [Live Demo](https://loving-dogsitter.herokuapp.com/)
 # Contributors
 
 [Qudus Agbalaya](https://github.com/quddd), [Ruslan Akhmetshin](https://github.com/ruslan-akhm) and [Thomas Sobor](https://github.com/Tomology)
